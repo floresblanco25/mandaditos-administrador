@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:layout_margin="8dp">
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="left|center"
+		android:layout_marginTop="8dp">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Código de orden:"/>
+
+		<EditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Consultando..."
+			android:id="@+id/dashboarOrderTitle"
+			style="@style/title"
+			android:layout_marginBottom="16dp"
+			android:layout_margin="8dp"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Estado de orden"
+			style="@style/info"
+			android:layout_margin="8dp"/>
+
+		<EditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Consultando..."
+			style="@style/info"
+			android:layout_margin="8dp"
+			android:id="@+id/dashboardOrderStatus"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Partida"
+			style="@style/info"
+			android:layout_margin="8dp"/>
+
+		<EditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Consultando..."
+			style="@style/info"
+			android:layout_margin="8dp"
+			android:id="@+id/dashboardAddressA"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Destino"
+			style="@style/info"
+			android:layout_margin="8dp"/>
+
+		<EditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Consultando..."
+			style="@style/info"
+			android:layout_margin="8dp"
+			android:id="@+id/dashboardAddressB"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Distancia"
+			style="@style/info"
+			android:layout_margin="8dp"/>
+
+		<EditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Consultando..."
+			style="@style/info"
+			android:layout_margin="8dp"
+			android:id="@+id/dashboardDistance"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Fecha y hora de entrega"
+			style="@style/info"
+			android:layout_margin="8dp"/>
+
+		<EditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Consultando..."
+			style="@style/info"
+			android:layout_margin="8dp"
+			android:id="@+id/dashboardDateEta"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Recoger dinero en el lugar de"
+			style="@style/info"
+			android:layout_margin="8dp"/>
+
+		<EditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Consultando..."
+			style="@style/info"
+			android:id="@+id/dashboardWhereGetMoney"
+			android:layout_marginTop="8dp"
+			android:layout_marginBottom="8dp"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Costo total"
+			style="@style/info"
+			android:layout_margin="8dp"/>
+
+		<EditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Consultando..."
+			style="@style/info"
+			android:layout_margin="8dp"
+			android:id="@+id/dashboardTotalCost"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="left">
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Partida"
+			android:layout_marginRight="8dp"
+			android:id="@+id/orderrowButtonPartida"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonStyleSmall"
+			android:layout_height="wrap_content"
+			android:text="Destino"
+			android:layout_marginRight="8dp"
+			android:id="@+id/orderrowButtonDestino"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonStyleSmall"
+			android:layout_height="wrap_content"
+			android:text="Editar"
+			android:layout_marginRight="8dp"
+			android:id="@+id/orderrowButtonEditar"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonStyleSmall"
+			android:layout_height="wrap_content"
+			android:text="Restablecer"
+			android:layout_marginRight="8dp"
+			android:id="@+id/orderrowButtonRestablecer"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonStyleSmall"
+			android:layout_height="wrap_content"
+			android:text="Guardar"
+			android:id="@+id/orderrowButtonGuardar"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+

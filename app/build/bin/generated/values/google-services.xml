@@ -1,0 +1,9 @@
+<resources>
+    <string name="default_web_client_id" translatable="false">1074825476512-pbo2gqg197nqs862h97vkdvbi2foqeri.apps.googleusercontent.com</string>
+    <string name="google_app_id" translatable="false">1:1074825476512:android:171c516289f71c662dccc5</string>
+    <string name="gcm_defaultSenderId" translatable="false">1074825476512</string>
+    <string name="google_api_key" translatable="false">AIzaSyB-ZC9tlk5zg-Rwlqrk4rXisQb1LWhs7G4</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyB-ZC9tlk5zg-Rwlqrk4rXisQb1LWhs7G4</string>
+    <string name="firebase_database_url" translatable="false">https://app-de-domicilios.firebaseio.com</string>
+    <string name="google_storage_bucket" translatable="false">app-de-domicilios.appspot.com</string>
+</resources>
