@@ -1,24 +1,44 @@
 package com.mandaditos.administrador;
 
+import android.app.*;
 import android.content.*;
+import android.os.*;
 import android.support.v7.widget.*;
 import android.view.*;
 import android.view.View.*;
+import android.view.ViewGroup.*;
+import android.view.animation.*;
 import android.widget.*;
+import android.widget.AdapterView.*;
+import com.google.android.gms.maps.model.*;
 import com.google.firebase.database.*;
 import com.mandaditos.administrador.models.*;
 import java.util.*;
-import android.app.*;
+
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 
 public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 {
 
     private Context mContext;
     private List<mandaditosModel> mDataList;
+	String[] statuses = { "Sin Completar", "Completada"};  
+	String[] dondeRecoger = { "Partida", "Destino"};
+	static LatLng latLngA,latLngB;
 
     mAdapter(Context mContext, List< mandaditosModel > mDataList) {
         this.mContext = mContext;
         this.mDataList = mDataList;
+    }
+	public static void setLatLng(String partidaODetino,LatLng latLng) {
+		if(partidaODetino.matches("partida")){
+			latLngA= latLng;
+		}
+		if(partidaODetino.matches("destino")){
+			latLngB=latLng;
+		}
+		
     }
 
     @Override
@@ -29,6 +49,8 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 
     @Override
     public void onBindViewHolder(final mViewHolder holder, final int position) {
+		latLngA = mDataList.get(position).getLatLngA();
+		latLngB = mDataList.get(position).getLatLngB();
 		holder.PartidaEd.setText(mDataList.get(position).getPartida());
 		holder.DestinoEd.setText(mDataList.get(position).getDestino());
 		holder.DistanciaEd.setText(mDataList.get(position).getDistancia());
@@ -36,6 +58,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		holder.DondeRecogerDineroEd.setText(mDataList.get(position).getRecogerDineroEn());
 		holder.CostoEd.setText(mDataList.get(position).getCosto());
 		holder.EstadoDeOrdenEd.setText(mDataList.get(position).getEstadoDeOrden());
+		
 		holder.NumeroDeOrdenEd.setText(mDataList.get(position).getNumeroDeOrden());
 		holder.NumeroDeOrdenEd.setEnabled(false);
 		holder.PartidaEd.setEnabled(false);
@@ -46,10 +69,65 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		holder.CostoEd.setEnabled(false);
 		holder.EstadoDeOrdenEd.setEnabled(false);
 		holder.save.setEnabled(false);
+		ArrayAdapter statsAdapter = new ArrayAdapter(holder.context,android.R.layout.simple_spinner_item,statuses);  
+        statsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
+		holder.SpinnerEstadoDeOrden.setEnabled(false);
+        holder.SpinnerEstadoDeOrden.setAdapter(statsAdapter);  
+		ArrayAdapter whereAdapter = new ArrayAdapter(holder.context,android.R.layout.simple_spinner_item,dondeRecoger);  
+        statsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
+		holder.SpinnerDondeRecogerDinero.setEnabled(false);
+        holder.SpinnerDondeRecogerDinero.setAdapter(whereAdapter);
+		
+//Spinner recoger dinero default
+		if(mDataList.get(position).getRecogerDineroEn().matches(dondeRecoger[0])){
+			holder.SpinnerDondeRecogerDinero.setSelection(0);
+		}
+		if(mDataList.get(position).getRecogerDineroEn().matches(dondeRecoger[1])){
+			holder.SpinnerDondeRecogerDinero.setSelection(1);
+		}
+//Spinner estado de orden default
+		if(mDataList.get(position).getEstadoDeOrden().matches(statuses[0])){
+			holder.SpinnerEstadoDeOrden.setSelection(0);
+		}
+		if(mDataList.get(position).getEstadoDeOrden().matches(statuses[1])){
+			holder.SpinnerEstadoDeOrden.setSelection(1);
+		}
+		
+//spinner estado de orden
+		holder.SpinnerEstadoDeOrden.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+				@Override
+				public void onItemSelected(AdapterView<?> p1, View p2, int position, long p4)
+				{
+					String selected = statuses[position];
+					holder.EstadoDeOrdenEd.setText(selected);
+				}
+
+				@Override
+				public void onNothingSelected(AdapterView<?> p1)
+				{
+					
+				}
+			});
+//Spinner donde recoger el dinero
+		holder.SpinnerDondeRecogerDinero.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+				@Override
+				public void onItemSelected(AdapterView<?> p1, View p2, int pos, long p4)
+				{
+					String selected = dondeRecoger[pos];
+					holder.DondeRecogerDineroEd.setText(selected);
+				}
+
+				@Override
+				public void onNothingSelected(AdapterView<?> p1)
+				{
+				}
+			});
 		
 		
 		
-		
+//Guardar boton
 		holder.save.setOnClickListener(new OnClickListener(){
 
 				@Override
@@ -84,14 +162,17 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 								mDatabase.child("distancia").setValue(distancia);
 								mDatabase.child("recogerDineroEn").setValue(recogerdinero);
 								mDatabase.child("costo").setValue(costo);
+								mDatabase.child("latLngA").setValue(latLngA);
+								mDatabase.child("latLngB").setValue(latLngB);
 								holder.PartidaEd.setEnabled(false);
 								holder.DestinoEd.setEnabled(false);
 								holder.DistanciaEd.setEnabled(false);
 								holder.FechaEtaEd.setEnabled(false);
 								holder.DondeRecogerDineroEd.setEnabled(false);
 								holder.CostoEd.setEnabled(false);
-								holder.EstadoDeOrdenEd.setEnabled(false);
 								holder.save.setEnabled(false);
+								holder.SpinnerEstadoDeOrden.setEnabled(false);
+								holder.SpinnerDondeRecogerDinero.setEnabled(false);
 							}
 						});
 						dialog.show();
@@ -99,6 +180,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				}
 
 			});
+//Edit button
 		holder.edit.setOnClickListener(new OnClickListener(){
 
 				@Override
@@ -110,12 +192,115 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 					holder.FechaEtaEd.setEnabled(true);
 					holder.DondeRecogerDineroEd.setEnabled(true);
 					holder.CostoEd.setEnabled(true);
-					holder.EstadoDeOrdenEd.setEnabled(true);
 					holder.save.setEnabled(true);
+					holder.SpinnerEstadoDeOrden.setEnabled(true);
+					holder.SpinnerDondeRecogerDinero.setEnabled(true);
+				}
+			});
+//Mapa partida
+		holder.PartidaBt.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View p1)
+				{
+					Intent i = new Intent(mContext,mapPicker.class);
+					Bundle b = new Bundle();
+					b.putParcelable("latLng",mDataList.get(position).getLatLngA());
+					b.putString("partidaODestino","partida");
+					i.putExtras(b);
+					mContext.startActivity(i);
+					
+				}
+			});
+//mapa destino 
+		holder.DestinoBt.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View p1)
+				{
+					Intent i = new Intent(mContext,mapPicker.class);
+					Bundle b = new Bundle();
+					b.putParcelable("latLng",mDataList.get(position).getLatLngB());
+					b.putString("partidaODestino","destino");
+					i.putExtras(b);
+					mContext.startActivity(i);
+
+				}
+			});
+//unfold button
+		holder.unfoldButton.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View p1)
+				{
+					if(holder.layoutToCollapse.getVisibility()==View.GONE){
+						expand(holder.layoutToCollapse);
+					}else{
+					if(!(holder.layoutToCollapse.getVisibility()==View.GONE)){
+						collapse(holder.layoutToCollapse);
+					}
+					}
 				}
 			});
 			
+			
     }
+	public static void expand(final View v) {
+		int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
+		int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+		v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
+		final int targetHeight = v.getMeasuredHeight();
+
+		// Older versions of android (pre API 21) cancel animations for views with a height of 0.
+		v.getLayoutParams().height = 1;
+		v.setVisibility(View.VISIBLE);
+		Animation a = new Animation()
+		{
+			@Override
+			protected void applyTransformation(float interpolatedTime, Transformation t) {
+				v.getLayoutParams().height = interpolatedTime == 1
+                    ? LayoutParams.WRAP_CONTENT
+                    : (int)(targetHeight * interpolatedTime);
+				v.requestLayout();
+			}
+
+			@Override
+			public boolean willChangeBounds() {
+				return true;
+			}
+		};
+
+		// Expansion speed of 1dp/ms
+		a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density));
+		v.startAnimation(a);
+	}
+
+	public static void collapse(final View v) {
+		final int initialHeight = v.getMeasuredHeight();
+
+		Animation a = new Animation()
+		{
+			@Override
+			protected void applyTransformation(float interpolatedTime, Transformation t) {
+				if(interpolatedTime == 1){
+					v.setVisibility(View.GONE);
+				}else{
+					v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+					v.requestLayout();
+				}
+			}
+
+			@Override
+			public boolean willChangeBounds() {
+				return true;
+			}
+		};
+
+		// Collapse speed of 1dp/ms
+		a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+		v.startAnimation(a);
+	}
+	
 	
 	
     @Override
@@ -127,7 +312,10 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 class mViewHolder extends RecyclerView.ViewHolder {
 
     EditText NumeroDeOrdenEd,PartidaEd,DestinoEd,DistanciaEd,FechaEtaEd,DondeRecogerDineroEd,CostoEd,EstadoDeOrdenEd;
-	Button save,edit;
+	Button save,edit,PartidaBt,DestinoBt;
+	Spinner SpinnerEstadoDeOrden,SpinnerDondeRecogerDinero;
+	ImageView unfoldButton;
+	LinearLayout layoutToCollapse;
 	Context context;
 
     mViewHolder(View v) {
@@ -143,14 +331,19 @@ class mViewHolder extends RecyclerView.ViewHolder {
 		EstadoDeOrdenEd = v.findViewById(R.id.dashboardOrderStatus);
 		save = v.findViewById(R.id.orderrowButtonGuardar);
 		edit = v.findViewById(R.id.orderrowButtonEditar);
+		SpinnerEstadoDeOrden = v.findViewById(R.id.orderStatus_rowSpinner);
+		SpinnerDondeRecogerDinero = v.findViewById(R.id.where_rowSpinner);
+		PartidaBt = v.findViewById(R.id.orderrowButtonPartida);
+		DestinoBt = v.findViewById(R.id.orderrowButtonDestino);
+		unfoldButton = v.findViewById(R.id.orderrowUnfoldButtom);
+		layoutToCollapse = v.findViewById(R.id.orderRowLayoutToCollapse);
 		context = v.getContext();
 
     }
 	
 	
 
-
-
+	
 
 
 
