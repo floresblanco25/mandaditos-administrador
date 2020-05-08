@@ -72,7 +72,7 @@ public class Home extends AppCompatActivity
 							double lngB = postSnapshot.child("latLngB/longitude").getValue();
 							
 							mandaditosModel m = new mandaditosModel();
-							m.setMUserId(postSnapshot.child("muserId").getValue().toString());
+							m.setUserId(postSnapshot.child("userId").getValue().toString());
 							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
 							m.setPartida(postSnapshot.child("partida").getValue().toString());
 							m.setDestino(postSnapshot.child("destino").getValue().toString());
@@ -85,6 +85,7 @@ public class Home extends AppCompatActivity
 							m.setLatLngA(new LatLng(latA,lngA));
 							m.setLatLngB(new LatLng(latB,lngB));
 							m.setNumeroDeOrden(postSnapshot.getKey().toString());
+							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
 							if(m.getEstadoDeOrden().toString().toLowerCase().matches("Sin completar".toLowerCase())){
 								ordersList.add(m);
 								}

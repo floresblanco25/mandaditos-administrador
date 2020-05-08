@@ -30,10 +30,10 @@
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:gravity="right">
+		android:gravity="center">
 
 		<ImageView
-			android:src="@drawable/baseline_unfold_more_black_36"
+			android:src="@drawable/baseline_unfold_more_black_24"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:id="@+id/orderrowUnfoldButtom"/>
@@ -45,7 +45,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:id="@+id/orderRowLayoutToCollapse"
-		android:visibility="gone">
+		android:visibility="visible">
 
 		<LinearLayout
 			android:orientation="horizontal"
@@ -72,6 +72,29 @@
 				android:id="@+id/orderStatus_rowSpinner"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Driver Asignado"
+				style="@style/info"
+				android:layout_margin="8dp"/>
+
+			<EditText
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Consultando..."
+				style="@style/info"
+				android:layout_margin="0dp"
+				android:id="@+id/DriverAsignadodashboard"/>
 
 		</LinearLayout>
 
@@ -257,9 +280,9 @@
 				android:layout_width="wrap_content"
 				style="?android:attr/buttonStyleSmall"
 				android:layout_height="wrap_content"
-				android:text="Restablecer"
+				android:text="Asignar"
 				android:layout_marginRight="8dp"
-				android:id="@+id/orderrowButtonRestablecer"/>
+				android:id="@+id/AsignarDriverOrderrow"/>
 
 			<Button
 				android:layout_width="wrap_content"

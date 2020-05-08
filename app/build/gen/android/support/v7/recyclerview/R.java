@@ -2700,7 +2700,9 @@ containing a value of this type.
     }
     public static final class id {
         public static final int ALT=0x7f0a0042;
+        public static final int AsignarDriverOrderrow=0x7f0a00a8;
         public static final int CTRL=0x7f0a0043;
+        public static final int DriverAsignadodashboard=0x7f0a009d;
         public static final int FUNCTION=0x7f0a0044;
         public static final int META=0x7f0a0045;
         public static final int SHIFT=0x7f0a0046;
@@ -2753,13 +2755,13 @@ containing a value of this type.
         public static final int customPanel=0x7f0a005f;
         public static final int dark=0x7f0a0017;
         public static final int dashboarOrderTitle=0x7f0a0098;
-        public static final int dashboardAddressA=0x7f0a009d;
-        public static final int dashboardAddressB=0x7f0a009e;
-        public static final int dashboardDateEta=0x7f0a00a0;
-        public static final int dashboardDistance=0x7f0a009f;
+        public static final int dashboardAddressA=0x7f0a009e;
+        public static final int dashboardAddressB=0x7f0a009f;
+        public static final int dashboardDateEta=0x7f0a00a1;
+        public static final int dashboardDistance=0x7f0a00a0;
         public static final int dashboardOrderStatus=0x7f0a009b;
-        public static final int dashboardTotalCost=0x7f0a00a3;
-        public static final int dashboardWhereGetMoney=0x7f0a00a1;
+        public static final int dashboardTotalCost=0x7f0a00a4;
+        public static final int dashboardWhereGetMoney=0x7f0a00a2;
         public static final int decor_content_parent=0x7f0a006d;
         public static final int default_activity_button=0x7f0a0053;
         public static final int disableHome=0x7f0a0032;
@@ -2804,11 +2806,10 @@ containing a value of this type.
         public static final int notification_main_column_container=0x7f0a008d;
         public static final int orderRowLayoutToCollapse=0x7f0a009a;
         public static final int orderStatus_rowSpinner=0x7f0a009c;
-        public static final int orderrowButtonDestino=0x7f0a00a5;
-        public static final int orderrowButtonEditar=0x7f0a00a6;
-        public static final int orderrowButtonGuardar=0x7f0a00a8;
-        public static final int orderrowButtonPartida=0x7f0a00a4;
-        public static final int orderrowButtonRestablecer=0x7f0a00a7;
+        public static final int orderrowButtonDestino=0x7f0a00a6;
+        public static final int orderrowButtonEditar=0x7f0a00a7;
+        public static final int orderrowButtonGuardar=0x7f0a00a9;
+        public static final int orderrowButtonPartida=0x7f0a00a5;
         public static final int orderrowUnfoldButtom=0x7f0a0099;
         public static final int parentPanel=0x7f0a0058;
         public static final int progress_circular=0x7f0a000c;
@@ -2864,7 +2865,7 @@ containing a value of this type.
         public static final int uniform=0x7f0a003e;
         public static final int up=0x7f0a000f;
         public static final int useLogo=0x7f0a0037;
-        public static final int where_rowSpinner=0x7f0a00a2;
+        public static final int where_rowSpinner=0x7f0a00a3;
         public static final int wide=0x7f0a0015;
         public static final int withText=0x7f0a004c;
         public static final int wrap_content=0x7f0a003f;

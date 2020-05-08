@@ -21,16 +21,21 @@ import android.view.ViewGroup.LayoutParams;
 public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 {
 
+//Initialize
     private Context mContext;
     private List<mandaditosModel> mDataList;
 	String[] statuses = { "Sin Completar", "Completada"};  
 	String[] dondeRecoger = { "Partida", "Destino"};
 	static LatLng latLngA,latLngB;
 
+	
+//Constructor
     mAdapter(Context mContext, List< mandaditosModel > mDataList) {
         this.mContext = mContext;
         this.mDataList = mDataList;
     }
+	
+//To acces from mappicker
 	public static void setLatLng(String partidaODetino,LatLng latLng) {
 		if(partidaODetino.matches("partida")){
 			latLngA= latLng;
@@ -40,6 +45,8 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		}
 		
     }
+	
+//Nothing
 
     @Override
     public mViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -47,6 +54,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
         return new mViewHolder(mView);
     }
 
+//Bind
     @Override
     public void onBindViewHolder(final mViewHolder holder, final int position) {
 		latLngA = mDataList.get(position).getLatLngA();
@@ -58,8 +66,9 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		holder.DondeRecogerDineroEd.setText(mDataList.get(position).getRecogerDineroEn());
 		holder.CostoEd.setText(mDataList.get(position).getCosto());
 		holder.EstadoDeOrdenEd.setText(mDataList.get(position).getEstadoDeOrden());
-		
 		holder.NumeroDeOrdenEd.setText(mDataList.get(position).getNumeroDeOrden());
+		holder.DriverAsignado.setText(mDataList.get(position).getDriverAsignado());
+		holder.DriverAsignado.setEnabled(true);
 		holder.NumeroDeOrdenEd.setEnabled(false);
 		holder.PartidaEd.setEnabled(false);
 		holder.DestinoEd.setEnabled(false);
@@ -69,6 +78,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		holder.CostoEd.setEnabled(false);
 		holder.EstadoDeOrdenEd.setEnabled(false);
 		holder.save.setEnabled(false);
+		holder.AssignarDriverButton.setEnabled(false);
 		ArrayAdapter statsAdapter = new ArrayAdapter(holder.context,android.R.layout.simple_spinner_item,statuses);  
         statsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
 		holder.SpinnerEstadoDeOrden.setEnabled(false);
@@ -155,6 +165,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 								String distancia = holder.DistanciaEd.getText().toString();
 								String recogerdinero = holder.DondeRecogerDineroEd.getText().toString();
 								String costo = holder.CostoEd.getText().toString();
+								String newDriverUid = holder.DriverAsignado.getText().toString();
 								DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Ordenes").child(mDataList.get(position).getNumeroDeOrden());
 								mDatabase.child("estadoDeOrden").setValue(ordrStat);
 								mDatabase.child("partida").setValue(partida);
@@ -164,6 +175,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 								mDatabase.child("costo").setValue(costo);
 								mDatabase.child("latLngA").setValue(latLngA);
 								mDatabase.child("latLngB").setValue(latLngB);
+								mDatabase.child("driverAsignado").setValue(newDriverUid);
 								holder.PartidaEd.setEnabled(false);
 								holder.DestinoEd.setEnabled(false);
 								holder.DistanciaEd.setEnabled(false);
@@ -173,6 +185,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 								holder.save.setEnabled(false);
 								holder.SpinnerEstadoDeOrden.setEnabled(false);
 								holder.SpinnerDondeRecogerDinero.setEnabled(false);
+								holder.AssignarDriverButton.setEnabled(false);
 							}
 						});
 						dialog.show();
@@ -195,6 +208,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 					holder.save.setEnabled(true);
 					holder.SpinnerEstadoDeOrden.setEnabled(true);
 					holder.SpinnerDondeRecogerDinero.setEnabled(true);
+					holder.AssignarDriverButton.setEnabled(true);
 				}
 			});
 //Mapa partida
@@ -243,8 +257,20 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				}
 			});
 			
+//asignar button
+		holder.AssignarDriverButton.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View p1)
+				{
+//					TODO abrir lista de drivers 
+				}
+			});
+			
 			
     }
+	
+//Expand and collapse
 	public static void expand(final View v) {
 		int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
 		int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
@@ -303,16 +329,20 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 	
 	
 	
+	
+//nothing
     @Override
     public int getItemCount() {
         return mDataList.size();
     }
 }
 
+
+//Class virwholder
 class mViewHolder extends RecyclerView.ViewHolder {
 
-    EditText NumeroDeOrdenEd,PartidaEd,DestinoEd,DistanciaEd,FechaEtaEd,DondeRecogerDineroEd,CostoEd,EstadoDeOrdenEd;
-	Button save,edit,PartidaBt,DestinoBt;
+    EditText NumeroDeOrdenEd,PartidaEd,DestinoEd,DistanciaEd,FechaEtaEd,DondeRecogerDineroEd,CostoEd,EstadoDeOrdenEd,DriverAsignado;
+	Button save,edit,PartidaBt,DestinoBt,AssignarDriverButton;
 	Spinner SpinnerEstadoDeOrden,SpinnerDondeRecogerDinero;
 	ImageView unfoldButton;
 	LinearLayout layoutToCollapse;
@@ -337,6 +367,8 @@ class mViewHolder extends RecyclerView.ViewHolder {
 		DestinoBt = v.findViewById(R.id.orderrowButtonDestino);
 		unfoldButton = v.findViewById(R.id.orderrowUnfoldButtom);
 		layoutToCollapse = v.findViewById(R.id.orderRowLayoutToCollapse);
+		DriverAsignado = v.findViewById(R.id.DriverAsignadodashboard);
+		AssignarDriverButton = v.findViewById(R.id.AsignarDriverOrderrow);
 		context = v.getContext();
 
     }
