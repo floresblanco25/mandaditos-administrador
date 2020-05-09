@@ -32,6 +32,14 @@
 			android:layout_margin="8dp"
 			android:id="@+id/countmainTextView1"/>
 
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Bar Button"
+			android:id="@+id/ArchiveAllOrdersmainButton1"
+			android:onClick="archivarTodo"/>
+
 	</LinearLayout>
 
 	<android.support.v7.widget.RecyclerView

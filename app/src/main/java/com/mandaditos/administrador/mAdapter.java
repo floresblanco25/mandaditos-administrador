@@ -4,6 +4,7 @@ import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.support.v7.widget.*;
+import android.util.*;
 import android.view.*;
 import android.view.View.*;
 import android.view.ViewGroup.*;
@@ -299,12 +300,14 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 					if (holder.layoutToCollapse.getVisibility() == View.GONE)
 					{
 						expand(holder.layoutToCollapse);
+						holder.unfoldButton.setImageDrawable(holder.context.getResources().getDrawable(R.drawable.baseline_expand_less_black_24));
 					}
 					else
 					{
 						if (!(holder.layoutToCollapse.getVisibility() == View.GONE))
 						{
 							collapse(holder.layoutToCollapse);
+							holder.unfoldButton.setImageDrawable(holder.context.getResources().getDrawable(R.drawable.baseline_expand_more_black_24));
 						}
 					}
 				}
@@ -326,14 +329,31 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				{
 					
 					AlertDialog.Builder builder = new AlertDialog.Builder(holder.context);
-					builder.setTitle("Choose an animal");
-					String[] animals = GetStringArray(DriversList);
-					builder.setItems(animals, new DialogInterface.OnClickListener() {
+					builder.setTitle("Elige un Driver");
+					String[] drivers = GetStringArray(DriversList);
+					builder.setItems(drivers, new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								String selected = DriversList.get(which);
-								holder.DriverAsignado.setText(selected);
+								final String selected = DriversList.get(which);
+								//aqui obtenemos el nombre del usuario
+								DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Drivers/" + selected + "/Perfil").child("nombre");
+								ref.addListenerForSingleValueEvent(new ValueEventListener() {
+										@Override
+										public void onDataChange(DataSnapshot dataSnapshot) {
+											String t = dataSnapshot.getValue(String.class);
+											holder.DriverAsignado.setText(selected);
+											holder.DriverName.setText(t);
+
+										}
+
+										@Override
+										public void onCancelled(DatabaseError databaseError) {
+
+										}
+									});
 								
+								
+
 							}
 						});
 
@@ -341,6 +361,8 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 					dialog.show();
 				}
 			});
+			
+			
 
 
     }
@@ -496,6 +518,7 @@ class mViewHolder extends RecyclerView.ViewHolder
 	Spinner SpinnerEstadoDeOrden,SpinnerDondeRecogerDinero;
 	ImageView unfoldButton;
 	LinearLayout layoutToCollapse;
+	TextView DriverName;
 	Context context;
 
 
@@ -521,6 +544,7 @@ class mViewHolder extends RecyclerView.ViewHolder
 		layoutToCollapse = v.findViewById(R.id.orderRowLayoutToCollapse);
 		DriverAsignado = v.findViewById(R.id.DriverAsignadodashboard);
 		AssignarDriverButton = v.findViewById(R.id.AsignarDriverOrderrow);
+		DriverName = v.findViewById(R.id.DriverNameTextView);
 		context = v.getContext();
 
 

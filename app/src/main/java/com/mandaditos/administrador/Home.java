@@ -9,6 +9,9 @@ import android.os.*;
 import android.support.annotation.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.*;
+import android.view.*;
+import android.widget.*;
+import android.widget.CompoundButton.*;
 import com.google.android.gms.maps.model.*;
 import com.google.firebase.database.*;
 import com.mandaditos.administrador.*;
@@ -18,8 +21,6 @@ import java.util.*;
 
 import android.Manifest;
 import com.mandaditos.administrador.R;
-import android.widget.*;
-import android.widget.CompoundButton.*;
 public class Home extends AppCompatActivity
 {
 
@@ -28,6 +29,9 @@ public class Home extends AppCompatActivity
 	private RequestPermissionHandler mRequestPermissionHandler;
 	private ToggleButton switchOrders;
 	private TextView CuentaTv;
+
+	private mAdapter adapter;
+	private RecyclerView mRecyclerView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -39,12 +43,14 @@ public class Home extends AppCompatActivity
 		switchOrders = findViewById(R.id.ordenesEntregadasSinEntregar);
 		CuentaTv = findViewById(R.id.countmainTextView1);
 		switchOrders.setChecked(true);
+		mRecyclerView = findViewById(R.id.recycler_orders);
 		
 		
 		
 		
-		
-		
+
+// Restore state
+	
 		
 		
 		
@@ -107,13 +113,11 @@ public class Home extends AppCompatActivity
 											}
 										}
 
-
-										mAdapter adapter = new mAdapter(Home.this,ordersList);
-										RecyclerView mRecyclerView = findViewById(R.id.recycler_orders);
+										adapter = new mAdapter(Home.this,ordersList);
 										mRecyclerView.setHasFixedSize(true);
 										LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
-										layoutManager.setReverseLayout(false);
-										layoutManager.setStackFromEnd(false);
+										layoutManager.setReverseLayout(true);
+										layoutManager.setStackFromEnd(true);
 										mRecyclerView.setLayoutManager(layoutManager);
 										mRecyclerView.setAdapter(adapter);
 										int count = 0;
@@ -183,11 +187,10 @@ public class Home extends AppCompatActivity
 
 
 										mAdapter adapter = new mAdapter(Home.this,ordersList);
-										RecyclerView mRecyclerView = findViewById(R.id.recycler_orders);
 										mRecyclerView.setHasFixedSize(true);
 										LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
-										layoutManager.setReverseLayout(false);
-										layoutManager.setStackFromEnd(false);
+										layoutManager.setReverseLayout(true);
+										layoutManager.setStackFromEnd(true);
 										mRecyclerView.setLayoutManager(layoutManager);
 										mRecyclerView.setAdapter(adapter);
 										int count = 0;
@@ -220,6 +223,17 @@ public class Home extends AppCompatActivity
 	}
 	
 	
+	
+
+	
+	
+	
+	
+//Archivar todo
+	public void archivarTodo(View v){
+		
+	}
+	
 
 	@Override
 	public void onBackPressed() {
@@ -250,6 +264,7 @@ public class Home extends AppCompatActivity
         mRequestPermissionHandler.onRequestPermissionsResult(requestCode, permissions,
 															 grantResults);
     }
+
 	
 	
 }
