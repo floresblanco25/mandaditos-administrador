@@ -1,18 +1,22 @@
 package com.mandaditos.administrador;
 
-import android.app.*;
-import android.content.*;
 import android.location.*;
 import android.os.*;
+import android.support.annotation.*;
+import android.support.v7.app.*;
+import android.util.*;
 import android.view.*;
 import android.view.View.*;
+import android.view.inputmethod.*;
 import android.widget.*;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
+import com.google.android.gms.tasks.*;
 import com.mandaditos.administrador.*;
+import java.io.*;
+import java.util.*;
 
 import com.mandaditos.administrador.R;
-import android.support.v7.app.*;
 
 public class mapPicker extends AppCompatActivity implements OnMapReadyCallback
 {
@@ -25,8 +29,9 @@ public class mapPicker extends AppCompatActivity implements OnMapReadyCallback
 	private LatLng latLng;
 	private Bundle args;
 	private String partidaODestino;
-	private Button guardarPosBt;
-
+	private Button guardarPosBt,BuscarButton;
+	String TAG = "search map";
+	private EditText mSearchText;
 
 
 
@@ -121,6 +126,11 @@ public class mapPicker extends AppCompatActivity implements OnMapReadyCallback
 		partidaODestino = args.getString("partidaODestino");
 		setContentView(R.layout.map_marker_edit);
 		guardarPosBt = findViewById(R.id.address_pickerButtonSaveMarker);
+		BuscarButton = findViewById(R.id.BuscarmapmarkereditButton1);
+		
+		
+		
+		
 		Bundle mapViewBundle = null;
 		if (savedInstanceState != null) {
 			mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
@@ -128,12 +138,25 @@ public class mapPicker extends AppCompatActivity implements OnMapReadyCallback
 		mapView = findViewById(R.id.map_view_picker);
 		mapView.onCreate(mapViewBundle);
 		mapView.getMapAsync(this);
+		mSearchText = findViewById(R.id.BuscarmapmarkereditEditText1);
+		
+		
+		BuscarButton.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View p1)
+				{
+					searchLocation();
+					// TODO: Implement this method
+				}
+			});
 
 
 
 
-
-
+		
+		
+		
 
 
 
@@ -165,7 +188,39 @@ public class mapPicker extends AppCompatActivity implements OnMapReadyCallback
 
 
 
+	
+	
+	
+	
+	
+	
+//search
+	public void searchLocation() {  
+        String location = mSearchText.getText().toString();  
+        List<Address> addressList = null;  
 
+        if (location != null || !location.equals("")) {  
+            Geocoder geocoder = new Geocoder(this);  
+            try {  
+                addressList = geocoder.getFromLocationName(location, 1);  
+
+            } catch (IOException e) {  
+                e.printStackTrace();  
+            }  
+			try{
+            Address address = addressList.get(0);  
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());  
+				gmap.clear();
+				marker = new MarkerOptions().position(latLng);
+				newLatLng = latLng;
+				gmap.addMarker(marker);
+				gmap.animateCamera(CameraUpdateFactory.newLatLng(latLng));  
+			}catch(Exception e){
+				Toast.makeText(getApplicationContext(),"No hay lugares",Toast.LENGTH_LONG).show();
+			}
+			
+        }  
+    }  
 
 
 
@@ -243,11 +298,6 @@ public class mapPicker extends AppCompatActivity implements OnMapReadyCallback
 		super.onLowMemory();
 		mapView.onLowMemory();
 	}
-
-
-
-
-
 
 
 

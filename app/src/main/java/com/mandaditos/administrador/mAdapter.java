@@ -26,43 +26,52 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
     private List<mandaditosModel> mDataList;
 	String[] statuses = { "Sin Completar", "Completada"};  
 	String[] dondeRecoger = { "Partida", "Destino"};
+	private ArrayList<String> DriversList;
 	static LatLng latLngA,latLngB;
 
+	private DatabaseReference mDataBase;
 	
+
 //Constructor
-    mAdapter(Context mContext, List< mandaditosModel > mDataList) {
+    mAdapter(Context mContext, List< mandaditosModel > mDataList)
+	{
         this.mContext = mContext;
         this.mDataList = mDataList;
     }
-	
+
 //To acces from mappicker
-	public static void setLatLng(String partidaODetino,LatLng latLng) {
-		if(partidaODetino.matches("partida")){
-			latLngA= latLng;
+	public static void setLatLng(String partidaODetino, LatLng latLng)
+	{
+		if (partidaODetino.matches("partida"))
+		{
+			latLngA = latLng;
 		}
-		if(partidaODetino.matches("destino")){
-			latLngB=latLng;
+		if (partidaODetino.matches("destino"))
+		{
+			latLngB = latLng;
 		}
-		
+
     }
-	
+
 //Nothing
 
     @Override
-    public mViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public mViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	{
         View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_row, parent, false);
         return new mViewHolder(mView);
     }
 
 //Bind
     @Override
-    public void onBindViewHolder(final mViewHolder holder, final int position) {
+    public void onBindViewHolder(final mViewHolder holder, final int position)
+	{
 		latLngA = mDataList.get(position).getLatLngA();
 		latLngB = mDataList.get(position).getLatLngB();
 		holder.PartidaEd.setText(mDataList.get(position).getPartida());
 		holder.DestinoEd.setText(mDataList.get(position).getDestino());
 		holder.DistanciaEd.setText(mDataList.get(position).getDistancia());
-		holder.FechaEtaEd.setText(mDataList.get(position).getFecha()+" "+mDataList.get(position).getEta());
+		holder.FechaEtaEd.setText(mDataList.get(position).getFecha() + " " + mDataList.get(position).getEta());
 		holder.DondeRecogerDineroEd.setText(mDataList.get(position).getRecogerDineroEn());
 		holder.CostoEd.setText(mDataList.get(position).getCosto());
 		holder.EstadoDeOrdenEd.setText(mDataList.get(position).getEstadoDeOrden());
@@ -79,30 +88,66 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		holder.EstadoDeOrdenEd.setEnabled(false);
 		holder.save.setEnabled(false);
 		holder.AssignarDriverButton.setEnabled(false);
-		ArrayAdapter statsAdapter = new ArrayAdapter(holder.context,android.R.layout.simple_spinner_item,statuses);  
+		holder.DriverAsignado.setEnabled(false);
+		holder.PartidaBt.setEnabled(false);
+		holder.DestinoBt.setEnabled(false);
+		ArrayAdapter statsAdapter = new ArrayAdapter(holder.context, android.R.layout.simple_spinner_item, statuses);  
         statsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
 		holder.SpinnerEstadoDeOrden.setEnabled(false);
         holder.SpinnerEstadoDeOrden.setAdapter(statsAdapter);  
-		ArrayAdapter whereAdapter = new ArrayAdapter(holder.context,android.R.layout.simple_spinner_item,dondeRecoger);  
+		ArrayAdapter whereAdapter = new ArrayAdapter(holder.context, android.R.layout.simple_spinner_item, dondeRecoger);  
         statsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
 		holder.SpinnerDondeRecogerDinero.setEnabled(false);
         holder.SpinnerDondeRecogerDinero.setAdapter(whereAdapter);
 		
+		mDataBase = FirebaseDatabase.getInstance().getReference("Drivers");
+		mDataBase.addValueEventListener(new ValueEventListener(){
+
+
+				@Override
+				public void onDataChange(DataSnapshot p1)
+				{
+					if (p1.exists())
+					{
+						DriversList = new ArrayList<String>();
+						for (DataSnapshot postSnapshot : p1.getChildren())
+						{
+							String driver = postSnapshot.getKey().toString();
+							DriversList.add(driver);
+
+						}
+
+
+					}
+					else
+					{}
+				}
+				@Override
+				public void onCancelled(DatabaseError p1)
+				{
+				}
+			});
+			
+
 //Spinner recoger dinero default
-		if(mDataList.get(position).getRecogerDineroEn().matches(dondeRecoger[0])){
+		if (mDataList.get(position).getRecogerDineroEn().matches(dondeRecoger[0]))
+		{
 			holder.SpinnerDondeRecogerDinero.setSelection(0);
 		}
-		if(mDataList.get(position).getRecogerDineroEn().matches(dondeRecoger[1])){
+		if (mDataList.get(position).getRecogerDineroEn().matches(dondeRecoger[1]))
+		{
 			holder.SpinnerDondeRecogerDinero.setSelection(1);
 		}
 //Spinner estado de orden default
-		if(mDataList.get(position).getEstadoDeOrden().matches(statuses[0])){
+		if (mDataList.get(position).getEstadoDeOrden().matches(statuses[0]))
+		{
 			holder.SpinnerEstadoDeOrden.setSelection(0);
 		}
-		if(mDataList.get(position).getEstadoDeOrden().matches(statuses[1])){
+		if (mDataList.get(position).getEstadoDeOrden().matches(statuses[1]))
+		{
 			holder.SpinnerEstadoDeOrden.setSelection(1);
 		}
-		
+
 //spinner estado de orden
 		holder.SpinnerEstadoDeOrden.setOnItemSelectedListener(new OnItemSelectedListener(){
 
@@ -116,7 +161,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				@Override
 				public void onNothingSelected(AdapterView<?> p1)
 				{
-					
+
 				}
 			});
 //Spinner donde recoger el dinero
@@ -134,9 +179,9 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				{
 				}
 			});
-		
-		
-		
+
+
+
 //Guardar boton
 		holder.save.setOnClickListener(new OnClickListener(){
 
@@ -186,9 +231,11 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 								holder.SpinnerEstadoDeOrden.setEnabled(false);
 								holder.SpinnerDondeRecogerDinero.setEnabled(false);
 								holder.AssignarDriverButton.setEnabled(false);
+								holder.PartidaBt.setEnabled(false);
+								holder.DestinoBt.setEnabled(false);
 							}
 						});
-						dialog.show();
+					dialog.show();
 
 				}
 
@@ -209,6 +256,8 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 					holder.SpinnerEstadoDeOrden.setEnabled(true);
 					holder.SpinnerDondeRecogerDinero.setEnabled(true);
 					holder.AssignarDriverButton.setEnabled(true);
+					holder.PartidaBt.setEnabled(true);
+					holder.DestinoBt.setEnabled(true);
 				}
 			});
 //Mapa partida
@@ -217,13 +266,13 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				@Override
 				public void onClick(View p1)
 				{
-					Intent i = new Intent(mContext,mapPicker.class);
+					Intent i = new Intent(mContext, mapPicker.class);
 					Bundle b = new Bundle();
-					b.putParcelable("latLng",mDataList.get(position).getLatLngA());
-					b.putString("partidaODestino","partida");
+					b.putParcelable("latLng", mDataList.get(position).getLatLngA());
+					b.putString("partidaODestino", "partida");
 					i.putExtras(b);
 					mContext.startActivity(i);
-					
+
 				}
 			});
 //mapa destino 
@@ -232,10 +281,10 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				@Override
 				public void onClick(View p1)
 				{
-					Intent i = new Intent(mContext,mapPicker.class);
+					Intent i = new Intent(mContext, mapPicker.class);
 					Bundle b = new Bundle();
-					b.putParcelable("latLng",mDataList.get(position).getLatLngB());
-					b.putString("partidaODestino","destino");
+					b.putParcelable("latLng", mDataList.get(position).getLatLngB());
+					b.putString("partidaODestino", "destino");
 					i.putExtras(b);
 					mContext.startActivity(i);
 
@@ -247,31 +296,105 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				@Override
 				public void onClick(View p1)
 				{
-					if(holder.layoutToCollapse.getVisibility()==View.GONE){
+					if (holder.layoutToCollapse.getVisibility() == View.GONE)
+					{
 						expand(holder.layoutToCollapse);
-					}else{
-					if(!(holder.layoutToCollapse.getVisibility()==View.GONE)){
-						collapse(holder.layoutToCollapse);
 					}
+					else
+					{
+						if (!(holder.layoutToCollapse.getVisibility() == View.GONE))
+						{
+							collapse(holder.layoutToCollapse);
+						}
 					}
 				}
 			});
 			
+			
+			
+			
+			
+			
+			
+			
+
 //asignar button
 		holder.AssignarDriverButton.setOnClickListener(new OnClickListener(){
 
 				@Override
 				public void onClick(View p1)
 				{
-//					TODO abrir lista de drivers 
+					
+					AlertDialog.Builder builder = new AlertDialog.Builder(holder.context);
+					builder.setTitle("Choose an animal");
+					String[] animals = GetStringArray(DriversList);
+					builder.setItems(animals, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								String selected = DriversList.get(which);
+								holder.DriverAsignado.setText(selected);
+								
+							}
+						});
+
+					AlertDialog dialog = builder.create();
+					dialog.show();
 				}
 			});
-			
-			
+
+
     }
 	
+	
+	
+	
+	
+	
+	
+//Get stringarray
+	public static String[] GetStringArray(ArrayList<String> arr) 
+
+    { 
+
+
+
+        // declaration and initialise String Array 
+
+        String str[] = new String[arr.size()]; 
+
+
+
+        // ArrayList to Array Conversion 
+
+        for (int j = 0; j < arr.size(); j++) { 
+
+
+
+            // Assign each value to String array 
+
+            str[j] = arr.get(j); 
+
+        } 
+
+
+
+        return str; 
+
+    } 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 //Expand and collapse
-	public static void expand(final View v) {
+	public static void expand(final View v)
+	{
 		int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
 		int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
 		v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
@@ -283,7 +406,8 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		Animation a = new Animation()
 		{
 			@Override
-			protected void applyTransformation(float interpolatedTime, Transformation t) {
+			protected void applyTransformation(float interpolatedTime, Transformation t)
+			{
 				v.getLayoutParams().height = interpolatedTime == 1
                     ? LayoutParams.WRAP_CONTENT
                     : (int)(targetHeight * interpolatedTime);
@@ -291,7 +415,8 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 			}
 
 			@Override
-			public boolean willChangeBounds() {
+			public boolean willChangeBounds()
+			{
 				return true;
 			}
 		};
@@ -301,23 +426,29 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		v.startAnimation(a);
 	}
 
-	public static void collapse(final View v) {
+	public static void collapse(final View v)
+	{
 		final int initialHeight = v.getMeasuredHeight();
 
 		Animation a = new Animation()
 		{
 			@Override
-			protected void applyTransformation(float interpolatedTime, Transformation t) {
-				if(interpolatedTime == 1){
+			protected void applyTransformation(float interpolatedTime, Transformation t)
+			{
+				if (interpolatedTime == 1)
+				{
 					v.setVisibility(View.GONE);
-				}else{
+				}
+				else
+				{
 					v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
 					v.requestLayout();
 				}
 			}
 
 			@Override
-			public boolean willChangeBounds() {
+			public boolean willChangeBounds()
+			{
 				return true;
 			}
 		};
@@ -326,20 +457,39 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
 		v.startAnimation(a);
 	}
+
+
+
 	
 	
 	
 	
+	
+	
+
 //nothing
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+	{
         return mDataList.size();
     }
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
 //Class virwholder
-class mViewHolder extends RecyclerView.ViewHolder {
+class mViewHolder extends RecyclerView.ViewHolder
+{
 
     EditText NumeroDeOrdenEd,PartidaEd,DestinoEd,DistanciaEd,FechaEtaEd,DondeRecogerDineroEd,CostoEd,EstadoDeOrdenEd,DriverAsignado;
 	Button save,edit,PartidaBt,DestinoBt,AssignarDriverButton;
@@ -348,7 +498,9 @@ class mViewHolder extends RecyclerView.ViewHolder {
 	LinearLayout layoutToCollapse;
 	Context context;
 
-    mViewHolder(View v) {
+
+    mViewHolder(View v)
+	{
         super(v);
 
 		NumeroDeOrdenEd = v.findViewById(R.id.dashboarOrderTitle);
@@ -371,11 +523,15 @@ class mViewHolder extends RecyclerView.ViewHolder {
 		AssignarDriverButton = v.findViewById(R.id.AsignarDriverOrderrow);
 		context = v.getContext();
 
-    }
-	
-	
 
-	
+
+
+
+    }
+
+
+
+
 
 
 
