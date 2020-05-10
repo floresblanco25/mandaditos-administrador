@@ -362,6 +362,53 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				}
 			});
 			
+//Delete order
+		holder.deleteButton.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View p1)
+				{
+					{
+						final AlertDialog dialog = new AlertDialog.Builder(holder.context).create();
+						dialog.setTitle("Borrado!");
+						dialog.setMessage("Borraras esta orden "+ mDataList.get(position).getNumeroDeOrden());
+						dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener(){
+
+								@Override
+								public void onClick(DialogInterface p1, int p2)
+								{
+									dialog.dismiss();
+								}
+							});
+						dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Eliminar", new DialogInterface.OnClickListener(){
+
+								@Override
+								public void onClick(DialogInterface p1, int p2)
+								{
+									DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+									Query applesQuery = ref.child("Ordenes/"+mDataList.get(position).getNumeroDeOrden());
+
+									applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+											@Override
+											public void onDataChange(DataSnapshot dataSnapshot) {
+												for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+													appleSnapshot.getRef().removeValue();
+												}
+											}
+
+											@Override
+											public void onCancelled(DatabaseError databaseError) {
+												Toast.makeText(holder.context,databaseError.toException().toString(),Toast.LENGTH_SHORT).show();
+											}
+										});
+								}
+							});
+						dialog.show();
+
+					}
+				}
+			});
+			
 			
 
 
@@ -377,8 +424,6 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 	public static String[] GetStringArray(ArrayList<String> arr) 
 
     { 
-
-
 
         // declaration and initialise String Array 
 
@@ -516,9 +561,10 @@ class mViewHolder extends RecyclerView.ViewHolder
     EditText NumeroDeOrdenEd,PartidaEd,DestinoEd,DistanciaEd,FechaEtaEd,DondeRecogerDineroEd,CostoEd,EstadoDeOrdenEd,DriverAsignado;
 	Button save,edit,PartidaBt,DestinoBt,AssignarDriverButton;
 	Spinner SpinnerEstadoDeOrden,SpinnerDondeRecogerDinero;
-	ImageView unfoldButton;
+	ImageView unfoldButton,deleteButton;;
 	LinearLayout layoutToCollapse;
 	TextView DriverName;
+	
 	Context context;
 
 
@@ -545,6 +591,7 @@ class mViewHolder extends RecyclerView.ViewHolder
 		DriverAsignado = v.findViewById(R.id.DriverAsignadodashboard);
 		AssignarDriverButton = v.findViewById(R.id.AsignarDriverOrderrow);
 		DriverName = v.findViewById(R.id.DriverNameTextView);
+		deleteButton = v.findViewById(R.id.deleteorderrowImageView1);
 		context = v.getContext();
 
 

@@ -15,19 +15,6 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Mostrar"
-			android:layout_margin="8dp"/>
-
-		<ToggleButton
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textOn="En proceso"
-			android:textOff="Entregadas"
-			android:id="@+id/ordenesEntregadasSinEntregar"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
 			android:text="0"
 			android:layout_margin="8dp"
 			android:id="@+id/countmainTextView1"/>
@@ -36,9 +23,29 @@
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
-			android:text="Bar Button"
-			android:id="@+id/ArchiveAllOrdersmainButton1"
-			android:onClick="archivarTodo"/>
+			android:text="Añadir"
+			android:onClick="addOrder"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Completas"
+			android:onClick="mostrarCompletas"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Sin completar"
+			android:onClick="mostrarSinCompletar"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Sin asignar"
+			android:onClick="mostrarSinAsignar"/>
 
 	</LinearLayout>
 
