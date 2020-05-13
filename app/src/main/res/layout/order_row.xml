@@ -5,7 +5,7 @@
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
 	android:layout_margin="16dp"
-	android:elevation="1dp"
+	android:elevation="10dp"
 	android:background="#EFEFEF"
 	android:gravity="right">
 
@@ -33,14 +33,15 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Código de orden:"/>
+			android:text="Código de orden:"
+			android:layout_margin="8dp"/>
 
 		<EditText
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="Consultando..."
 			android:id="@+id/dashboarOrderTitle"
-			style="@style/title"/>
+			android:textSize="14sp"/>
 
 	</LinearLayout>
 
@@ -68,7 +69,8 @@
 				android:text="Consultando..."
 				style="@style/info"
 				android:layout_margin="8dp"
-				android:id="@+id/dashboardOrderStatus"/>
+				android:id="@+id/dashboardOrderStatus"
+				android:textColor="#FA3D32"/>
 
 			<Spinner
 				android:id="@+id/orderStatus_rowSpinner"
@@ -103,7 +105,8 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:id="@+id/DriverNameTextView"
-				android:layout_margin="8dp"/>
+				android:layout_margin="8dp"
+				android:text="Driver"/>
 
 		</LinearLayout>
 
@@ -116,7 +119,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Partida"
+				android:text="Cliente"
 				style="@style/info"
 				android:layout_margin="8dp"/>
 
@@ -126,7 +129,46 @@
 				android:text="Consultando..."
 				style="@style/info"
 				android:layout_margin="0dp"
-				android:id="@+id/dashboardAddressA"/>
+				android:id="@+id/dashboardAddressA"
+				android:textColor="#A02595"
+				android:textSize="16sp"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Tel.:"
+				style="@style/info"
+				android:layout_margin="8dp"/>
+
+			<EditText
+				android:textIsSelectable="true"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				style="@style/info"
+				android:layout_margin="0dp"
+				android:id="@+id/CelulardashboardAddressA"
+				android:textColor="#3F6A78"
+				android:textStyle="bold"
+				android:textSize="16sp"
+				android:maxEms="10"
+				android:ems="10"
+				android:inputType="phone"/>
+
+			<Button
+				android:layout_width="wrap_content"
+				style="?android:attr/buttonBarButtonStyle"
+				android:layout_height="wrap_content"
+				android:text="Llamar"
+				android:id="@+id/llamarorderpoolrowButton1"
+				android:textColor="#85089E"/>
 
 		</LinearLayout>
 
@@ -149,111 +191,118 @@
 				android:text="Consultando..."
 				style="@style/info"
 				android:layout_margin="0dp"
-				android:id="@+id/dashboardAddressB"/>
+				android:id="@+id/dashboardAddressB"
+				android:textColor="#00676E"
+				android:textSize="14sp"/>
 
 		</LinearLayout>
+
 		<LinearLayout
 			android:orientation="vertical"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:id="@+id/orderRowLayoutToCollapse"
-			android:visibility="gone"
-		>
+			android:visibility="gone">
 
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:gravity="center_vertical">
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Distancia"
-				style="@style/info"
-				android:layout_margin="8dp"/>
-
-			<EditText
+			<LinearLayout
+				android:orientation="horizontal"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="Consultando..."
-				style="@style/info"
-				android:id="@+id/dashboardDistance"/>
+				android:gravity="center_vertical"
+				android:visibility="gone">
 
-		</LinearLayout>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Distancia"
+					style="@style/info"
+					android:layout_margin="8dp"/>
 
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:gravity="center_vertical">
+				<EditText
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="Consultando..."
+					style="@style/info"
+					android:id="@+id/dashboardDistance"/>
 
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Fecha y hora de entrega"
-				style="@style/info"
-				android:layout_margin="8dp"/>
+			</LinearLayout>
 
-			<EditText
+			<LinearLayout
+				android:orientation="horizontal"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="Consultando..."
-				style="@style/info"
-				android:id="@+id/dashboardDateEta"/>
+				android:gravity="center_vertical"
+				android:visibility="gone">
 
-		</LinearLayout>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Fecha y hora de entrega"
+					style="@style/info"
+					android:layout_margin="8dp"/>
 
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:gravity="center_vertical">
+				<EditText
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="Consultando..."
+					style="@style/info"
+					android:id="@+id/dashboardDateEta"/>
 
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Recoger dinero en"
-				style="@style/info"
-				android:layout_margin="8dp"/>
+			</LinearLayout>
 
-			<EditText
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Consultando..."
-				style="@style/info"
-				android:id="@+id/dashboardWhereGetMoney"
-				android:layout_margin="8dp"/>
-
-			<Spinner
-				android:id="@+id/where_rowSpinner"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"/>
-
-		</LinearLayout>
-
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:gravity="center_vertical">
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Costo total"
-				style="@style/info"
-				android:layout_margin="8dp"/>
-
-			<EditText
+			<LinearLayout
+				android:orientation="horizontal"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="Consultando..."
-				style="@style/info"
-				android:id="@+id/dashboardTotalCost"
-				android:textColor="#A00900"/>
+				android:gravity="center_vertical"
+				android:visibility="gone">
 
-		</LinearLayout>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Recoger dinero en"
+					style="@style/info"
+					android:layout_margin="8dp"/>
+
+				<EditText
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Consultando..."
+					style="@style/info"
+					android:id="@+id/dashboardWhereGetMoney"
+					android:layout_margin="8dp"/>
+
+				<Spinner
+					android:id="@+id/where_rowSpinner"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:visibility="gone"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Costo total"
+					style="@style/info"
+					android:layout_margin="8dp"/>
+
+				<EditText
+					android:inputType="numberDecimal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text=""
+					style="@style/info"
+					android:id="@+id/dashboardTotalCost"
+					android:textColor="#A00900"/>
+
+			</LinearLayout>
 
 			<LinearLayout
 				android:orientation="horizontal"

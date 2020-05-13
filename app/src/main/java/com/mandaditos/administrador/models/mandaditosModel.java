@@ -19,14 +19,15 @@ public class mandaditosModel
 	private String UserId;
 	private String DriverUid;
 	private String DriverAsignado;
+	private String Telefono;
 
 	public mandaditosModel(){}
 
     public mandaditosModel(String userId,
-							   String Usuario,String Partida, String Destino, String Distancia, String Fecha, 
-							   String ETA, String RecogerDineroEn, String Costo, String EstadoDeOrden,LatLng LatLngA,
-							   LatLng LatLngB, String driverAsignado
-							   ) {
+						   String Usuario,String Partida, String Destino, String Distancia, String Fecha, 
+						   String ETA, String RecogerDineroEn, String Costo, String EstadoDeOrden,LatLng LatLngA,
+						   LatLng LatLngB, String driverAsignado, String Telefono
+						   ) {
         this.Partida = Partida;
         this.Destino = Destino;
 		this.Distancia = Distancia;
@@ -40,6 +41,17 @@ public class mandaditosModel
 		this.LatLngB=LatLngB;
 		this.UserId=userId;
 		this.DriverAsignado = driverAsignado;
+		this.Telefono=Telefono;
+	}
+
+	public void setTelefono(String telefono)
+	{
+		Telefono = telefono;
+	}
+
+	public String getTelefono()
+	{
+		return Telefono;
 	}
 
 	public void setDriverAsignado(String mNombreDriver)

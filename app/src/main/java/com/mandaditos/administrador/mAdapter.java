@@ -2,9 +2,9 @@ package com.mandaditos.administrador;
 
 import android.app.*;
 import android.content.*;
+import android.net.*;
 import android.os.*;
 import android.support.v7.widget.*;
-import android.util.*;
 import android.view.*;
 import android.view.View.*;
 import android.view.ViewGroup.*;
@@ -27,11 +27,10 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
     private List<mandaditosModel> mDataList;
 	String[] statuses = { "Sin Completar", "Completada"};  
 	String[] dondeRecoger = { "Partida", "Destino"};
-	private ArrayList<String> DriversList;
+	private ArrayList<String> DriversUIdList;
 	static LatLng latLngA,latLngB;
-
+	private String asignedDriverName;
 	private DatabaseReference mDataBase;
-	
 
 //Constructor
     mAdapter(Context mContext, List< mandaditosModel > mDataList)
@@ -39,6 +38,12 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
         this.mContext = mContext;
         this.mDataList = mDataList;
     }
+
+
+
+
+
+
 
 //To acces from mappicker
 	public static void setLatLng(String partidaODetino, LatLng latLng)
@@ -63,6 +68,12 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
         return new mViewHolder(mView);
     }
 
+
+
+
+
+
+
 //Bind
     @Override
     public void onBindViewHolder(final mViewHolder holder, final int position)
@@ -78,6 +89,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		holder.EstadoDeOrdenEd.setText(mDataList.get(position).getEstadoDeOrden());
 		holder.NumeroDeOrdenEd.setText(mDataList.get(position).getNumeroDeOrden());
 		holder.DriverAsignado.setText(mDataList.get(position).getDriverAsignado());
+		holder.callEd.setText(mDataList.get(position).getTelefono());
 		holder.DriverAsignado.setEnabled(true);
 		holder.NumeroDeOrdenEd.setEnabled(false);
 		holder.PartidaEd.setEnabled(false);
@@ -92,6 +104,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		holder.DriverAsignado.setEnabled(false);
 		holder.PartidaBt.setEnabled(false);
 		holder.DestinoBt.setEnabled(false);
+		holder.callEd.setEnabled(false);
 		ArrayAdapter statsAdapter = new ArrayAdapter(holder.context, android.R.layout.simple_spinner_item, statuses);  
         statsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
 		holder.SpinnerEstadoDeOrden.setEnabled(false);
@@ -100,9 +113,10 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
         statsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
 		holder.SpinnerDondeRecogerDinero.setEnabled(false);
         holder.SpinnerDondeRecogerDinero.setAdapter(whereAdapter);
-		
+
 		mDataBase = FirebaseDatabase.getInstance().getReference("Drivers");
-		mDataBase.addValueEventListener(new ValueEventListener(){
+//		modified
+		mDataBase.addListenerForSingleValueEvent(new ValueEventListener(){
 
 
 				@Override
@@ -110,14 +124,12 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				{
 					if (p1.exists())
 					{
-						DriversList = new ArrayList<String>();
+						DriversUIdList = new ArrayList<String>();
 						for (DataSnapshot postSnapshot : p1.getChildren())
 						{
 							String driver = postSnapshot.getKey().toString();
-							DriversList.add(driver);
-
+							DriversUIdList.add(driver);
 						}
-
 
 					}
 					else
@@ -129,6 +141,74 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				}
 			});
 			
+			
+			
+			
+			
+			
+			
+			
+			
+//Obtenemos nombre por uid
+		mDataBase = FirebaseDatabase.getInstance().getReference("Drivers/" + mDataList.get(position).getDriverAsignado() +"/"+ "Perfil").child("nombre");
+		mDataBase.addListenerForSingleValueEvent(new ValueEventListener(){
+
+
+				@Override
+				public void onDataChange(DataSnapshot p1)
+				{
+					if (p1.exists())
+					{
+						holder.DriverName.setText(p1.getValue().toString());
+					}
+					else
+					{}
+				}
+				@Override
+				public void onCancelled(DatabaseError p1)
+				{
+				}
+			});
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		//llamar
+		holder.llamar.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View p1)
+				{
+					String phone = holder.callEd.getText().toString();
+					holder.context.startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null)));
+				}
+			});
+
+
+
+
+
+
+
+
+
+
 
 //Spinner recoger dinero default
 		if (mDataList.get(position).getRecogerDineroEn().matches(dondeRecoger[0]))
@@ -139,6 +219,15 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		{
 			holder.SpinnerDondeRecogerDinero.setSelection(1);
 		}
+
+
+
+
+
+
+
+
+
 //Spinner estado de orden default
 		if (mDataList.get(position).getEstadoDeOrden().matches(statuses[0]))
 		{
@@ -148,6 +237,15 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		{
 			holder.SpinnerEstadoDeOrden.setSelection(1);
 		}
+
+
+
+
+
+
+
+
+
 
 //spinner estado de orden
 		holder.SpinnerEstadoDeOrden.setOnItemSelectedListener(new OnItemSelectedListener(){
@@ -165,6 +263,18 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 
 				}
 			});
+
+
+
+
+
+
+
+
+
+
+
+
 //Spinner donde recoger el dinero
 		holder.SpinnerDondeRecogerDinero.setOnItemSelectedListener(new OnItemSelectedListener(){
 
@@ -180,6 +290,17 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				{
 				}
 			});
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -208,15 +329,15 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 								String ordrStat = holder.EstadoDeOrdenEd.getText().toString();
 								String partida = holder.PartidaEd.getText().toString();
 								String destino = holder.DestinoEd.getText().toString();
-								String distancia = holder.DistanciaEd.getText().toString();
 								String recogerdinero = holder.DondeRecogerDineroEd.getText().toString();
 								String costo = holder.CostoEd.getText().toString();
 								String newDriverUid = holder.DriverAsignado.getText().toString();
+								String telefono = holder.callEd.getText().toString();
 								DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Ordenes").child(mDataList.get(position).getNumeroDeOrden());
 								mDatabase.child("estadoDeOrden").setValue(ordrStat);
 								mDatabase.child("partida").setValue(partida);
 								mDatabase.child("destino").setValue(destino);
-								mDatabase.child("distancia").setValue(distancia);
+								mDatabase.child("telefono").setValue(telefono);
 								mDatabase.child("recogerDineroEn").setValue(recogerdinero);
 								mDatabase.child("costo").setValue(costo);
 								mDatabase.child("latLngA").setValue(latLngA);
@@ -234,6 +355,8 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 								holder.AssignarDriverButton.setEnabled(false);
 								holder.PartidaBt.setEnabled(false);
 								holder.DestinoBt.setEnabled(false);
+								holder.callEd.setEnabled(false);
+								Toast.makeText(holder.context, telefono, Toast.LENGTH_LONG).show();
 							}
 						});
 					dialog.show();
@@ -241,6 +364,17 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				}
 
 			});
+
+
+
+
+
+
+
+
+
+
+
 //Edit button
 		holder.edit.setOnClickListener(new OnClickListener(){
 
@@ -259,8 +393,21 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 					holder.AssignarDriverButton.setEnabled(true);
 					holder.PartidaBt.setEnabled(true);
 					holder.DestinoBt.setEnabled(true);
+					holder.callEd.setEnabled(true);
+					holder.callEd.setEnabled(true);
 				}
 			});
+
+
+
+
+
+
+
+
+
+
+
 //Mapa partida
 		holder.PartidaBt.setOnClickListener(new OnClickListener(){
 
@@ -276,6 +423,17 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 
 				}
 			});
+
+
+
+
+
+
+
+
+
+
+
 //mapa destino 
 		holder.DestinoBt.setOnClickListener(new OnClickListener(){
 
@@ -291,6 +449,17 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 
 				}
 			});
+
+
+
+
+
+
+
+
+
+
+
 //unfold button
 		holder.unfoldButton.setOnClickListener(new OnClickListener(){
 
@@ -312,14 +481,16 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 					}
 				}
 			});
-			
-			
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
+
+
+
+
 
 //asignar button
 		holder.AssignarDriverButton.setOnClickListener(new OnClickListener(){
@@ -327,32 +498,37 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				@Override
 				public void onClick(View p1)
 				{
-					
+
 					AlertDialog.Builder builder = new AlertDialog.Builder(holder.context);
 					builder.setTitle("Elige un Driver");
-					String[] drivers = GetStringArray(DriversList);
+					String[] drivers = GetStringArray(DriversUIdList);
 					builder.setItems(drivers, new DialogInterface.OnClickListener() {
 							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								final String selected = DriversList.get(which);
+							public void onClick(DialogInterface dialog, int which)
+							{
+								final String selectedUId = DriversUIdList.get(which);
 								//aqui obtenemos el nombre del usuario
-								DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Drivers/" + selected + "/Perfil").child("nombre");
-								ref.addListenerForSingleValueEvent(new ValueEventListener() {
+								DatabaseReference refByUid = FirebaseDatabase.getInstance().getReference("Drivers/" + selectedUId + "/Perfil").child("nombre");
+								refByUid.addListenerForSingleValueEvent(new ValueEventListener() {
+
 										@Override
-										public void onDataChange(DataSnapshot dataSnapshot) {
-											String t = dataSnapshot.getValue(String.class);
-											holder.DriverAsignado.setText(selected);
-											holder.DriverName.setText(t);
+										public void onDataChange(DataSnapshot dataSnapshot)
+										{
+											String nombre = dataSnapshot.getValue(String.class);
+											holder.DriverAsignado.setText(selectedUId);
+											asignedDriverName = nombre;
+											holder.DriverName.setText(nombre);
 
 										}
 
 										@Override
-										public void onCancelled(DatabaseError databaseError) {
+										public void onCancelled(DatabaseError databaseError)
+										{
 
 										}
 									});
-								
-								
+
+
 
 							}
 						});
@@ -361,7 +537,18 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 					dialog.show();
 				}
 			});
-			
+
+
+
+
+
+
+
+
+
+
+
+
 //Delete order
 		holder.deleteButton.setOnClickListener(new OnClickListener(){
 
@@ -371,7 +558,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 					{
 						final AlertDialog dialog = new AlertDialog.Builder(holder.context).create();
 						dialog.setTitle("Borrado!");
-						dialog.setMessage("Borraras esta orden "+ mDataList.get(position).getNumeroDeOrden());
+						dialog.setMessage("Borraras esta orden " + mDataList.get(position).getNumeroDeOrden());
 						dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener(){
 
 								@Override
@@ -386,19 +573,22 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 								public void onClick(DialogInterface p1, int p2)
 								{
 									DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-									Query applesQuery = ref.child("Ordenes/"+mDataList.get(position).getNumeroDeOrden());
+									Query applesQuery = ref.child("Ordenes/" + mDataList.get(position).getNumeroDeOrden());
 
 									applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
 											@Override
-											public void onDataChange(DataSnapshot dataSnapshot) {
-												for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+											public void onDataChange(DataSnapshot dataSnapshot)
+											{
+												for (DataSnapshot appleSnapshot: dataSnapshot.getChildren())
+												{
 													appleSnapshot.getRef().removeValue();
 												}
 											}
 
 											@Override
-											public void onCancelled(DatabaseError databaseError) {
-												Toast.makeText(holder.context,databaseError.toException().toString(),Toast.LENGTH_SHORT).show();
+											public void onCancelled(DatabaseError databaseError)
+											{
+												Toast.makeText(holder.context, databaseError.toException().toString(), Toast.LENGTH_SHORT).show();
 											}
 										});
 								}
@@ -408,56 +598,44 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 					}
 				}
 			});
-			
-			
+
+
 
 
     }
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
 //Get stringarray
 	public static String[] GetStringArray(ArrayList<String> arr) 
-
     { 
-
-        // declaration and initialise String Array 
-
         String str[] = new String[arr.size()]; 
-
-
-
-        // ArrayList to Array Conversion 
-
-        for (int j = 0; j < arr.size(); j++) { 
-
-
-
-            // Assign each value to String array 
-
+        for (int j = 0; j < arr.size(); j++)
+		{ 
             str[j] = arr.get(j); 
-
         } 
-
-
 
         return str; 
 
     } 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
 
 //Expand and collapse
 	public static void expand(final View v)
@@ -466,8 +644,6 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
 		v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
 		final int targetHeight = v.getMeasuredHeight();
-
-		// Older versions of android (pre API 21) cancel animations for views with a height of 0.
 		v.getLayoutParams().height = 1;
 		v.setVisibility(View.VISIBLE);
 		Animation a = new Animation()
@@ -487,12 +663,23 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				return true;
 			}
 		};
-
-		// Expansion speed of 1dp/ms
 		a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density));
 		v.startAnimation(a);
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+//expand
 	public static void collapse(final View v)
 	{
 		final int initialHeight = v.getMeasuredHeight();
@@ -519,20 +706,20 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				return true;
 			}
 		};
-
-		// Collapse speed of 1dp/ms
 		a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
 		v.startAnimation(a);
 	}
 
 
 
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 
 //nothing
     @Override
@@ -554,17 +741,21 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 
 
 
+
+
+
 //Class virwholder
 class mViewHolder extends RecyclerView.ViewHolder
 {
 
     EditText NumeroDeOrdenEd,PartidaEd,DestinoEd,DistanciaEd,FechaEtaEd,DondeRecogerDineroEd,CostoEd,EstadoDeOrdenEd,DriverAsignado;
-	Button save,edit,PartidaBt,DestinoBt,AssignarDriverButton;
+	Button save,edit,PartidaBt,DestinoBt,AssignarDriverButton,llamar;
 	Spinner SpinnerEstadoDeOrden,SpinnerDondeRecogerDinero;
 	ImageView unfoldButton,deleteButton;;
 	LinearLayout layoutToCollapse;
 	TextView DriverName;
-	
+	EditText callEd;
+
 	Context context;
 
 
@@ -592,6 +783,8 @@ class mViewHolder extends RecyclerView.ViewHolder
 		AssignarDriverButton = v.findViewById(R.id.AsignarDriverOrderrow);
 		DriverName = v.findViewById(R.id.DriverNameTextView);
 		deleteButton = v.findViewById(R.id.deleteorderrowImageView1);
+		llamar = v.findViewById(R.id.llamarorderpoolrowButton1);
+		callEd = v.findViewById(R.id.CelulardashboardAddressA);
 		context = v.getContext();
 
 

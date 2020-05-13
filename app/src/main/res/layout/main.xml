@@ -23,7 +23,7 @@
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
-			android:text="Añadir"
+			android:text="+"
 			android:onClick="addOrder"/>
 
 		<Button
@@ -37,15 +37,22 @@
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
-			android:text="Sin completar"
+			android:text="Incompletas"
 			android:onClick="mostrarSinCompletar"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
-			android:text="Sin asignar"
+			android:text="Nuevas"
 			android:onClick="mostrarSinAsignar"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Drivers"
+			android:onClick="verDrivers"/>
 
 	</LinearLayout>
 

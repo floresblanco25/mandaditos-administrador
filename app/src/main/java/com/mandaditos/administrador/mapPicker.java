@@ -46,7 +46,7 @@ public class mapPicker extends AppCompatActivity implements OnMapReadyCallback
 	{
 		gmap = p1;
         gmap.setMinZoomPreference(12);
-		gmap.setMyLocationEnabled(false);
+		gmap.setMyLocationEnabled(true);
 		
 		gmap.clear();
 		marker = new MarkerOptions().position(latLng);
