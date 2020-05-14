@@ -18,6 +18,8 @@ import java.util.*;
 
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.graphics.*;
+import android.text.*;
 
 public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 {
@@ -82,22 +84,27 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		latLngB = mDataList.get(position).getLatLngB();
 		holder.PartidaEd.setText(mDataList.get(position).getPartida());
 		holder.DestinoEd.setText(mDataList.get(position).getDestino());
-		holder.DistanciaEd.setText(mDataList.get(position).getDistancia());
-		holder.FechaEtaEd.setText(mDataList.get(position).getFecha() + " " + mDataList.get(position).getEta());
-		holder.DondeRecogerDineroEd.setText(mDataList.get(position).getRecogerDineroEn());
-		holder.CostoEd.setText(mDataList.get(position).getCosto());
+//		holder.DistanciaEd.setText(mDataList.get(position).getDistancia());
+//		holder.FechaEtaEd.setText(mDataList.get(position).getFecha() + " " + mDataList.get(position).getEta());
+//		holder.DondeRecogerDineroEd.setText(mDataList.get(position).getRecogerDineroEn());
+		holder.CostoDelProductoEd.setText(mDataList.get(position).getCostoDelProducto());
+		holder.CostoDelEnvioEd.setText(mDataList.get(position).getCostoDelEnvio());
 		holder.EstadoDeOrdenEd.setText(mDataList.get(position).getEstadoDeOrden());
 		holder.NumeroDeOrdenEd.setText(mDataList.get(position).getNumeroDeOrden());
 		holder.DriverAsignado.setText(mDataList.get(position).getDriverAsignado());
 		holder.callEd.setText(mDataList.get(position).getTelefono());
+		holder.EmpresaEd.setText(mDataList.get(position).getEmpresa());
+		holder.direccionEmpresaEd.setText(mDataList.get(position).getDireccionEmpresa());
+		holder.InstruccionesEd.setText(mDataList.get(position).getInstruccionesDeLlegada());
 		holder.DriverAsignado.setEnabled(true);
 		holder.NumeroDeOrdenEd.setEnabled(false);
 		holder.PartidaEd.setEnabled(false);
 		holder.DestinoEd.setEnabled(false);
-		holder.DistanciaEd.setEnabled(false);
-		holder.FechaEtaEd.setEnabled(false);
-		holder.DondeRecogerDineroEd.setEnabled(false);
-		holder.CostoEd.setEnabled(false);
+//		holder.DistanciaEd.setEnabled(false);
+//		holder.FechaEtaEd.setEnabled(false);
+//		holder.DondeRecogerDineroEd.setEnabled(false);
+		holder.CostoDelProductoEd.setEnabled(false);
+		holder.CostoDelEnvioEd.setEnabled(false);
 		holder.EstadoDeOrdenEd.setEnabled(false);
 		holder.save.setEnabled(false);
 		holder.AssignarDriverButton.setEnabled(false);
@@ -105,17 +112,104 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		holder.PartidaBt.setEnabled(false);
 		holder.DestinoBt.setEnabled(false);
 		holder.callEd.setEnabled(false);
+		holder.EmpresaEd.setEnabled(false);
+		holder.direccionEmpresaEd.setEnabled(false);
+		holder.InstruccionesEd.setEnabled(false);
+		
+		float CostProdNum=Float.parseFloat(mDataList.get(position).getCostoDelProducto());
+		float CostEnvNum=Float.parseFloat(mDataList.get(position).getCostoDelEnvio());
+		float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
+		holder.CostoTotalTv.setText(String.valueOf(Float.toString(resultadoDeProdMasEnv)));
+
+		
+//		holder.CostoDelProductoEd.addTextChangedListener(new TextWatcher(){
+//				private float CostProdNum;
+//				private float CostEnvNum;
+//				@Override
+//				public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4)
+//				{
+//					// TODO: Implement this method
+//				}
+//
+//				@Override
+//				public void onTextChanged(CharSequence p1, int p2, int p3, int p4)
+//				{
+//					if(p1.toString().matches("")){
+//						CostProdNum=0;
+//						CostEnvNum=Float.parseFloat(holder.CostoDelEnvioEd.getText().toString());
+//						float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
+//						holder.CostoTotalTv.setText(String.valueOf(Float.toString(resultadoDeProdMasEnv)));
+//					}
+//					else{
+//						
+//						CostEnvNum=Float.parseFloat(p1.toString());
+//						CostProdNum=Float.parseFloat(holder.CostoDelProductoEd.getText().toString());
+//						float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
+//						holder.CostoTotalTv.setText(String.valueOf(Float.toString(resultadoDeProdMasEnv)));
+//					}
+//					
+//					// TODO: Implement this method
+//				}
+//
+//				@Override
+//				public void afterTextChanged(Editable p1)
+//				{
+//					
+//
+//
+//					// TODO: Implement this method
+//				}
+//			});
+//		holder.CostoDelEnvioEd.addTextChangedListener(new TextWatcher(){
+//				private float CostProdNum;
+//				private float CostEnvNum;
+//				@Override
+//				public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4)
+//				{
+//					// TODO: Implement this method
+//				}
+//
+//				@Override
+//				public void onTextChanged(CharSequence p1, int p2, int p3, int p4)
+//				{
+//					if(p1.toString().matches("")){
+//						CostEnvNum=0;
+//						CostProdNum=Float.parseFloat(holder.CostoDelProductoEd.getText().toString());
+//						float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
+//						holder.CostoTotalTv.setText(String.valueOf(Float.toString(resultadoDeProdMasEnv)));
+//					}
+//					else{
+//						CostProdNum=Float.parseFloat(holder.CostoDelProductoEd.toString());
+//						CostEnvNum=Float.parseFloat(p1.toString());
+//						
+//					float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
+//					holder.CostoTotalTv.setText(String.valueOf(Float.toString(resultadoDeProdMasEnv)));
+//					}
+//					
+//					// TODO: Implement this method
+//				}
+//
+//				@Override
+//				public void afterTextChanged(Editable p1)
+//				{
+//					// TODO: Implement this method
+//				}
+//			});
+		
+		
+		
+		
+
 		ArrayAdapter statsAdapter = new ArrayAdapter(holder.context, android.R.layout.simple_spinner_item, statuses);  
         statsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
 		holder.SpinnerEstadoDeOrden.setEnabled(false);
         holder.SpinnerEstadoDeOrden.setAdapter(statsAdapter);  
 		ArrayAdapter whereAdapter = new ArrayAdapter(holder.context, android.R.layout.simple_spinner_item, dondeRecoger);  
         statsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
-		holder.SpinnerDondeRecogerDinero.setEnabled(false);
-        holder.SpinnerDondeRecogerDinero.setAdapter(whereAdapter);
+//		holder.SpinnerDondeRecogerDinero.setEnabled(false);
+//        holder.SpinnerDondeRecogerDinero.setAdapter(whereAdapter);
 
 		mDataBase = FirebaseDatabase.getInstance().getReference("Drivers");
-//		modified
 		mDataBase.addListenerForSingleValueEvent(new ValueEventListener(){
 
 
@@ -140,17 +234,17 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				{
 				}
 			});
-			
-			
-			
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
+
+
+
 //Obtenemos nombre por uid
-		mDataBase = FirebaseDatabase.getInstance().getReference("Drivers/" + mDataList.get(position).getDriverAsignado() +"/"+ "Perfil").child("nombre");
+		mDataBase = FirebaseDatabase.getInstance().getReference("Drivers/" + mDataList.get(position).getDriverAsignado() + "/" + "Perfil").child("nombre");
 		mDataBase.addListenerForSingleValueEvent(new ValueEventListener(){
 
 
@@ -171,7 +265,6 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 			});
 
 
-		
 
 
 
@@ -189,7 +282,8 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 
 
 
-		//llamar
+
+//llamar
 		holder.llamar.setOnClickListener(new OnClickListener(){
 
 				@Override
@@ -213,11 +307,11 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 //Spinner recoger dinero default
 		if (mDataList.get(position).getRecogerDineroEn().matches(dondeRecoger[0]))
 		{
-			holder.SpinnerDondeRecogerDinero.setSelection(0);
+//			holder.SpinnerDondeRecogerDinero.setSelection(0);
 		}
 		if (mDataList.get(position).getRecogerDineroEn().matches(dondeRecoger[1]))
 		{
-			holder.SpinnerDondeRecogerDinero.setSelection(1);
+//			holder.SpinnerDondeRecogerDinero.setSelection(1);
 		}
 
 
@@ -232,10 +326,12 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		if (mDataList.get(position).getEstadoDeOrden().matches(statuses[0]))
 		{
 			holder.SpinnerEstadoDeOrden.setSelection(0);
+			holder.EstadoDeOrdenEd.setTextColor(Color.RED);
 		}
 		if (mDataList.get(position).getEstadoDeOrden().matches(statuses[1]))
 		{
 			holder.SpinnerEstadoDeOrden.setSelection(1);
+			holder.EstadoDeOrdenEd.setTextColor(Color.BLUE);
 		}
 
 
@@ -276,20 +372,20 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 
 
 //Spinner donde recoger el dinero
-		holder.SpinnerDondeRecogerDinero.setOnItemSelectedListener(new OnItemSelectedListener(){
-
-				@Override
-				public void onItemSelected(AdapterView<?> p1, View p2, int pos, long p4)
-				{
-					String selected = dondeRecoger[pos];
-					holder.DondeRecogerDineroEd.setText(selected);
-				}
-
-				@Override
-				public void onNothingSelected(AdapterView<?> p1)
-				{
-				}
-			});
+//		holder.SpinnerDondeRecogerDinero.setOnItemSelectedListener(new OnItemSelectedListener(){
+//
+//				@Override
+//				public void onItemSelected(AdapterView<?> p1, View p2, int pos, long p4)
+//				{
+//					String selected = dondeRecoger[pos];
+//					holder.DondeRecogerDineroEd.setText(selected);
+//				}
+//
+//				@Override
+//				public void onNothingSelected(AdapterView<?> p1)
+//				{
+//				}
+//			});
 
 
 
@@ -310,56 +406,78 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				@Override
 				public void onClick(View p1)
 				{
-					final AlertDialog dialog = new AlertDialog.Builder(holder.context).create();
-					dialog.setTitle("Alerta!");
-					dialog.setMessage("Asegurate que los datos sean correctos");
-					dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener(){
+					
+					String costoDelProducto = holder.CostoDelProductoEd.getText().toString();
+					if (costoDelProducto.isEmpty())
+					{
+						Toast.makeText(holder.context, "Ingresa el costo, si ya esta cobrado ingresa 0", 1000).show();
+					}if (!costoDelProducto.isEmpty())
+					{
+						final AlertDialog dialog = new AlertDialog.Builder(holder.context).create();
+						dialog.setTitle("Alerta!");
+						dialog.setMessage("Asegurate que los datos sean correctos");
+						dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener(){
 
-							@Override
-							public void onClick(DialogInterface p1, int p2)
-							{
-								dialog.dismiss();
-							}
-						});
-					dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Continuar", new DialogInterface.OnClickListener(){
+								@Override
+								public void onClick(DialogInterface p1, int p2)
+								{
+									dialog.dismiss();
+								}
+							});
+						dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Continuar", new DialogInterface.OnClickListener(){
 
-							@Override
-							public void onClick(DialogInterface p1, int p2)
-							{
-								String ordrStat = holder.EstadoDeOrdenEd.getText().toString();
-								String partida = holder.PartidaEd.getText().toString();
-								String destino = holder.DestinoEd.getText().toString();
-								String recogerdinero = holder.DondeRecogerDineroEd.getText().toString();
-								String costo = holder.CostoEd.getText().toString();
-								String newDriverUid = holder.DriverAsignado.getText().toString();
-								String telefono = holder.callEd.getText().toString();
-								DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Ordenes").child(mDataList.get(position).getNumeroDeOrden());
-								mDatabase.child("estadoDeOrden").setValue(ordrStat);
-								mDatabase.child("partida").setValue(partida);
-								mDatabase.child("destino").setValue(destino);
-								mDatabase.child("telefono").setValue(telefono);
-								mDatabase.child("recogerDineroEn").setValue(recogerdinero);
-								mDatabase.child("costo").setValue(costo);
-								mDatabase.child("latLngA").setValue(latLngA);
-								mDatabase.child("latLngB").setValue(latLngB);
-								mDatabase.child("driverAsignado").setValue(newDriverUid);
-								holder.PartidaEd.setEnabled(false);
-								holder.DestinoEd.setEnabled(false);
-								holder.DistanciaEd.setEnabled(false);
-								holder.FechaEtaEd.setEnabled(false);
-								holder.DondeRecogerDineroEd.setEnabled(false);
-								holder.CostoEd.setEnabled(false);
-								holder.save.setEnabled(false);
-								holder.SpinnerEstadoDeOrden.setEnabled(false);
-								holder.SpinnerDondeRecogerDinero.setEnabled(false);
-								holder.AssignarDriverButton.setEnabled(false);
-								holder.PartidaBt.setEnabled(false);
-								holder.DestinoBt.setEnabled(false);
-								holder.callEd.setEnabled(false);
-								Toast.makeText(holder.context, telefono, Toast.LENGTH_LONG).show();
-							}
-						});
-					dialog.show();
+								@Override
+								public void onClick(DialogInterface p1, int p2)
+								{
+									String ordrStat = holder.EstadoDeOrdenEd.getText().toString();
+									String partida = holder.PartidaEd.getText().toString();
+									String destino = holder.DestinoEd.getText().toString();
+//								String recogerdinero = holder.DondeRecogerDineroEd.getText().toString();
+									String costoDelProducto = holder.CostoDelProductoEd.getText().toString();
+									String newDriverUid = holder.DriverAsignado.getText().toString();
+									String telefono = holder.callEd.getText().toString();
+									String empresa = holder.EmpresaEd.getText().toString();
+									String direccionDeEmpresa = holder.direccionEmpresaEd.getText().toString();
+									String instruccionesDeEnvio = holder.InstruccionesEd.getText().toString();
+									String costoDelEnvio =holder.CostoDelEnvioEd.getText().toString();
+
+									DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Ordenes").child(mDataList.get(position).getNumeroDeOrden());
+									mDatabase.child("estadoDeOrden").setValue(ordrStat);
+									mDatabase.child("partida").setValue(partida);
+									mDatabase.child("destino").setValue(destino);
+									mDatabase.child("telefono").setValue(telefono);
+//								mDatabase.child("recogerDineroEn").setValue(recogerdinero);
+									mDatabase.child("costoDelProducto").setValue(costoDelProducto);
+									mDatabase.child("costoDelEnvio").setValue(costoDelEnvio);
+									mDatabase.child("latLngA").setValue(latLngA);
+									mDatabase.child("latLngB").setValue(latLngB);
+									mDatabase.child("driverAsignado").setValue(newDriverUid);
+									mDatabase.child("empresa").setValue(empresa);
+									mDatabase.child("direccionEmpresa").setValue(direccionDeEmpresa);
+									mDatabase.child("instruccionesDeLlegada").setValue(instruccionesDeEnvio);
+									holder.PartidaEd.setEnabled(false);
+									holder.DestinoEd.setEnabled(false);
+//								holder.DistanciaEd.setEnabled(false);
+//								holder.FechaEtaEd.setEnabled(false);
+//								holder.DondeRecogerDineroEd.setEnabled(false);
+									holder.CostoDelProductoEd.setEnabled(false);
+									holder.CostoDelEnvioEd.setEnabled(false);
+									holder.save.setEnabled(false);
+									holder.SpinnerEstadoDeOrden.setEnabled(false);
+//								holder.SpinnerDondeRecogerDinero.setEnabled(false);
+									holder.AssignarDriverButton.setEnabled(false);
+									holder.PartidaBt.setEnabled(false);
+									holder.DestinoBt.setEnabled(false);
+									holder.callEd.setEnabled(false);
+									holder.EmpresaEd.setEnabled(false);
+									holder.direccionEmpresaEd.setEnabled(false);
+									holder.InstruccionesEd.setEnabled(false);
+									Toast.makeText(holder.context, "Guardado y enviado", Toast.LENGTH_LONG).show();
+
+								}
+							});
+						dialog.show();
+					}
 
 				}
 
@@ -383,18 +501,23 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				{
 					holder.PartidaEd.setEnabled(true);
 					holder.DestinoEd.setEnabled(true);
-					holder.DistanciaEd.setEnabled(true);
-					holder.FechaEtaEd.setEnabled(true);
-					holder.DondeRecogerDineroEd.setEnabled(true);
-					holder.CostoEd.setEnabled(true);
+//					holder.DistanciaEd.setEnabled(true);
+//					holder.FechaEtaEd.setEnabled(true);
+//					holder.DondeRecogerDineroEd.setEnabled(true);
+					holder.CostoDelProductoEd.setEnabled(true);
+					holder.CostoDelEnvioEd.setEnabled(true);
 					holder.save.setEnabled(true);
 					holder.SpinnerEstadoDeOrden.setEnabled(true);
-					holder.SpinnerDondeRecogerDinero.setEnabled(true);
+//					holder.SpinnerDondeRecogerDinero.setEnabled(true);
 					holder.AssignarDriverButton.setEnabled(true);
 					holder.PartidaBt.setEnabled(true);
 					holder.DestinoBt.setEnabled(true);
 					holder.callEd.setEnabled(true);
 					holder.callEd.setEnabled(true);
+					holder.EmpresaEd.setEnabled(true);
+					holder.direccionEmpresaEd.setEnabled(true);
+					holder.InstruccionesEd.setEnabled(true);
+
 				}
 			});
 
@@ -582,6 +705,8 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 												for (DataSnapshot appleSnapshot: dataSnapshot.getChildren())
 												{
 													appleSnapshot.getRef().removeValue();
+
+													holder.context.startActivity(new Intent(holder.context, Home.class));
 												}
 											}
 
@@ -624,7 +749,17 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
         return str; 
 
     } 
+//total calc
+	private float grandTotal(List<CostoPorOrden> items)
+	{
+		float totalPrice = 0;
+		for (int i = 0 ; i < items.size(); i++)
+		{
+			totalPrice += items.get(i).getPrecioDeOrden(); 
+		}
 
+		return totalPrice;
+	}
 
 
 
@@ -748,12 +883,12 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 class mViewHolder extends RecyclerView.ViewHolder
 {
 
-    EditText NumeroDeOrdenEd,PartidaEd,DestinoEd,DistanciaEd,FechaEtaEd,DondeRecogerDineroEd,CostoEd,EstadoDeOrdenEd,DriverAsignado;
+    EditText NumeroDeOrdenEd,PartidaEd,DestinoEd,CostoDelProductoEd,EstadoDeOrdenEd,DriverAsignado,EmpresaEd,direccionEmpresaEd,InstruccionesEd,CostoDelEnvioEd;
 	Button save,edit,PartidaBt,DestinoBt,AssignarDriverButton,llamar;
-	Spinner SpinnerEstadoDeOrden,SpinnerDondeRecogerDinero;
+	Spinner SpinnerEstadoDeOrden;
 	ImageView unfoldButton,deleteButton;;
 	LinearLayout layoutToCollapse;
-	TextView DriverName;
+	TextView DriverName,CostoTotalTv;
 	EditText callEd;
 
 	Context context;
@@ -766,15 +901,17 @@ class mViewHolder extends RecyclerView.ViewHolder
 		NumeroDeOrdenEd = v.findViewById(R.id.dashboarOrderTitle);
 		PartidaEd = v.findViewById(R.id.dashboardAddressA);
 		DestinoEd = v.findViewById(R.id.dashboardAddressB);
-		DistanciaEd = v.findViewById(R.id.dashboardDistance);
-		FechaEtaEd = v.findViewById(R.id.dashboardDateEta);
-		DondeRecogerDineroEd = v.findViewById(R.id.dashboardWhereGetMoney);
-		CostoEd = v.findViewById(R.id.dashboardTotalCost);
+//		DistanciaEd = v.findViewById(R.id.dashboardDistance);
+//		FechaEtaEd = v.findViewById(R.id.dashboardDateEta);
+//		DondeRecogerDineroEd = v.findViewById(R.id.dashboardWhereGetMoney);
+		CostoDelProductoEd = v.findViewById(R.id.costodelproducto);
+		CostoDelEnvioEd = v.findViewById(R.id.costodelenvio);
+		CostoTotalTv = v.findViewById(R.id.totalCostSum);
 		EstadoDeOrdenEd = v.findViewById(R.id.dashboardOrderStatus);
 		save = v.findViewById(R.id.orderrowButtonGuardar);
 		edit = v.findViewById(R.id.orderrowButtonEditar);
 		SpinnerEstadoDeOrden = v.findViewById(R.id.orderStatus_rowSpinner);
-		SpinnerDondeRecogerDinero = v.findViewById(R.id.where_rowSpinner);
+//		SpinnerDondeRecogerDinero = v.findViewById(R.id.where_rowSpinner);
 		PartidaBt = v.findViewById(R.id.orderrowButtonPartida);
 		DestinoBt = v.findViewById(R.id.orderrowButtonDestino);
 		unfoldButton = v.findViewById(R.id.orderrowUnfoldButtom);
@@ -785,6 +922,9 @@ class mViewHolder extends RecyclerView.ViewHolder
 		deleteButton = v.findViewById(R.id.deleteorderrowImageView1);
 		llamar = v.findViewById(R.id.llamarorderpoolrowButton1);
 		callEd = v.findViewById(R.id.CelulardashboardAddressA);
+		EmpresaEd = v.findViewById(R.id.empresaEd);
+		direccionEmpresaEd = v.findViewById(R.id.direccionEmpresaEd);
+		InstruccionesEd = v.findViewById(R.id.instruccionesEd);
 		context = v.getContext();
 
 

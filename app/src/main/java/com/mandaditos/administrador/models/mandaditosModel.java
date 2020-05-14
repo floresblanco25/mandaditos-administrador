@@ -11,7 +11,8 @@ public class mandaditosModel
     private String Fecha;
 	private String ETA;
     private String RecogerDineroEn;
-	private String Costo;
+	private String CostoDelProducto;
+	private String costoDelEnvio;
 	private String EstadoDeOrden;
 	private LatLng LatLngA;
 	private LatLng LatLngB;
@@ -20,12 +21,15 @@ public class mandaditosModel
 	private String DriverUid;
 	private String DriverAsignado;
 	private String Telefono;
-
+	private String Empresa;
+	private String DireccionEmpresa;
+	private String InstruccionesDeLlegada;
+	
 	public mandaditosModel(){}
 
-    public mandaditosModel(String userId,
+    public mandaditosModel(String CostoDelEnvio, String Empresa, String DireccionDeEmpresa, String InstruccionesDeLlegada, String userId,
 						   String Usuario,String Partida, String Destino, String Distancia, String Fecha, 
-						   String ETA, String RecogerDineroEn, String Costo, String EstadoDeOrden,LatLng LatLngA,
+						   String ETA, String RecogerDineroEn, String CostoDelProducto, String EstadoDeOrden,LatLng LatLngA,
 						   LatLng LatLngB, String driverAsignado, String Telefono
 						   ) {
         this.Partida = Partida;
@@ -34,7 +38,7 @@ public class mandaditosModel
         this.Fecha = Fecha;
 		this.ETA = ETA;
         this.RecogerDineroEn = RecogerDineroEn;
-		this.Costo = Costo;
+		this.CostoDelProducto = CostoDelProducto;
 		this.EstadoDeOrden=EstadoDeOrden;
 		this.LatLngA=LatLngA;
 		this.Usuario=Usuario;
@@ -42,6 +46,50 @@ public class mandaditosModel
 		this.UserId=userId;
 		this.DriverAsignado = driverAsignado;
 		this.Telefono=Telefono;
+		this.Empresa=Empresa;
+		this.DireccionEmpresa=DireccionDeEmpresa;
+		this.InstruccionesDeLlegada=InstruccionesDeLlegada;
+		this.costoDelEnvio=CostoDelEnvio;
+	}
+
+	public void setCostoDelEnvio(String costoDelEnvio)
+	{
+		this.costoDelEnvio = costoDelEnvio;
+	}
+
+	public String getCostoDelEnvio()
+	{
+		return costoDelEnvio;
+	}
+
+	public void setEmpresa(String empresa)
+	{
+		Empresa = empresa;
+	}
+
+	public String getEmpresa()
+	{
+		return Empresa;
+	}
+
+	public void setDireccionEmpresa(String direccionEmpresa)
+	{
+		DireccionEmpresa = direccionEmpresa;
+	}
+
+	public String getDireccionEmpresa()
+	{
+		return DireccionEmpresa;
+	}
+
+	public void setInstruccionesDeLlegada(String instruccionesDeLlegada)
+	{
+		InstruccionesDeLlegada = instruccionesDeLlegada;
+	}
+
+	public String getInstruccionesDeLlegada()
+	{
+		return InstruccionesDeLlegada;
 	}
 
 	public void setTelefono(String telefono)
@@ -132,8 +180,8 @@ public class mandaditosModel
     public String getRecogerDineroEn() {
         return RecogerDineroEn;
     }
-	public String getCosto() {
-        return Costo;
+	public String getCostoDelProducto() {
+        return CostoDelProducto;
     }
 	public String getEstadoDeOrden(){
 		return EstadoDeOrden;
@@ -166,8 +214,8 @@ public class mandaditosModel
 	public void setRecogerDineroEn(String t){
 		RecogerDineroEn=t;
 	}
-	public void setCosto(String t){
-		Costo=t;
+	public void setCostoDelProducto(String t){
+		CostoDelProducto=t;
 	}
 
 	public void setEstadoDeOrden(String t){

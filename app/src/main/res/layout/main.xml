@@ -10,34 +10,30 @@
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:gravity="left|center_vertical">
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="0"
-			android:layout_margin="8dp"
-			android:id="@+id/countmainTextView1"/>
+		android:gravity="left|center_vertical"
+		style="?android:attr/buttonBarStyle">
 
 		<Button
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
-			android:text="+"
-			android:onClick="addOrder"/>
+			android:text="Añadir"
+			android:onClick="addOrder"
+			android:textColor="#550874"
+			android:textStyle="bold"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
-			android:text="Completas"
+			android:text="Entregadas"
 			android:onClick="mostrarCompletas"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
-			android:text="Incompletas"
+			android:text="Sin Entregar"
 			android:onClick="mostrarSinCompletar"/>
 
 		<Button
@@ -47,6 +43,15 @@
 			android:text="Nuevas"
 			android:onClick="mostrarSinAsignar"/>
 
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="left|center_vertical"
+		style="?android:attr/buttonBarStyle">
+
 		<Button
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
@@ -54,16 +59,69 @@
 			android:text="Drivers"
 			android:onClick="verDrivers"/>
 
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Refrescar"
+			android:onClick="refresh"/>
+
 	</LinearLayout>
 
 	<android.support.v7.widget.RecyclerView
 		xmlns:app="http://schemas.android.com/apk/res-auto"
 		android:id="@+id/recycler_orders"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
 		android:layout_marginTop="16dp">
 
 	</android.support.v7.widget.RecyclerView>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="left|center_vertical">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Total $:"
+			android:layout_margin="8dp"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="0"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:layout_margin="8dp"
+			android:textColor="#98160E"
+			android:id="@+id/totalAliquidar"
+			android:textStyle="bold"
+			android:layout_marginLeft="0dp"/>
+
+		<View
+			android:background="?android:attr/dividerHorizontal"
+			android:layout_width="1dp"
+			android:layout_height="match_parent"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Ordenes:"
+			android:layout_marginLeft="8dp"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="0"
+			android:layout_margin="8dp"
+			android:id="@+id/countmainTextView1"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:textColor="#274885"/>
+
+	</LinearLayout>
 
 </LinearLayout>
 
