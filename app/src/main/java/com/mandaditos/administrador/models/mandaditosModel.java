@@ -24,13 +24,14 @@ public class mandaditosModel
 	private String Empresa;
 	private String DireccionEmpresa;
 	private String InstruccionesDeLlegada;
+	private String CostoOrden;
 	
 	public mandaditosModel(){}
 
     public mandaditosModel(String CostoDelEnvio, String Empresa, String DireccionDeEmpresa, String InstruccionesDeLlegada, String userId,
 						   String Usuario,String Partida, String Destino, String Distancia, String Fecha, 
 						   String ETA, String RecogerDineroEn, String CostoDelProducto, String EstadoDeOrden,LatLng LatLngA,
-						   LatLng LatLngB, String driverAsignado, String Telefono
+						   LatLng LatLngB, String driverAsignado, String Telefono, String CostoOrden
 						   ) {
         this.Partida = Partida;
         this.Destino = Destino;
@@ -50,6 +51,17 @@ public class mandaditosModel
 		this.DireccionEmpresa=DireccionDeEmpresa;
 		this.InstruccionesDeLlegada=InstruccionesDeLlegada;
 		this.costoDelEnvio=CostoDelEnvio;
+		this.CostoOrden=CostoOrden;
+	}
+
+	public void setCostoOrden(String costoOrden)
+	{
+		CostoOrden = costoOrden;
+	}
+
+	public String getCostoOrden()
+	{
+		return CostoOrden;
 	}
 
 	public void setCostoDelEnvio(String costoDelEnvio)

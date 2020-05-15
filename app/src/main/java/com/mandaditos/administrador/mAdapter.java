@@ -96,6 +96,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		holder.EmpresaEd.setText(mDataList.get(position).getEmpresa());
 		holder.direccionEmpresaEd.setText(mDataList.get(position).getDireccionEmpresa());
 		holder.InstruccionesEd.setText(mDataList.get(position).getInstruccionesDeLlegada());
+		holder.CostoTotalTv.setText(mDataList.get(position).getCostoOrden());
 		holder.DriverAsignado.setEnabled(true);
 		holder.NumeroDeOrdenEd.setEnabled(false);
 		holder.PartidaEd.setEnabled(false);
@@ -408,10 +409,11 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				{
 					
 					String costoDelProducto = holder.CostoDelProductoEd.getText().toString();
-					if (costoDelProducto.isEmpty())
+					String costoDelEnvio = holder.CostoDelEnvioEd.getText().toString();
+					if (costoDelProducto.isEmpty()|costoDelEnvio.isEmpty())
 					{
-						Toast.makeText(holder.context, "Ingresa el costo, si ya esta cobrado ingresa 0", 1000).show();
-					}if (!costoDelProducto.isEmpty())
+						Toast.makeText(holder.context, "Ingresa el costo del producto y envío, si ya esta cobrado ingresa 0", 1000).show();
+					}if (!costoDelProducto.isEmpty()&&!costoDelEnvio.isEmpty())
 					{
 						final AlertDialog dialog = new AlertDialog.Builder(holder.context).create();
 						dialog.setTitle("Alerta!");
@@ -440,6 +442,14 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 									String direccionDeEmpresa = holder.direccionEmpresaEd.getText().toString();
 									String instruccionesDeEnvio = holder.InstruccionesEd.getText().toString();
 									String costoDelEnvio =holder.CostoDelEnvioEd.getText().toString();
+									//error aqui abajo 
+									float CostProdNum=Float.parseFloat(costoDelProducto);
+									float CostEnvNum=Float.parseFloat(costoDelEnvio);
+									float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
+									holder.CostoTotalTv.setText(String.valueOf(Float.toString(resultadoDeProdMasEnv)));
+
+									
+									String costoOrden =String.valueOf(Float.toString(resultadoDeProdMasEnv));
 
 									DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Ordenes").child(mDataList.get(position).getNumeroDeOrden());
 									mDatabase.child("estadoDeOrden").setValue(ordrStat);
@@ -455,6 +465,8 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 									mDatabase.child("empresa").setValue(empresa);
 									mDatabase.child("direccionEmpresa").setValue(direccionDeEmpresa);
 									mDatabase.child("instruccionesDeLlegada").setValue(instruccionesDeEnvio);
+									mDatabase.child("costoOrden").setValue(costoOrden);
+									
 									holder.PartidaEd.setEnabled(false);
 									holder.DestinoEd.setEnabled(false);
 //								holder.DistanciaEd.setEnabled(false);

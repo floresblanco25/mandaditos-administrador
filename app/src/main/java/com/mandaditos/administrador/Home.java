@@ -28,7 +28,7 @@ public class Home extends AppCompatActivity
 	private DatabaseReference mDataBaseOrders;
 	private DatabaseReference mDataBase;
 	private RequestPermissionHandler mRequestPermissionHandler;
-	private TextView CuentaTv,totalAliquidar;
+	private TextView contarOrdenes,totalAliquidar;
 
 	private mAdapter adapter;
 	private RecyclerView mRecyclerView;
@@ -37,9 +37,9 @@ public class Home extends AppCompatActivity
 	private ArrayList<String> namesList;
 	private String Empresa = "Pon aqui tu empresa";
 	private String Direccion = "Tu direccion de empresa";
-	
-	
-	
+
+
+
 
 
 	@Override
@@ -49,19 +49,19 @@ public class Home extends AppCompatActivity
 		setContentView(R.layout.main);
 		mRequestPermissionHandler = new RequestPermissionHandler();
 		mCheckPermission();
-		CuentaTv = findViewById(R.id.countmainTextView1);
+		contarOrdenes = findViewById(R.id.countmainTextView1);
 		mRecyclerView = findViewById(R.id.recycler_orders);
 		mFirebaseAuth = FirebaseAuth.getInstance();
 		totalAliquidar = findViewById(R.id.totalAliquidar);
 
-		
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
+
 
 //load drivers list for picker
 		mDataBase = FirebaseDatabase.getInstance().getReference("Drivers");
@@ -77,7 +77,7 @@ public class Home extends AppCompatActivity
 						for (DataSnapshot postSnapshot : p1.getChildren())
 						{
 							String driver = postSnapshot.getKey().toString();
-							mDataBase = FirebaseDatabase.getInstance().getReference("Drivers/"+driver);
+							mDataBase = FirebaseDatabase.getInstance().getReference("Drivers/" + driver);
 							mDataBase.addListenerForSingleValueEvent(new ValueEventListener(){
 
 									@Override
@@ -110,17 +110,17 @@ public class Home extends AppCompatActivity
 			});
 		mDataBase = FirebaseDatabase.getInstance().getReference("Drivers");
 		//Obtenemos nombre por uid
-			
-			
-			
-			
-			
-			
 
 
 
-			
-			
+
+
+
+
+
+
+
+
 
 
 
@@ -140,23 +140,16 @@ public class Home extends AppCompatActivity
 		mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
 		mDataBaseOrders.addListenerForSingleValueEvent(new ValueEventListener(){
 
-				private Float numbers;
+				private Float costosDeOrden;
 
 
 				@Override
 				public void onDataChange(DataSnapshot p1)
 				{
-//						try {
-//							Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//							Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-//							r.play();
-//						} catch (Exception e) {
-//							e.printStackTrace();
-//						}
 					pDialog.dismiss();
 					if (p1.exists())
 					{
-						List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
+						List<CostoPorOrden> costoPorOrdenList = new ArrayList<CostoPorOrden>();
 						List<mandaditosModel> ordersList = new ArrayList<mandaditosModel>();
 						for (DataSnapshot postSnapshot : p1.getChildren())
 						{
@@ -174,27 +167,28 @@ public class Home extends AppCompatActivity
 							m.setFecha(postSnapshot.child("fecha").getValue().toString());
 							m.setETA(postSnapshot.child("eta").getValue().toString());
 							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
-							
+
 							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
 							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-								m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
-								m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
-								m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
+							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
+							m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
 							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
 							m.setLatLngA(new LatLng(latA, lngA));
 							m.setLatLngB(new LatLng(latB, lngB));
 							m.setNumeroDeOrden(postSnapshot.getKey().toString());
 							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
 							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
 							if (m.getEstadoDeOrden().toString().toLowerCase().matches("Sin completar".toLowerCase()))
 							{
 								if (m.getDriverAsignado().toString().toLowerCase().matches("Sin asignar".toLowerCase()))
 								{
 									ordersList.add(m);
 									CostoPorOrden precioModel = new CostoPorOrden();
-									numbers = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
-									precioModel.setPrecioDeOrden(numbers);
-									items.add(precioModel);
+									costosDeOrden = Float.valueOf(postSnapshot.child("costoOrden").getValue().toString());
+									precioModel.setPrecioDeOrden(costosDeOrden);
+									costoPorOrdenList.add(precioModel);
 								}
 
 							}
@@ -208,13 +202,13 @@ public class Home extends AppCompatActivity
 						layoutManager.setStackFromEnd(true);
 						mRecyclerView.setLayoutManager(layoutManager);
 						mRecyclerView.setAdapter(adapter);
-						totalAliquidar.setText(String.valueOf(grandTotal(items)));
+						totalAliquidar.setText(String.valueOf(grandTotal(costoPorOrdenList)));
 						int count = 0;
 						if (adapter != null)
 						{
 							count = adapter.getItemCount();
 						}
-						CuentaTv.setText(String.valueOf(count));
+						contarOrdenes.setText(String.valueOf(count));
 					}
 
 					else
@@ -232,28 +226,28 @@ public class Home extends AppCompatActivity
 
 
 
-			
+
 //add more
 
 	}
-	
+
 	class MyAdapter extends BaseAdapter
 	{
 
 		private CharSequence[] titles;
 
 		private CharSequence[] susbtitles;
-		
+
 		private Context mContext;
-		
+
 		MyAdapter(Context mContext, String[] titles, String[] subtitles)
 		{
 			this.mContext = mContext;
 			this.titles = titles;
-			this.susbtitles=subtitles;
+			this.susbtitles = subtitles;
 		}
-		
-		
+
+
 
 		@Override
 		public int getCount() 
@@ -277,26 +271,26 @@ public class Home extends AppCompatActivity
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) 
 		{
-			if(convertView == null)
+			if (convertView == null)
 			{
 				convertView = getLayoutInflater().inflate(R.layout.drivers_list_row, null);
 			}
 
-			((TextView)convertView.findViewById(R.id.text1)).setText( titles[position]);
-			((TextView)convertView.findViewById(R.id.text2)).setText( susbtitles[position]);
+			((TextView)convertView.findViewById(R.id.text1)).setText(titles[position]);
+			((TextView)convertView.findViewById(R.id.text2)).setText(susbtitles[position]);
 
 			return convertView;
 		}
 
-		}
+	}
 
 
 
 
 
-	
-	
-	
+
+
+
 
 
 //Añadir
@@ -306,22 +300,22 @@ public class Home extends AppCompatActivity
 		String UserId = mFirebaseUser.getUid().toString();
 		FirebaseDatabase.getInstance().getReference("Ordenes")
 			.push()
-			.setValue(new mandaditosModel("0",Empresa,Direccion,"",UserId, "", "", "", "", "", 
-										  "", "", "0", "Sin completar", new LatLng(13.67694, -89.27972), new LatLng(13.67694, -89.27972), "Sin asignar",""));
+			.setValue(new mandaditosModel("0", Empresa, Direccion, "", UserId, "", "", "", "", "", 
+										  "", "", "0", "Sin completar", new LatLng(13.67694, -89.27972), new LatLng(13.67694, -89.27972), "Sin asignar", "", "0"));
 		finishAffinity();
 		startActivity(new Intent(Home.this, Home.class));
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
 //sin comoletar boton
 	public void mostrarSinCompletar(View v)
 	{
@@ -360,7 +354,7 @@ public class Home extends AppCompatActivity
 							m.setFecha(postSnapshot.child("fecha").getValue().toString());
 							m.setETA(postSnapshot.child("eta").getValue().toString());
 							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
-								m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
+							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
 							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
 							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
 							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
@@ -369,6 +363,7 @@ public class Home extends AppCompatActivity
 							m.setLatLngA(new LatLng(latA, lngA));
 							m.setLatLngB(new LatLng(latB, lngB));
 							m.setNumeroDeOrden(postSnapshot.getKey().toString());
+							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
 							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
 							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
 							if (m.getEstadoDeOrden().toString().toLowerCase().matches("Sin completar".toLowerCase()))
@@ -377,7 +372,7 @@ public class Home extends AppCompatActivity
 								{
 									ordersList.add(m);
 									CostoPorOrden precioModel = new CostoPorOrden();
-									float numbers = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
+									float numbers = Float.valueOf(postSnapshot.child("costoOrden").getValue().toString());
 									precioModel.setPrecioDeOrden(numbers);
 									items.add(precioModel);
 								}
@@ -398,7 +393,7 @@ public class Home extends AppCompatActivity
 						{
 							count = adapter.getItemCount();
 						}
-						CuentaTv.setText(String.valueOf(count));
+						contarOrdenes.setText(String.valueOf(count));
 					}
 
 					else
@@ -418,8 +413,8 @@ public class Home extends AppCompatActivity
 
 
 
-	
-	
+
+
 //comoletadas boton
 	public void mostrarCompletas(View v)
 	{
@@ -467,18 +462,19 @@ public class Home extends AppCompatActivity
 							m.setNumeroDeOrden(postSnapshot.getKey().toString());
 							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
 							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
 							if (m.getEstadoDeOrden().toString().toLowerCase().matches("Completada".toLowerCase()))
 							{
 								ordersList.add(m);
 								CostoPorOrden precioModel = new CostoPorOrden();
-								float numbers = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
+								float numbers = Float.valueOf(postSnapshot.child("costoOrden").getValue().toString());
 								precioModel.setPrecioDeOrden(numbers);
 								items.add(precioModel);
 							}
 						}
 
-
-						mAdapter adapter = new mAdapter(Home.this, ordersList);
+//edited
+						adapter = new mAdapter(Home.this, ordersList);
 						mRecyclerView.setHasFixedSize(true);
 						LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
 						layoutManager.setReverseLayout(true);
@@ -491,7 +487,7 @@ public class Home extends AppCompatActivity
 						{
 							count = adapter.getItemCount();
 						}
-						CuentaTv.setText(String.valueOf(count));
+						contarOrdenes.setText(String.valueOf(count));
 					}
 					else
 					{}
@@ -554,7 +550,7 @@ public class Home extends AppCompatActivity
 							m.setFecha(postSnapshot.child("fecha").getValue().toString());
 							m.setETA(postSnapshot.child("eta").getValue().toString());
 							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
-								m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
+							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
 							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
 							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
 							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
@@ -565,13 +561,14 @@ public class Home extends AppCompatActivity
 							m.setNumeroDeOrden(postSnapshot.getKey().toString());
 							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
 							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
 							if (m.getEstadoDeOrden().toString().toLowerCase().matches("Sin completar".toLowerCase()))
 							{
 								if (m.getDriverAsignado().toString().toLowerCase().matches("Sin asignar".toLowerCase()))
 								{
 									ordersList.add(m);
 									CostoPorOrden precioModel = new CostoPorOrden();
-									float numbers = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
+									float numbers = Float.valueOf(postSnapshot.child("costoOrden").getValue().toString());
 									precioModel.setPrecioDeOrden(numbers);
 									items.add(precioModel);
 								}
@@ -593,7 +590,7 @@ public class Home extends AppCompatActivity
 						{
 							count = adapter.getItemCount();
 						}
-						CuentaTv.setText(String.valueOf(count));
+						contarOrdenes.setText(String.valueOf(count));
 					}
 
 					else
@@ -617,16 +614,17 @@ public class Home extends AppCompatActivity
 
 
 
-	
+
 
 
 //Ver drivers boton
-	public void verDrivers(View v){
+	public void verDrivers(View v)
+	{
 		String[] drivers = GetStringArray(DriversList);
 //		String[] names = GetStringArray(namesList);
 //		solo necesuto arreglar la lista de nlmbres 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setAdapter(new MyAdapter(Home.this,drivers,drivers), null);
+        builder.setAdapter(new MyAdapter(Home.this, drivers, drivers), null);
         builder.setTitle("Asignar A?");
 		builder.setItems(drivers, new DialogInterface.OnClickListener() {
 
@@ -682,16 +680,18 @@ public class Home extends AppCompatActivity
 													model.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
 													model.setDriverUid(postSnapshot.child("driverAsignado").getValue().toString());
 													model.setTelefono(postSnapshot.child("telefono").getValue().toString());
+													model.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
 													if (model.getDriverAsignado().toString().matches(selectedUid))
 													{
 														ordersList.add(model);
 													}
-														if(model.getDriverUid().toString().matches(selectedUid)){
-															CostoPorOrden precioModel = new CostoPorOrden();
-															float numbers = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
-															precioModel.setPrecioDeOrden(numbers);
-															items.add(precioModel);
-														}
+													if (model.getDriverUid().toString().matches(selectedUid))
+													{
+														CostoPorOrden precioModel = new CostoPorOrden();
+														float numbers = Float.valueOf(postSnapshot.child("costoOrden").getValue().toString());
+														precioModel.setPrecioDeOrden(numbers);
+														items.add(precioModel);
+													}
 												}
 
 
@@ -708,7 +708,7 @@ public class Home extends AppCompatActivity
 												{
 													count = adapter.getItemCount();
 												}
-												CuentaTv.setText(String.valueOf(count));
+												contarOrdenes.setText(String.valueOf(count));
 											}
 											else
 											{}
@@ -733,50 +733,52 @@ public class Home extends AppCompatActivity
 
 
         builder.show();
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
 //total calc
-	private float grandTotal(List<CostoPorOrden> items){
+	private float grandTotal(List<CostoPorOrden> items)
+	{
 		float totalPrice = 0;
-		for(int i = 0 ; i < items.size(); i++) {
+		for (int i = 0 ; i < items.size(); i++)
+		{
 			totalPrice += items.get(i).getPrecioDeOrden(); 
 		}
 
 		return totalPrice;
-		}
-	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //refresh
-		public void refresh(View v){
-			finishAffinity();
-			startActivity(new Intent(Home.this, Home.class));
-		}
-	 
+	public void refresh(View v)
+	{
+		finishAffinity();
+		startActivity(new Intent(Home.this, Home.class));
+	}
 
 
 
@@ -793,13 +795,14 @@ public class Home extends AppCompatActivity
 
 
 
-	
+
+
 	@Override
 	public void onBackPressed()
 	{
 		final AlertDialog dialog = new AlertDialog.Builder(this).create();
 		dialog.setTitle("Salir");
-		dialog.setMessage("¿Seguro que quieres salir?" );
+		dialog.setMessage("¿Seguro que quieres salir?");
 		dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener(){
 
 				@Override
@@ -849,7 +852,7 @@ public class Home extends AppCompatActivity
 
 
 
-	
+
 
 	@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -867,7 +870,7 @@ public class Home extends AppCompatActivity
 
 
 
-	
+
 //Get stringarray
 	public static String[] GetStringArray(ArrayList<String> arr) 
     { 
