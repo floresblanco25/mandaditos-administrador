@@ -7,8 +7,9 @@ import android.os.*;
 import android.support.annotation.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.*;
+import android.text.*;
+import android.util.*;
 import android.view.*;
-import android.view.View.*;
 import android.widget.*;
 import com.google.android.gms.maps.model.*;
 import com.google.firebase.auth.*;
@@ -28,15 +29,17 @@ public class Home extends AppCompatActivity
 	private DatabaseReference mDataBaseOrders;
 	private DatabaseReference mDataBase;
 	private RequestPermissionHandler mRequestPermissionHandler;
-	private TextView contarOrdenes,totalAliquidar;
-
+	private TextView contarOrdenes,totalAliquidar,pagoDriverTv;
 	private mAdapter adapter;
 	private RecyclerView mRecyclerView;
 	FirebaseAuth mFirebaseAuth;
 	private ArrayList<String> DriversList;
 	private ArrayList<String> namesList;
-	private String Empresa = "Pon aqui tu empresa";
-	private String Direccion = "Tu direccion de empresa";
+	private String Empresa;
+	private String Direccion = "";
+	private Button entregadas,sinentregar,nuevas,drivers; 
+	private EditText buscarEd;
+	private String uId;
 
 
 
@@ -53,9 +56,103 @@ public class Home extends AppCompatActivity
 		mRecyclerView = findViewById(R.id.recycler_orders);
 		mFirebaseAuth = FirebaseAuth.getInstance();
 		totalAliquidar = findViewById(R.id.totalAliquidar);
+		pagoDriverTv = findViewById(R.id.pagoDrivermainTextView1);
+		
+		
+		entregadas = findViewById(R.id.entregadasmainButton1);
+		sinentregar = findViewById(R.id.sinentregarmainButton1);
+		drivers = findViewById(R.id.driversmainButton1);
+		nuevas = findViewById(R.id.nuevasmainButton1);
+		buscarEd = findViewById(R.id.searchEdmainEditText1);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+//aqui obtenemos el uid
+		mFirebaseAuth = FirebaseAuth.getInstance();
+		FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
+		uId = mFirebaseUser.getUid().toString();
+
+
+//aqui obtenemos el nombre del usuario
+		mFirebaseAuth = FirebaseAuth.getInstance();
+		String userId = mFirebaseUser.getUid().toString();
+		DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Usuarios/" + userId + "/Perfil").child("nombre");
+		ref.addListenerForSingleValueEvent(new ValueEventListener() {
+				@Override
+				public void onDataChange(DataSnapshot dataSnapshot) {
+					String t = dataSnapshot.getValue(String.class);
+					setNombreUsuario(t);
+
+				}
+				private void setNombreUsuario(String t)
+				{
+
+					String usuario = t;
+					try{
+						int index = usuario.indexOf(' ');
+						usuario = usuario.substring(0, index);
+					}catch(Exception e){Log.e("Couldent split name",e.toString());}
+					
+					Empresa=usuario;
+					
+
+
+				}
+
+				@Override
+				public void onCancelled(DatabaseError databaseError) {
+
+				}
+			});
+
+		DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("Usuarios/" + userId + "/Perfil").child("address");
+		ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+				@Override
+				public void onDataChange(DataSnapshot dataSnapshot) {
+					String t = dataSnapshot.getValue(String.class);
+					setNombreUsuario(t);
+
+				}
+				private void setNombreUsuario(String t)
+				{
+
+					String usuario = t;
+
+					Direccion=usuario;
 
 
 
+				}
+
+				@Override
+				public void onCancelled(DatabaseError databaseError) {
+
+				}
+			});
+		
+
+			
+			
+			
+			
+			
+			
+			
+			
+//Hide views for cliemt
+		if(!userId.toString().matches("bTn7vklJZGhVYa2tnPlDZKStwEi2")){
+			entregadas.setVisibility(View.GONE);
+			sinentregar.setVisibility(View.GONE);
+			drivers.setVisibility(View.GONE);
+			nuevas.setVisibility(View.GONE);
+		}
 
 
 
@@ -111,19 +208,12 @@ public class Home extends AppCompatActivity
 		mDataBase = FirebaseDatabase.getInstance().getReference("Drivers");
 		//Obtenemos nombre por uid
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+		
+		
+		
+		
+		
+		
 		//dialog 
 		pDialog = new ProgressDialog(Home.this);
 		pDialog.setMessage("Cargando datos de los servidores..");
@@ -217,6 +307,32 @@ public class Home extends AppCompatActivity
 				@Override
 				public void onCancelled(DatabaseError p1)
 				{
+				}
+			});
+			
+			
+			
+			
+			
+			
+			
+			
+			
+//Search edittext
+		buscarEd.addTextChangedListener(new TextWatcher() {
+				@Override
+				public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+				}
+
+				@Override
+				public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+				}
+
+				@Override
+				public void afterTextChanged(Editable editable) {
+					filter(editable.toString());
 				}
 			});
 
@@ -649,7 +765,8 @@ public class Home extends AppCompatActivity
 											{
 
 												List<mandaditosModel> ordersList = new ArrayList<mandaditosModel>();
-												List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
+												List<CostoPorOrden> costos = new ArrayList<CostoPorOrden>();
+												List<CostoPorOrden> costosEnvio = new ArrayList<CostoPorOrden>();
 												for (DataSnapshot postSnapshot : p1.getChildren())
 												{
 
@@ -690,7 +807,17 @@ public class Home extends AppCompatActivity
 														CostoPorOrden precioModel = new CostoPorOrden();
 														float numbers = Float.valueOf(postSnapshot.child("costoOrden").getValue().toString());
 														precioModel.setPrecioDeOrden(numbers);
-														items.add(precioModel);
+														costos.add(precioModel);
+														
+														//costo envio suma
+														CostoPorOrden precioModelEnvio = new CostoPorOrden();
+														float numbersEnvio = Float.valueOf(postSnapshot.child("costoDelEnvio").getValue().toString());
+														if(Float.parseFloat(postSnapshot.child("costoDelEnvio").getValue().toString())>0.0f)
+															{
+															precioModelEnvio.setPrecioDeOrden(numbersEnvio-1);
+															costosEnvio.add(precioModelEnvio);
+														}
+														
 													}
 												}
 
@@ -702,7 +829,8 @@ public class Home extends AppCompatActivity
 												layoutManager.setStackFromEnd(true);
 												mRecyclerView.setLayoutManager(layoutManager);
 												mRecyclerView.setAdapter(adapter);
-												totalAliquidar.setText(String.valueOf(grandTotal(items)));
+												totalAliquidar.setText(String.valueOf(grandTotal(costos)));
+												pagoDriverTv.setText(String.valueOf(grandTotal(costosEnvio)));
 												int count = 0;
 												if (adapter != null)
 												{
@@ -883,6 +1011,100 @@ public class Home extends AppCompatActivity
         return str; 
 
     } 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//FILTER
+	//Filter
+	private void filter(final String text) {
+		mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
+		mDataBaseOrders.addListenerForSingleValueEvent(new ValueEventListener(){
+
+				private Float costosDeOrden;
+
+
+				@Override
+				public void onDataChange(DataSnapshot p1)
+				{
+					pDialog.dismiss();
+					if (p1.exists())
+					{
+						List<CostoPorOrden> costoPorOrdenList = new ArrayList<CostoPorOrden>();
+						List<mandaditosModel> ordersList = new ArrayList<mandaditosModel>();
+						for (DataSnapshot postSnapshot : p1.getChildren())
+						{
+							double latA = postSnapshot.child("latLngA/latitude").getValue();
+							double lngA = postSnapshot.child("latLngA/longitude").getValue();
+							double latB = postSnapshot.child("latLngB/latitude").getValue();
+							double lngB = postSnapshot.child("latLngB/longitude").getValue();
+
+							mandaditosModel m = new mandaditosModel();
+							m.setUserId(postSnapshot.child("userId").getValue().toString());
+							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
+							m.setPartida(postSnapshot.child("partida").getValue().toString());
+							m.setDestino(postSnapshot.child("destino").getValue().toString());
+							m.setDistancia(postSnapshot.child("distancia").getValue().toString());
+							m.setFecha(postSnapshot.child("fecha").getValue().toString());
+							m.setETA(postSnapshot.child("eta").getValue().toString());
+							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
+
+							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
+							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
+							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
+							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
+							m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
+							m.setLatLngA(new LatLng(latA, lngA));
+							m.setLatLngB(new LatLng(latB, lngB));
+							m.setNumeroDeOrden(postSnapshot.getKey().toString());
+							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
+							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
+								if (m.getEmpresa().toString().toLowerCase().contains(text.toLowerCase()))
+								{
+									ordersList.add(m);
+									CostoPorOrden precioModel = new CostoPorOrden();
+									costosDeOrden = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
+									precioModel.setPrecioDeOrden(costosDeOrden);
+									costoPorOrdenList.add(precioModel);
+								}
+
+						}
+
+
+						adapter = new mAdapter(Home.this, ordersList);
+						mRecyclerView.setHasFixedSize(true);
+						LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
+						layoutManager.setReverseLayout(true);
+						layoutManager.setStackFromEnd(true);
+						mRecyclerView.setLayoutManager(layoutManager);
+						mRecyclerView.setAdapter(adapter);
+						totalAliquidar.setText(String.valueOf(grandTotal(costoPorOrdenList)));
+						int count = 0;
+						if (adapter != null)
+						{
+							count = adapter.getItemCount();
+						}
+						contarOrdenes.setText(String.valueOf(count));
+					}
+
+					else
+					{}
+				}
+				@Override
+				public void onCancelled(DatabaseError p1)
+				{
+				}
+			});
+		
+    }
 
 
 

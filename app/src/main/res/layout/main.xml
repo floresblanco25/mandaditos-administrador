@@ -19,7 +19,7 @@
 			android:layout_height="wrap_content"
 			android:text="Añadir"
 			android:onClick="addOrder"
-			android:textColor="#550874"
+			android:textColor="#000000"
 			android:textStyle="bold"/>
 
 		<Button
@@ -27,21 +27,24 @@
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
 			android:text="Entregadas"
-			android:onClick="mostrarCompletas"/>
+			android:onClick="mostrarCompletas"
+			android:id="@+id/entregadasmainButton1"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
 			android:text="Sin Entregar"
-			android:onClick="mostrarSinCompletar"/>
+			android:onClick="mostrarSinCompletar"
+			android:id="@+id/sinentregarmainButton1"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
 			android:text="Nuevas"
-			android:onClick="mostrarSinAsignar"/>
+			android:onClick="mostrarSinAsignar"
+			android:id="@+id/nuevasmainButton1"/>
 
 	</LinearLayout>
 
@@ -57,7 +60,8 @@
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
 			android:text="Drivers"
-			android:onClick="verDrivers"/>
+			android:onClick="verDrivers"
+			android:id="@+id/driversmainButton1"/>
 
 		<Button
 			android:layout_width="wrap_content"
@@ -65,6 +69,12 @@
 			android:layout_height="wrap_content"
 			android:text="Refrescar"
 			android:onClick="refresh"/>
+
+		<EditText
+			android:layout_width="wrap_content"
+			android:ems="10"
+			android:layout_height="wrap_content"
+			android:id="@+id/searchEdmainEditText1"/>
 
 	</LinearLayout>
 
@@ -120,6 +130,25 @@
 			android:id="@+id/countmainTextView1"
 			android:textAppearance="?android:attr/textAppearanceLarge"
 			android:textColor="#274885"/>
+
+		<View
+			android:background="?android:attr/dividerHorizontal"
+			android:layout_width="1dp"
+			android:layout_height="match_parent"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Pago del driver :$"
+			android:layout_margin="8dp"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="0"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:id="@+id/pagoDrivermainTextView1"
+			android:textColor="#32A05C"/>
 
 	</LinearLayout>
 
