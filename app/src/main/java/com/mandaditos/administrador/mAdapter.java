@@ -2,6 +2,7 @@ package com.mandaditos.administrador;
 
 import android.app.*;
 import android.content.*;
+import android.graphics.*;
 import android.net.*;
 import android.os.*;
 import android.support.v7.widget.*;
@@ -12,14 +13,13 @@ import android.view.animation.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
 import com.google.android.gms.maps.model.*;
+import com.google.firebase.auth.*;
 import com.google.firebase.database.*;
 import com.mandaditos.administrador.models.*;
 import java.util.*;
 
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.graphics.*;
-import android.text.*;
 
 public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 {
@@ -116,13 +116,13 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		holder.EmpresaEd.setEnabled(false);
 		holder.direccionEmpresaEd.setEnabled(false);
 		holder.InstruccionesEd.setEnabled(false);
-		
+
 		float CostProdNum=Float.parseFloat(mDataList.get(position).getCostoDelProducto());
 		float CostEnvNum=Float.parseFloat(mDataList.get(position).getCostoDelEnvio());
 		float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
 		holder.CostoTotalTv.setText(String.valueOf(Float.toString(resultadoDeProdMasEnv)));
 
-		
+
 //		holder.CostoDelProductoEd.addTextChangedListener(new TextWatcher(){
 //				private float CostProdNum;
 //				private float CostEnvNum;
@@ -196,10 +196,10 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 //					// TODO: Implement this method
 //				}
 //			});
-		
-		
-		
-		
+
+
+
+
 
 		ArrayAdapter statsAdapter = new ArrayAdapter(holder.context, android.R.layout.simple_spinner_item, statuses);  
         statsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
@@ -407,13 +407,13 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				@Override
 				public void onClick(View p1)
 				{
-					
+
 					String costoDelProducto = holder.CostoDelProductoEd.getText().toString();
 					String costoDelEnvio = holder.CostoDelEnvioEd.getText().toString();
-					if (costoDelProducto.isEmpty()|costoDelEnvio.isEmpty())
+					if (costoDelProducto.isEmpty() | costoDelEnvio.isEmpty())
 					{
 						Toast.makeText(holder.context, "Ingresa el costo del producto y envío, si ya esta cobrado ingresa 0", 1000).show();
-					}if (!costoDelProducto.isEmpty()&&!costoDelEnvio.isEmpty())
+					}if (!costoDelProducto.isEmpty() && !costoDelEnvio.isEmpty())
 					{
 						final AlertDialog dialog = new AlertDialog.Builder(holder.context).create();
 						dialog.setTitle("Alerta!");
@@ -448,7 +448,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 									float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
 									holder.CostoTotalTv.setText(String.valueOf(Float.toString(resultadoDeProdMasEnv)));
 
-									
+
 									String costoOrden =String.valueOf(Float.toString(resultadoDeProdMasEnv));
 
 									DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Ordenes").child(mDataList.get(position).getNumeroDeOrden());
@@ -466,7 +466,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 									mDatabase.child("direccionEmpresa").setValue(direccionDeEmpresa);
 									mDatabase.child("instruccionesDeLlegada").setValue(instruccionesDeEnvio);
 									mDatabase.child("costoOrden").setValue(costoOrden);
-									
+
 									holder.PartidaEd.setEnabled(false);
 									holder.DestinoEd.setEnabled(false);
 //								holder.DistanciaEd.setEnabled(false);
@@ -718,7 +718,11 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 												{
 													appleSnapshot.getRef().removeValue();
 
-													holder.context.startActivity(new Intent(holder.context, Home.class));
+													if (holder.uId.matches("bTn7vklJZGhVYa2tnPlDZKStwEi2")){
+														holder.context.startActivity(new Intent(holder.context, Home.class));
+													}if (!holder.uId.matches("bTn7vklJZGhVYa2tnPlDZKStwEi2")){
+														holder.context.startActivity(new Intent(holder.context, HomeClient.class));
+													}
 												}
 											}
 
@@ -905,6 +909,10 @@ class mViewHolder extends RecyclerView.ViewHolder
 
 	Context context;
 
+	FirebaseAuth mFirebaseAuth;
+
+	String uId;
+
 
     mViewHolder(View v)
 	{
@@ -938,6 +946,9 @@ class mViewHolder extends RecyclerView.ViewHolder
 		direccionEmpresaEd = v.findViewById(R.id.direccionEmpresaEd);
 		InstruccionesEd = v.findViewById(R.id.instruccionesEd);
 		context = v.getContext();
+		mFirebaseAuth = FirebaseAuth.getInstance();
+		FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
+		uId = mFirebaseUser.getUid().toString();
 
 
 

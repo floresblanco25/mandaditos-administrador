@@ -43,18 +43,27 @@ public class LoginActivity extends AppCompatActivity
 					int index = email.indexOf('@');
 					email = email.substring(0, index);
 					Log.wtf("User is",email.toString());
-                    Toast.makeText(LoginActivity.this,"You are logged in",Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(LoginActivity.this, Home.class);
-                    startActivity(i);
+                    Toast.makeText(LoginActivity.this,"Inicio de sesión correcto",Toast.LENGTH_SHORT).show();
+					if(mFirebaseUser.getUid().toString().matches("bTn7vklJZGhVYa2tnPlDZKStwEi2")){
+						Intent i = new Intent(LoginActivity.this, Home.class);
+						startActivity(i);
+						
+					}
+					if(!mFirebaseUser.getUid().toString().matches("bTn7vklJZGhVYa2tnPlDZKStwEi2")){
+						Intent i = new Intent(LoginActivity.this, HomeClient.class);
+						startActivity(i);
+					}
+                    
                 }
                 else{
-                    Toast.makeText(LoginActivity.this,"Please Login",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this,"Por favor inicia sesión",Toast.LENGTH_SHORT).show();
                 }
             }
         };
 
 
         loginButton.setOnClickListener(new View.OnClickListener() {
+
 
 				@Override
 				public void onClick(View v) {
@@ -70,24 +79,33 @@ public class LoginActivity extends AppCompatActivity
 						passwordText.requestFocus();
 					}
 					else  if(email.isEmpty() && pwd.isEmpty()){
-						Toast.makeText(LoginActivity.this,"Fields Are Empty!",Toast.LENGTH_SHORT).show();
+						Toast.makeText(LoginActivity.this,"Campos vacíos!",Toast.LENGTH_SHORT).show();
 					}
 					else  if(!(email.isEmpty() && pwd.isEmpty())){
 						mFirebaseAuth.signInWithEmailAndPassword(email, pwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
 								@Override
 								public void onComplete(@NonNull Task<AuthResult> task) {
 									if(!task.isSuccessful()){
-										Toast.makeText(LoginActivity.this,"Login Error, Please Login Again",Toast.LENGTH_SHORT).show();
+										Toast.makeText(LoginActivity.this,"Error de inicio de sesión, intenta de nuevo",Toast.LENGTH_SHORT).show();
 									}
 									else{
-										Intent intToHome = new Intent(LoginActivity.this,Home.class);
-										startActivity(intToHome);
+										String uId = mFirebaseAuth.getCurrentUser().getUid();
+										if(uId.matches("bTn7vklJZGhVYa2tnPlDZKStwEi2")){
+											Intent i = new Intent(LoginActivity.this, Home.class);
+											finishAffinity();
+											startActivity(i);
+										}
+										if(!uId.matches("bTn7vklJZGhVYa2tnPlDZKStwEi2")){
+											Intent i = new Intent(LoginActivity.this, HomeClient.class);
+											startActivity(i);
+											finishAffinity();
+										}
 									}
 								}
 							});
 					}
 					else{
-						Toast.makeText(LoginActivity.this,"Error Occurred!",Toast.LENGTH_SHORT).show();
+						Toast.makeText(LoginActivity.this,"Error!",Toast.LENGTH_SHORT).show();
 
 					}
 

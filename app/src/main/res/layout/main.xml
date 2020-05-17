@@ -46,6 +46,11 @@
 			android:onClick="mostrarSinAsignar"
 			android:id="@+id/nuevasmainButton1"/>
 
+		<ToggleButton
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/PublicarmainToggleButton1"/>
+
 	</LinearLayout>
 
 	<LinearLayout
@@ -72,9 +77,26 @@
 
 		<EditText
 			android:layout_width="wrap_content"
-			android:ems="10"
+			android:ems="6"
 			android:layout_height="wrap_content"
-			android:id="@+id/searchEdmainEditText1"/>
+			android:id="@+id/searchEdmainEditText1"
+			android:hint="Empresa"/>
+
+		<EditText
+			android:layout_width="wrap_content"
+			android:ems="5"
+			android:layout_height="wrap_content"
+			android:hint="Persona"
+			android:id="@+id/BuscarPersonamainEditText1"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Nuevo Cliente"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:layout_margin="8dp"
+			android:id="@+id/nuevoClientemainTextView1"
+			android:onClick="nuevoCliente"/>
 
 	</LinearLayout>
 

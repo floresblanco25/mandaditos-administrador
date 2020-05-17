@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:gravity="center"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="left|center_vertical"
+		style="?android:attr/buttonBarStyle">
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Añadir"
+			android:onClick="addOrderClient"
+			android:textColor="#000000"
+			android:textStyle="bold"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Refrescar"
+			android:onClick="refreshClient"/>
+
+		<EditText
+			android:layout_width="wrap_content"
+			android:ems="10"
+			android:layout_height="wrap_content"
+			android:id="@+id/searchEdmainEditText1Client"
+			android:hint="Buscar por nombre"/>
+
+
+
+	</LinearLayout>
+
+	<android.support.v7.widget.RecyclerView
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/recycler_ordersClient"
+		android:layout_width="match_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:layout_marginTop="16dp">
+
+	</android.support.v7.widget.RecyclerView>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="left|center_vertical">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Total $:"
+			android:layout_margin="8dp"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="0"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:layout_margin="8dp"
+			android:textColor="#98160E"
+			android:id="@+id/totalAliquidarClient"
+			android:textStyle="bold"
+			android:layout_marginLeft="0dp"/>
+
+		<View
+			android:background="?android:attr/dividerHorizontal"
+			android:layout_width="1dp"
+			android:layout_height="match_parent"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Ordenes:"
+			android:layout_marginLeft="8dp"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="0"
+			android:layout_margin="8dp"
+			android:id="@+id/countmainTextView1Client"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:textColor="#274885"/>
+
+		<View
+			android:background="?android:attr/dividerHorizontal"
+			android:layout_width="1dp"
+			android:layout_height="match_parent"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+

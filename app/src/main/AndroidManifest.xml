@@ -38,9 +38,19 @@
             </intent-filter>
         </activity>
 		<activity
+            android:name=".CreateAccount"
+            android:label="@string/app_name" >
+
+		</activity>
+		<activity
             android:name=".Home"
             android:label="@string/app_name" >
 		</activity>
+		<activity
+            android:name=".HomeClient"
+            android:label="@string/app_name" >
+				
+			</activity>
 		<activity
             android:name=".mapPicker"
             android:label="@string/app_name" >

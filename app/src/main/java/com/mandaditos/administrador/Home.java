@@ -38,7 +38,7 @@ public class Home extends AppCompatActivity
 	private String Empresa;
 	private String Direccion = "";
 	private Button entregadas,sinentregar,nuevas,drivers; 
-	private EditText buscarEd;
+	private EditText buscarEmpresaEd,buscarPersona;
 	private String uId;
 
 
@@ -63,10 +63,20 @@ public class Home extends AppCompatActivity
 		sinentregar = findViewById(R.id.sinentregarmainButton1);
 		drivers = findViewById(R.id.driversmainButton1);
 		nuevas = findViewById(R.id.nuevasmainButton1);
-		buscarEd = findViewById(R.id.searchEdmainEditText1);
+		buscarEmpresaEd = findViewById(R.id.searchEdmainEditText1);
+		buscarPersona = findViewById(R.id.BuscarPersonamainEditText1);
+
 		
 		
 		
+		
+		
+		
+		
+		
+		getWindow().setSoftInputMode(
+			WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+		);
 		
 		
 		
@@ -319,7 +329,7 @@ public class Home extends AppCompatActivity
 			
 			
 //Search edittext
-		buscarEd.addTextChangedListener(new TextWatcher() {
+		buscarEmpresaEd.addTextChangedListener(new TextWatcher() {
 				@Override
 				public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -335,7 +345,23 @@ public class Home extends AppCompatActivity
 					filter(editable.toString());
 				}
 			});
+		buscarPersona.addTextChangedListener(new TextWatcher() {
+				@Override
+				public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+				}
+
+				@Override
+				public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+				}
+
+				@Override
+				public void afterTextChanged(Editable editable) {
+					filterPersonas(editable.toString());
+				}
+			});
+		
 
 
 
@@ -863,6 +889,19 @@ public class Home extends AppCompatActivity
         builder.show();
 
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+//Crear un nuevo usuario 
+	public void nuevoCliente(View v){
+		Intent i = new Intent(Home.this,CreateAccount.class);
+		startActivity(i);
+	}
 
 
 
@@ -1104,6 +1143,88 @@ public class Home extends AppCompatActivity
 				}
 			});
 		
+    }
+	private void filterPersonas(final String text) {
+		mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
+		mDataBaseOrders.addListenerForSingleValueEvent(new ValueEventListener(){
+
+				private Float costosDeOrden;
+
+
+				@Override
+				public void onDataChange(DataSnapshot p1)
+				{
+					pDialog.dismiss();
+					if (p1.exists())
+					{
+						List<CostoPorOrden> costoPorOrdenList = new ArrayList<CostoPorOrden>();
+						List<mandaditosModel> ordersList = new ArrayList<mandaditosModel>();
+						for (DataSnapshot postSnapshot : p1.getChildren())
+						{
+							double latA = postSnapshot.child("latLngA/latitude").getValue();
+							double lngA = postSnapshot.child("latLngA/longitude").getValue();
+							double latB = postSnapshot.child("latLngB/latitude").getValue();
+							double lngB = postSnapshot.child("latLngB/longitude").getValue();
+
+							mandaditosModel m = new mandaditosModel();
+							m.setUserId(postSnapshot.child("userId").getValue().toString());
+							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
+							m.setPartida(postSnapshot.child("partida").getValue().toString());
+							m.setDestino(postSnapshot.child("destino").getValue().toString());
+							m.setDistancia(postSnapshot.child("distancia").getValue().toString());
+							m.setFecha(postSnapshot.child("fecha").getValue().toString());
+							m.setETA(postSnapshot.child("eta").getValue().toString());
+							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
+
+							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
+							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
+							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
+							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
+							m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
+							m.setLatLngA(new LatLng(latA, lngA));
+							m.setLatLngB(new LatLng(latB, lngB));
+							m.setNumeroDeOrden(postSnapshot.getKey().toString());
+							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
+							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
+							if (m.getPartida().toString().toLowerCase().contains(text.toLowerCase()))
+							{
+								ordersList.add(m);
+								CostoPorOrden precioModel = new CostoPorOrden();
+								costosDeOrden = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
+								precioModel.setPrecioDeOrden(costosDeOrden);
+								costoPorOrdenList.add(precioModel);
+							}
+
+						}
+
+
+						adapter = new mAdapter(Home.this, ordersList);
+						mRecyclerView.setHasFixedSize(true);
+						LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
+						layoutManager.setReverseLayout(true);
+						layoutManager.setStackFromEnd(true);
+						mRecyclerView.setLayoutManager(layoutManager);
+						mRecyclerView.setAdapter(adapter);
+						totalAliquidar.setText(String.valueOf(grandTotal(costoPorOrdenList)));
+						int count = 0;
+						if (adapter != null)
+						{
+							count = adapter.getItemCount();
+						}
+						contarOrdenes.setText(String.valueOf(count));
+					}
+
+					else
+					{}
+				}
+				@Override
+				public void onCancelled(DatabaseError p1)
+				{
+				}
+			});
+
     }
 
 

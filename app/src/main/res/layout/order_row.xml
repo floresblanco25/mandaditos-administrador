@@ -215,7 +215,10 @@
 				android:layout_margin="0dp"
 				android:id="@+id/instruccionesEd"
 				android:maxEms="10"
-				android:hint="Opcional"/>
+				android:hint="Opcional"
+				android:textColor="#ED008B"
+				android:textStyle="bold|italic"
+				android:textSize="16sp"/>
 
 		</LinearLayout>
 
