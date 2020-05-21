@@ -29,7 +29,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
     private List<mandaditosModel> mDataList;
 	String[] statuses = { "Sin Completar", "Completada"};  
 	String[] dondeRecoger = { "Partida", "Destino"};
-	private ArrayList<String> DriversUIdList;
+	private ArrayList<String> DriversUIdList,DriversListNames;
 	static LatLng latLngA,latLngB;
 	private String asignedDriverName;
 	private DatabaseReference mDataBase;
@@ -40,6 +40,8 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
         this.mContext = mContext;
         this.mDataList = mDataList;
     }
+	
+	
 
 
 
@@ -84,9 +86,6 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		latLngB = mDataList.get(position).getLatLngB();
 		holder.PartidaEd.setText(mDataList.get(position).getPartida());
 		holder.DestinoEd.setText(mDataList.get(position).getDestino());
-//		holder.DistanciaEd.setText(mDataList.get(position).getDistancia());
-//		holder.FechaEtaEd.setText(mDataList.get(position).getFecha() + " " + mDataList.get(position).getEta());
-//		holder.DondeRecogerDineroEd.setText(mDataList.get(position).getRecogerDineroEn());
 		holder.CostoDelProductoEd.setText(mDataList.get(position).getCostoDelProducto());
 		holder.CostoDelEnvioEd.setText(mDataList.get(position).getCostoDelEnvio());
 		holder.EstadoDeOrdenEd.setText(mDataList.get(position).getEstadoDeOrden());
@@ -97,13 +96,11 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		holder.direccionEmpresaEd.setText(mDataList.get(position).getDireccionEmpresa());
 		holder.InstruccionesEd.setText(mDataList.get(position).getInstruccionesDeLlegada());
 		holder.CostoTotalTv.setText(mDataList.get(position).getCostoOrden());
+		holder.number.setText(position+1+"");
 		holder.DriverAsignado.setEnabled(true);
 		holder.NumeroDeOrdenEd.setEnabled(false);
 		holder.PartidaEd.setEnabled(false);
 		holder.DestinoEd.setEnabled(false);
-//		holder.DistanciaEd.setEnabled(false);
-//		holder.FechaEtaEd.setEnabled(false);
-//		holder.DondeRecogerDineroEd.setEnabled(false);
 		holder.CostoDelProductoEd.setEnabled(false);
 		holder.CostoDelEnvioEd.setEnabled(false);
 		holder.EstadoDeOrdenEd.setEnabled(false);
@@ -116,87 +113,30 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 		holder.EmpresaEd.setEnabled(false);
 		holder.direccionEmpresaEd.setEnabled(false);
 		holder.InstruccionesEd.setEnabled(false);
+		
+		
+		
+		
+		
+		
+	
+//Hide view for not me 
+		if(!holder.uId.matches("bTn7vklJZGhVYa2tnPlDZKStwEi2")){
+			holder.AssignarDriverButton.setVisibility(View.GONE);
+			holder.SpinnerEstadoDeOrden.setVisibility(View.GONE);
+			holder.deleteButton.setVisibility(View.GONE);
+			holder.direccionEmpresaEd.setEnabled(false);
+			holder.EmpresaEd.setEnabled(false);
+
+		}
+		
+		
+		
 
 		float CostProdNum=Float.parseFloat(mDataList.get(position).getCostoDelProducto());
 		float CostEnvNum=Float.parseFloat(mDataList.get(position).getCostoDelEnvio());
 		float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
 		holder.CostoTotalTv.setText(String.valueOf(Float.toString(resultadoDeProdMasEnv)));
-
-
-//		holder.CostoDelProductoEd.addTextChangedListener(new TextWatcher(){
-//				private float CostProdNum;
-//				private float CostEnvNum;
-//				@Override
-//				public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4)
-//				{
-//					// TODO: Implement this method
-//				}
-//
-//				@Override
-//				public void onTextChanged(CharSequence p1, int p2, int p3, int p4)
-//				{
-//					if(p1.toString().matches("")){
-//						CostProdNum=0;
-//						CostEnvNum=Float.parseFloat(holder.CostoDelEnvioEd.getText().toString());
-//						float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
-//						holder.CostoTotalTv.setText(String.valueOf(Float.toString(resultadoDeProdMasEnv)));
-//					}
-//					else{
-//						
-//						CostEnvNum=Float.parseFloat(p1.toString());
-//						CostProdNum=Float.parseFloat(holder.CostoDelProductoEd.getText().toString());
-//						float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
-//						holder.CostoTotalTv.setText(String.valueOf(Float.toString(resultadoDeProdMasEnv)));
-//					}
-//					
-//					// TODO: Implement this method
-//				}
-//
-//				@Override
-//				public void afterTextChanged(Editable p1)
-//				{
-//					
-//
-//
-//					// TODO: Implement this method
-//				}
-//			});
-//		holder.CostoDelEnvioEd.addTextChangedListener(new TextWatcher(){
-//				private float CostProdNum;
-//				private float CostEnvNum;
-//				@Override
-//				public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4)
-//				{
-//					// TODO: Implement this method
-//				}
-//
-//				@Override
-//				public void onTextChanged(CharSequence p1, int p2, int p3, int p4)
-//				{
-//					if(p1.toString().matches("")){
-//						CostEnvNum=0;
-//						CostProdNum=Float.parseFloat(holder.CostoDelProductoEd.getText().toString());
-//						float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
-//						holder.CostoTotalTv.setText(String.valueOf(Float.toString(resultadoDeProdMasEnv)));
-//					}
-//					else{
-//						CostProdNum=Float.parseFloat(holder.CostoDelProductoEd.toString());
-//						CostEnvNum=Float.parseFloat(p1.toString());
-//						
-//					float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
-//					holder.CostoTotalTv.setText(String.valueOf(Float.toString(resultadoDeProdMasEnv)));
-//					}
-//					
-//					// TODO: Implement this method
-//				}
-//
-//				@Override
-//				public void afterTextChanged(Editable p1)
-//				{
-//					// TODO: Implement this method
-//				}
-//			});
-
 
 
 
@@ -207,9 +147,15 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
         holder.SpinnerEstadoDeOrden.setAdapter(statsAdapter);  
 		ArrayAdapter whereAdapter = new ArrayAdapter(holder.context, android.R.layout.simple_spinner_item, dondeRecoger);  
         statsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
-//		holder.SpinnerDondeRecogerDinero.setEnabled(false);
-//        holder.SpinnerDondeRecogerDinero.setAdapter(whereAdapter);
 
+		
+		
+		
+		
+		
+		
+		
+//FOR adding drivers list uid to spinner
 		mDataBase = FirebaseDatabase.getInstance().getReference("Drivers");
 		mDataBase.addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -220,12 +166,15 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 					if (p1.exists())
 					{
 						DriversUIdList = new ArrayList<String>();
+						DriversListNames = new ArrayList<String>();
 						for (DataSnapshot postSnapshot : p1.getChildren())
 						{
 							String driver = postSnapshot.getKey().toString();
+							String DriverName = postSnapshot.child("Perfil/nombre").getValue().toString();
 							DriversUIdList.add(driver);
+							DriversListNames.add(DriverName.toString());
 						}
-
+						
 					}
 					else
 					{}
@@ -292,6 +241,35 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				{
 					String phone = holder.callEd.getText().toString();
 					holder.context.startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null)));
+				}
+			});
+		holder.callDriver.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View p1)
+				{
+					String phone = mDataList.get(position).getTelefono().toString();
+					holder.context.startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null)));
+				}
+			});
+			
+			
+			
+			
+			
+			
+			
+//whatsapp 
+		holder.whatsapp.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View p1)
+				{
+					Intent intent = new Intent();
+					intent.setAction(Intent.ACTION_VIEW);
+					intent.addCategory(Intent.CATEGORY_BROWSABLE);
+					intent.setData(Uri.parse("https://wa.me/503"+mDataList.get(position).getTelefono().toString()+"?text=Buen%20dia,%20le%20informo%20que%20su%20paquete%20de%20parte%20de%20"+mDataList.get(position).getEmpresa().toString()+"%20está%20en%20ruta%20.%20Att.%20Mario%20Mandaditos."));
+					holder.context.startActivity(intent);
 				}
 			});
 
@@ -372,27 +350,6 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 
 
 
-//Spinner donde recoger el dinero
-//		holder.SpinnerDondeRecogerDinero.setOnItemSelectedListener(new OnItemSelectedListener(){
-//
-//				@Override
-//				public void onItemSelected(AdapterView<?> p1, View p2, int pos, long p4)
-//				{
-//					String selected = dondeRecoger[pos];
-//					holder.DondeRecogerDineroEd.setText(selected);
-//				}
-//
-//				@Override
-//				public void onNothingSelected(AdapterView<?> p1)
-//				{
-//				}
-//			});
-
-
-
-
-
-
 
 
 
@@ -434,7 +391,6 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 									String ordrStat = holder.EstadoDeOrdenEd.getText().toString();
 									String partida = holder.PartidaEd.getText().toString();
 									String destino = holder.DestinoEd.getText().toString();
-//								String recogerdinero = holder.DondeRecogerDineroEd.getText().toString();
 									String costoDelProducto = holder.CostoDelProductoEd.getText().toString();
 									String newDriverUid = holder.DriverAsignado.getText().toString();
 									String telefono = holder.callEd.getText().toString();
@@ -442,7 +398,6 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 									String direccionDeEmpresa = holder.direccionEmpresaEd.getText().toString();
 									String instruccionesDeEnvio = holder.InstruccionesEd.getText().toString();
 									String costoDelEnvio =holder.CostoDelEnvioEd.getText().toString();
-									//error aqui abajo 
 									float CostProdNum=Float.parseFloat(costoDelProducto);
 									float CostEnvNum=Float.parseFloat(costoDelEnvio);
 									float resultadoDeProdMasEnv = CostProdNum + CostEnvNum;
@@ -456,7 +411,6 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 									mDatabase.child("partida").setValue(partida);
 									mDatabase.child("destino").setValue(destino);
 									mDatabase.child("telefono").setValue(telefono);
-//								mDatabase.child("recogerDineroEn").setValue(recogerdinero);
 									mDatabase.child("costoDelProducto").setValue(costoDelProducto);
 									mDatabase.child("costoDelEnvio").setValue(costoDelEnvio);
 									mDatabase.child("latLngA").setValue(latLngA);
@@ -469,14 +423,10 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 
 									holder.PartidaEd.setEnabled(false);
 									holder.DestinoEd.setEnabled(false);
-//								holder.DistanciaEd.setEnabled(false);
-//								holder.FechaEtaEd.setEnabled(false);
-//								holder.DondeRecogerDineroEd.setEnabled(false);
 									holder.CostoDelProductoEd.setEnabled(false);
 									holder.CostoDelEnvioEd.setEnabled(false);
 									holder.save.setEnabled(false);
 									holder.SpinnerEstadoDeOrden.setEnabled(false);
-//								holder.SpinnerDondeRecogerDinero.setEnabled(false);
 									holder.AssignarDriverButton.setEnabled(false);
 									holder.PartidaBt.setEnabled(false);
 									holder.DestinoBt.setEnabled(false);
@@ -513,22 +463,26 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				{
 					holder.PartidaEd.setEnabled(true);
 					holder.DestinoEd.setEnabled(true);
-//					holder.DistanciaEd.setEnabled(true);
-//					holder.FechaEtaEd.setEnabled(true);
-//					holder.DondeRecogerDineroEd.setEnabled(true);
 					holder.CostoDelProductoEd.setEnabled(true);
 					holder.CostoDelEnvioEd.setEnabled(true);
 					holder.save.setEnabled(true);
 					holder.SpinnerEstadoDeOrden.setEnabled(true);
-//					holder.SpinnerDondeRecogerDinero.setEnabled(true);
 					holder.AssignarDriverButton.setEnabled(true);
 					holder.PartidaBt.setEnabled(true);
 					holder.DestinoBt.setEnabled(true);
 					holder.callEd.setEnabled(true);
 					holder.callEd.setEnabled(true);
-					holder.EmpresaEd.setEnabled(true);
-					holder.direccionEmpresaEd.setEnabled(true);
 					holder.InstruccionesEd.setEnabled(true);
+					if(holder.uId.matches("bTn7vklJZGhVYa2tnPlDZKStwEi2")){
+						holder.direccionEmpresaEd.setEnabled(true);
+						holder.EmpresaEd.setEnabled(true);
+
+					}
+					if(!holder.uId.matches("bTn7vklJZGhVYa2tnPlDZKStwEi2")){
+						holder.direccionEmpresaEd.setEnabled(false);
+						holder.EmpresaEd.setEnabled(false);
+
+					}
 
 				}
 			});
@@ -634,10 +588,14 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				public void onClick(View p1)
 				{
 
-					AlertDialog.Builder builder = new AlertDialog.Builder(holder.context);
-					builder.setTitle("Elige un Driver");
 					String[] drivers = GetStringArray(DriversUIdList);
+					String[] names = GetStringArray(DriversListNames);
+//		solo necesuto arreglar la lista de nlmbres 
+					AlertDialog.Builder builder = new AlertDialog.Builder(holder.context);
+					builder.setAdapter(new mSpinnerAdapter(holder.context, names, drivers), null);
+					builder.setTitle("Lista de Drivers");
 					builder.setItems(drivers, new DialogInterface.OnClickListener() {
+							
 							@Override
 							public void onClick(DialogInterface dialog, int which)
 							{
@@ -739,6 +697,9 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 					}
 				}
 			});
+			
+			
+			
 
 
 
@@ -895,16 +856,18 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 
 
 
+
+
 //Class virwholder
 class mViewHolder extends RecyclerView.ViewHolder
 {
 
     EditText NumeroDeOrdenEd,PartidaEd,DestinoEd,CostoDelProductoEd,EstadoDeOrdenEd,DriverAsignado,EmpresaEd,direccionEmpresaEd,InstruccionesEd,CostoDelEnvioEd;
-	Button save,edit,PartidaBt,DestinoBt,AssignarDriverButton,llamar;
+	Button save,edit,PartidaBt,DestinoBt,AssignarDriverButton,llamar,whatsapp,callDriver,WhatsappDriver;
 	Spinner SpinnerEstadoDeOrden;
 	ImageView unfoldButton,deleteButton;;
 	LinearLayout layoutToCollapse;
-	TextView DriverName,CostoTotalTv;
+	TextView DriverName,CostoTotalTv,number;
 	EditText callEd;
 
 	Context context;
@@ -921,9 +884,6 @@ class mViewHolder extends RecyclerView.ViewHolder
 		NumeroDeOrdenEd = v.findViewById(R.id.dashboarOrderTitle);
 		PartidaEd = v.findViewById(R.id.dashboardAddressA);
 		DestinoEd = v.findViewById(R.id.dashboardAddressB);
-//		DistanciaEd = v.findViewById(R.id.dashboardDistance);
-//		FechaEtaEd = v.findViewById(R.id.dashboardDateEta);
-//		DondeRecogerDineroEd = v.findViewById(R.id.dashboardWhereGetMoney);
 		CostoDelProductoEd = v.findViewById(R.id.costodelproducto);
 		CostoDelEnvioEd = v.findViewById(R.id.costodelenvio);
 		CostoTotalTv = v.findViewById(R.id.totalCostSum);
@@ -931,7 +891,6 @@ class mViewHolder extends RecyclerView.ViewHolder
 		save = v.findViewById(R.id.orderrowButtonGuardar);
 		edit = v.findViewById(R.id.orderrowButtonEditar);
 		SpinnerEstadoDeOrden = v.findViewById(R.id.orderStatus_rowSpinner);
-//		SpinnerDondeRecogerDinero = v.findViewById(R.id.where_rowSpinner);
 		PartidaBt = v.findViewById(R.id.orderrowButtonPartida);
 		DestinoBt = v.findViewById(R.id.orderrowButtonDestino);
 		unfoldButton = v.findViewById(R.id.orderrowUnfoldButtom);
@@ -945,16 +904,22 @@ class mViewHolder extends RecyclerView.ViewHolder
 		EmpresaEd = v.findViewById(R.id.empresaEd);
 		direccionEmpresaEd = v.findViewById(R.id.direccionEmpresaEd);
 		InstruccionesEd = v.findViewById(R.id.instruccionesEd);
+		whatsapp = v.findViewById(R.id.whatsapporderrowButton1);
+		number = v.findViewById(R.id.numberorderrowTextView1);
+		callDriver = v.findViewById(R.id.callDriverorderrowButton1);
+		WhatsappDriver = v.findViewById(R.id.whatsappDriverorderrowButton1);
 		context = v.getContext();
 		mFirebaseAuth = FirebaseAuth.getInstance();
 		FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
 		uId = mFirebaseUser.getUid().toString();
 
-
+		
 
 
 
     }
+	
+	
 
 
 

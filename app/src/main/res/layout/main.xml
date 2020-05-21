@@ -20,23 +20,26 @@
 			android:text="Añadir"
 			android:onClick="addOrder"
 			android:textColor="#000000"
-			android:textStyle="bold"/>
+			android:textStyle="bold"
+			android:textSize="12sp"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
-			android:text="Entregadas"
+			android:text="Entrgadas"
 			android:onClick="mostrarCompletas"
-			android:id="@+id/entregadasmainButton1"/>
+			android:id="@+id/entregadasmainButton1"
+			android:textSize="12sp"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
-			android:text="Sin Entregar"
+			android:text="Sin Entrgr"
 			android:onClick="mostrarSinCompletar"
-			android:id="@+id/sinentregarmainButton1"/>
+			android:id="@+id/sinentregarmainButton1"
+			android:textSize="12sp"/>
 
 		<Button
 			android:layout_width="wrap_content"
@@ -44,12 +47,17 @@
 			android:layout_height="wrap_content"
 			android:text="Nuevas"
 			android:onClick="mostrarSinAsignar"
-			android:id="@+id/nuevasmainButton1"/>
+			android:id="@+id/nuevasmainButton1"
+			android:textSize="12sp"/>
 
-		<ToggleButton
+		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:id="@+id/PublicarmainToggleButton1"/>
+			android:text="Nuevo Cliente"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:id="@+id/nuevoClientemainTextView1"
+			android:onClick="nuevoCliente"
+			android:textSize="12sp"/>
 
 	</LinearLayout>
 
@@ -66,37 +74,40 @@
 			android:layout_height="wrap_content"
 			android:text="Drivers"
 			android:onClick="verDrivers"
-			android:id="@+id/driversmainButton1"/>
+			android:id="@+id/driversmainButton1"
+			android:textSize="12sp"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
 			android:text="Refrescar"
-			android:onClick="refresh"/>
+			android:onClick="refresh"
+			android:textSize="12sp"/>
 
 		<EditText
 			android:layout_width="wrap_content"
-			android:ems="6"
+			android:ems="4"
 			android:layout_height="wrap_content"
 			android:id="@+id/searchEdmainEditText1"
-			android:hint="Empresa"/>
+			android:hint="Empresa"
+			android:textSize="12sp"/>
 
 		<EditText
 			android:layout_width="wrap_content"
-			android:ems="5"
+			android:ems="4"
 			android:layout_height="wrap_content"
 			android:hint="Persona"
-			android:id="@+id/BuscarPersonamainEditText1"/>
+			android:id="@+id/BuscarPersonamainEditText1"
+			android:textSize="12sp"/>
 
-		<TextView
+		<EditText
 			android:layout_width="wrap_content"
+			android:ems="4"
 			android:layout_height="wrap_content"
-			android:text="Nuevo Cliente"
-			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:layout_margin="8dp"
-			android:id="@+id/nuevoClientemainTextView1"
-			android:onClick="nuevoCliente"/>
+			android:hint="Lugar"
+			android:id="@+id/lugarmainEditText1"
+			android:textSize="12sp"/>
 
 	</LinearLayout>
 

@@ -19,29 +19,23 @@
 			android:orientation="horizontal"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:gravity="right">
-
-			<ImageView
-				android:src="@drawable/baseline_delete_outline_black_24"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:padding="8dp"
-				android:id="@+id/deleteorderrowImageView1"/>
-
-		</LinearLayout>
-
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
 			android:gravity="center_vertical">
 
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Estado de orden"
+				android:text="0"
 				style="@style/info"
-				android:layout_margin="8dp"/>
+				android:layout_margin="8dp"
+				android:textSize="14sp"
+				android:typeface="monospace"
+				android:id="@+id/numberorderrowTextView1"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Estado"
+				android:textAppearance="?android:attr/textAppearanceSmall"/>
 
 			<EditText
 				android:layout_width="wrap_content"
@@ -50,33 +44,28 @@
 				style="@style/info"
 				android:layout_margin="8dp"
 				android:id="@+id/dashboardOrderStatus"
-				android:textColor="#FA3D32"/>
+				android:textColor="#FA3D32"
+				android:textStyle="bold"/>
 
 			<Spinner
 				android:id="@+id/orderStatus_rowSpinner"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"/>
 
-		</LinearLayout>
-
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:gravity="center_vertical">
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Código de orden:"
-				android:layout_margin="8dp"/>
-
-			<EditText
+			<LinearLayout
+				android:orientation="horizontal"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="Consultando..."
-				android:id="@+id/dashboarOrderTitle"
-				android:textSize="14sp"/>
+				android:gravity="right">
+
+				<ImageView
+					android:src="@drawable/baseline_delete_outline_black_24"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/deleteorderrowImageView1"
+					android:paddingRight="8dp"/>
+
+			</LinearLayout>
 
 		</LinearLayout>
 
@@ -100,34 +89,12 @@
 
 		</LinearLayout>
 
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:gravity="center_vertical"
-			android:layout_marginBottom="8dp">
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Dirección Empresa"
-				android:layout_margin="8dp"/>
-
-			<EditText
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:id="@+id/direccionEmpresaEd"
-				android:textSize="14sp"/>
-
-		</LinearLayout>
-
 	</LinearLayout>
 
 	<View
 		android:background="?android:attr/dividerVertical"
 		android:layout_width="match_parent"
-		android:layout_height="1dp"
-		android:layout_marginBottom="8dp"/>
+		android:layout_height="1dp"/>
 
 	<LinearLayout
 		android:orientation="vertical"
@@ -182,7 +149,7 @@
 				android:textStyle="bold"
 				android:textSize="16sp"
 				android:maxEms="10"
-				android:ems="10"
+				android:ems="5"
 				android:inputType="phone"/>
 
 			<Button
@@ -192,6 +159,14 @@
 				android:text="Llamar"
 				android:id="@+id/llamarorderpoolrowButton1"
 				android:textColor="#85089E"/>
+
+			<Button
+				android:layout_width="wrap_content"
+				style="?android:attr/buttonBarButtonStyle"
+				android:layout_height="wrap_content"
+				android:text="Whatsapp"
+				android:textColor="#00DD4B"
+				android:id="@+id/whatsapporderrowButton1"/>
 
 		</LinearLayout>
 
@@ -261,7 +236,7 @@
 				android:layout_margin="8dp"/>
 
 			<EditText
-				android:inputType="numberDecimal"
+				android:inputType="numberDecimal|numberSigned"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text=""
@@ -335,7 +310,8 @@
 				style="@style/info"
 				android:layout_margin="0dp"
 				android:id="@+id/DriverAsignadodashboard"
-				android:maxEms="10"/>
+				android:maxEms="10"
+				android:visibility="gone"/>
 
 			<TextView
 				android:layout_width="wrap_content"
@@ -345,6 +321,21 @@
 				android:textColor="#35830A"
 				android:textSize="16sp"/>
 
+			<Button
+				android:layout_width="wrap_content"
+				style="?android:attr/buttonBarButtonStyle"
+				android:layout_height="wrap_content"
+				android:text="Whatsapp"
+				android:textColor="#0C690E"
+				android:id="@+id/whatsappDriverorderrowButton1"/>
+
+			<Button
+				android:layout_width="wrap_content"
+				style="?android:attr/buttonBarButtonStyle"
+				android:layout_height="wrap_content"
+				android:text="Llamar"
+				android:id="@+id/callDriverorderrowButton1"/>
+
 		</LinearLayout>
 
 		<LinearLayout
@@ -353,6 +344,48 @@
 			android:layout_height="wrap_content"
 			android:id="@+id/orderRowLayoutToCollapse"
 			android:visibility="gone">
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Código de orden:"
+					android:layout_margin="8dp"/>
+
+				<EditText
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="Consultando..."
+					android:id="@+id/dashboarOrderTitle"
+					android:textSize="14sp"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:layout_marginBottom="8dp">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Dirección Empresa"
+					android:layout_margin="8dp"/>
+
+				<EditText
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:id="@+id/direccionEmpresaEd"
+					android:textSize="14sp"/>
+
+			</LinearLayout>
 
 			<LinearLayout
 				android:orientation="horizontal"
@@ -414,8 +447,7 @@
 	<View
 		android:background="?android:attr/dividerVertical"
 		android:layout_width="match_parent"
-		android:layout_height="1dp"
-		android:layout_marginTop="16dp"/>
+		android:layout_height="1dp"/>
 
 	<LinearLayout
 		android:orientation="horizontal"
@@ -425,10 +457,10 @@
 
 		<ImageView
 			android:src="@drawable/baseline_expand_more_black_24"
-			android:layout_width="wrap_content"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:id="@+id/orderrowUnfoldButtom"
-			android:padding="16dp"/>
+			android:padding="4dp"/>
 
 	</LinearLayout>
 

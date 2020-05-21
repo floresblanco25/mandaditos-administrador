@@ -3,6 +3,8 @@ package com.mandaditos.administrador;
 import android.*;
 import android.app.*;
 import android.content.*;
+import android.media.*;
+import android.net.*;
 import android.os.*;
 import android.support.annotation.*;
 import android.support.v7.app.*;
@@ -33,12 +35,12 @@ public class Home extends AppCompatActivity
 	private mAdapter adapter;
 	private RecyclerView mRecyclerView;
 	FirebaseAuth mFirebaseAuth;
-	private ArrayList<String> DriversList;
+	private ArrayList<String> DriversListUid,DriversListNames;
 	private ArrayList<String> namesList;
 	private String Empresa;
 	private String Direccion = "";
 	private Button entregadas,sinentregar,nuevas,drivers; 
-	private EditText buscarEmpresaEd,buscarPersona;
+	private EditText buscarEmpresaEd,buscarPersona,buscarDestino;
 	private String uId;
 
 
@@ -65,7 +67,16 @@ public class Home extends AppCompatActivity
 		nuevas = findViewById(R.id.nuevasmainButton1);
 		buscarEmpresaEd = findViewById(R.id.searchEdmainEditText1);
 		buscarPersona = findViewById(R.id.BuscarPersonamainEditText1);
+		buscarDestino = findViewById(R.id.lugarmainEditText1);
 
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -78,6 +89,64 @@ public class Home extends AppCompatActivity
 			WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
 		);
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
+		mDataBaseOrders.orderByKey().limitToFirst(2).addValueEventListener(new ValueEventListener(){
+
+
+
+				@Override
+				public void onDataChange(DataSnapshot p1)
+				{
+					pDialog.dismiss();
+					if (p1.exists())
+					{
+						for (DataSnapshot postSnapshot : p1.getChildren())
+						{
+							mandaditosModel m = new mandaditosModel();
+							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
+							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
+							if (m.getEstadoDeOrden().toString().toLowerCase().matches("Sin completar".toLowerCase()))
+							{
+								if (m.getDriverAsignado().toString().toLowerCase().matches("Sin asignar".toLowerCase()))
+								{
+									try {
+										Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+										Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+										if(r.isPlaying()){
+											r.stop();
+										}
+										else{
+										r.play();}
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+
+							}
+						}
+
+
+					}
+
+					else
+					{}
+				}
+				@Override
+				public void onCancelled(DatabaseError p1)
+				{
+				}
+			});
 		
 		
 		
@@ -180,28 +249,14 @@ public class Home extends AppCompatActivity
 				{
 					if (p1.exists())
 					{
-						DriversList = new ArrayList<String>();
+						DriversListUid = new ArrayList<String>();
+						DriversListNames = new ArrayList<String>();
 						for (DataSnapshot postSnapshot : p1.getChildren())
 						{
 							String driver = postSnapshot.getKey().toString();
-							mDataBase = FirebaseDatabase.getInstance().getReference("Drivers/" + driver);
-							mDataBase.addListenerForSingleValueEvent(new ValueEventListener(){
-
-									@Override
-									public void onDataChange(DataSnapshot p1)
-									{
-//										Toast.makeText(Home.this,p1.toString(),500).show();
-//										String name = p1.child("nombre").getValue().toString();
-//										namesList.add(name);
-									}
-
-									@Override
-									public void onCancelled(DatabaseError p1)
-									{
-										// TODO: Implement this method
-									}
-								});
-							DriversList.add(driver);
+							String DriverName = postSnapshot.child("Perfil/nombre").getValue().toString();
+							DriversListUid.add(driver);
+							DriversListNames.add(DriverName.toString());
 
 						}
 
@@ -215,6 +270,15 @@ public class Home extends AppCompatActivity
 				{
 				}
 			});
+			
+			
+			
+			
+			
+			
+			
+			
+			
 		mDataBase = FirebaseDatabase.getInstance().getReference("Drivers");
 		//Obtenemos nombre por uid
 
@@ -342,7 +406,7 @@ public class Home extends AppCompatActivity
 
 				@Override
 				public void afterTextChanged(Editable editable) {
-					filter(editable.toString());
+					filterEmpresa(editable.toString());
 				}
 			});
 		buscarPersona.addTextChangedListener(new TextWatcher() {
@@ -361,6 +425,22 @@ public class Home extends AppCompatActivity
 					filterPersonas(editable.toString());
 				}
 			});
+		buscarDestino.addTextChangedListener(new TextWatcher() {
+				@Override
+				public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+				}
+
+				@Override
+				public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+				}
+
+				@Override
+				public void afterTextChanged(Editable editable) {
+					filterLugar(editable.toString());
+				}
+			});
 		
 
 
@@ -370,59 +450,6 @@ public class Home extends AppCompatActivity
 
 
 //add more
-
-	}
-
-	class MyAdapter extends BaseAdapter
-	{
-
-		private CharSequence[] titles;
-
-		private CharSequence[] susbtitles;
-
-		private Context mContext;
-
-		MyAdapter(Context mContext, String[] titles, String[] subtitles)
-		{
-			this.mContext = mContext;
-			this.titles = titles;
-			this.susbtitles = subtitles;
-		}
-
-
-
-		@Override
-		public int getCount() 
-		{
-			return titles.length;
-		}
-
-		@Override
-		public Object getItem(int position) 
-		{
-			//this isn't great
-			return titles[position];
-		}
-
-		@Override
-		public long getItemId(int position) 
-		{
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) 
-		{
-			if (convertView == null)
-			{
-				convertView = getLayoutInflater().inflate(R.layout.drivers_list_row, null);
-			}
-
-			((TextView)convertView.findViewById(R.id.text1)).setText(titles[position]);
-			((TextView)convertView.findViewById(R.id.text2)).setText(susbtitles[position]);
-
-			return convertView;
-		}
 
 	}
 
@@ -442,7 +469,7 @@ public class Home extends AppCompatActivity
 		String UserId = mFirebaseUser.getUid().toString();
 		FirebaseDatabase.getInstance().getReference("Ordenes")
 			.push()
-			.setValue(new mandaditosModel("0", Empresa, Direccion, "", UserId, "", "", "", "", "", 
+			.setValue(new mandaditosModel("0", "", "", "", UserId, "", "", "", "", "", 
 										  "", "", "0", "Sin completar", new LatLng(13.67694, -89.27972), new LatLng(13.67694, -89.27972), "Sin asignar", "", "0"));
 		finishAffinity();
 		startActivity(new Intent(Home.this, Home.class));
@@ -759,21 +786,21 @@ public class Home extends AppCompatActivity
 
 
 
-//Ver drivers boton
+//Ver drivers boton//Ver drivers boton//Ver drivers boton//Ver drivers boton//Ver drivers boton//Ver drivers boton//Ver drivers boton//Ver drivers boton//Ver drivers boton//Ver drivers boton//Ver drivers boton//Ver drivers boton//Ver drivers boton//Ver drivers boton//Ver drivers boton//Ver drivers boton
 	public void verDrivers(View v)
 	{
-		String[] drivers = GetStringArray(DriversList);
-//		String[] names = GetStringArray(namesList);
+		String[] drivers = GetStringArray(DriversListUid);
+		String[] names = GetStringArray(DriversListNames);
 //		solo necesuto arreglar la lista de nlmbres 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setAdapter(new MyAdapter(Home.this, drivers, drivers), null);
-        builder.setTitle("Asignar A?");
+        builder.setAdapter(new mSpinnerAdapter(Home.this, names, drivers), null);
+        builder.setTitle("Lista de Drivers");
 		builder.setItems(drivers, new DialogInterface.OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface p1, int p2)
 				{
-					final String selectedUid = DriversList.get(p2);
+					final String selectedUid = DriversListUid.get(p2);
 					//aqui obtenemos el nombre del usuario
 					DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Drivers/" + selectedUid + "/Perfil").child("nombre");
 					ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -1062,7 +1089,7 @@ public class Home extends AppCompatActivity
 	
 //FILTER
 	//Filter
-	private void filter(final String text) {
+	private void filterEmpresa(final String text) {
 		mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
 		mDataBaseOrders.addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -1107,12 +1134,19 @@ public class Home extends AppCompatActivity
 							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
 							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
 								if (m.getEmpresa().toString().toLowerCase().contains(text.toLowerCase()))
+										
 								{
 									ordersList.add(m);
-									CostoPorOrden precioModel = new CostoPorOrden();
-									costosDeOrden = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
-									precioModel.setPrecioDeOrden(costosDeOrden);
-									costoPorOrdenList.add(precioModel);
+								}
+							if (m.getEmpresa().toString().toLowerCase().contains(text.toLowerCase()))
+								if(m.getEstadoDeOrden().toString().matches("Completada")){
+
+									{
+										CostoPorOrden precioModel = new CostoPorOrden();
+										costosDeOrden = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
+										precioModel.setPrecioDeOrden(costosDeOrden);
+										costoPorOrdenList.add(precioModel);
+									}
 								}
 
 						}
@@ -1196,6 +1230,96 @@ public class Home extends AppCompatActivity
 								precioModel.setPrecioDeOrden(costosDeOrden);
 								costoPorOrdenList.add(precioModel);
 							}
+
+						}
+
+
+						adapter = new mAdapter(Home.this, ordersList);
+						mRecyclerView.setHasFixedSize(true);
+						LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
+						layoutManager.setReverseLayout(true);
+						layoutManager.setStackFromEnd(true);
+						mRecyclerView.setLayoutManager(layoutManager);
+						mRecyclerView.setAdapter(adapter);
+						totalAliquidar.setText(String.valueOf(grandTotal(costoPorOrdenList)));
+						int count = 0;
+						if (adapter != null)
+						{
+							count = adapter.getItemCount();
+						}
+						contarOrdenes.setText(String.valueOf(count));
+					}
+
+					else
+					{}
+				}
+				@Override
+				public void onCancelled(DatabaseError p1)
+				{
+				}
+			});
+
+    }
+	
+	private void filterLugar(final String text) {
+		mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
+		mDataBaseOrders.addListenerForSingleValueEvent(new ValueEventListener(){
+
+				private Float costosDeOrden;
+
+
+				@Override
+				public void onDataChange(DataSnapshot p1)
+				{
+					pDialog.dismiss();
+					if (p1.exists())
+					{
+						List<CostoPorOrden> costoPorOrdenList = new ArrayList<CostoPorOrden>();
+						List<mandaditosModel> ordersList = new ArrayList<mandaditosModel>();
+						for (DataSnapshot postSnapshot : p1.getChildren())
+						{
+							double latA = postSnapshot.child("latLngA/latitude").getValue();
+							double lngA = postSnapshot.child("latLngA/longitude").getValue();
+							double latB = postSnapshot.child("latLngB/latitude").getValue();
+							double lngB = postSnapshot.child("latLngB/longitude").getValue();
+
+							mandaditosModel m = new mandaditosModel();
+							m.setUserId(postSnapshot.child("userId").getValue().toString());
+							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
+							m.setPartida(postSnapshot.child("partida").getValue().toString());
+							m.setDestino(postSnapshot.child("destino").getValue().toString());
+							m.setDistancia(postSnapshot.child("distancia").getValue().toString());
+							m.setFecha(postSnapshot.child("fecha").getValue().toString());
+							m.setETA(postSnapshot.child("eta").getValue().toString());
+							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
+
+							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
+							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
+							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
+							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
+							m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
+							m.setLatLngA(new LatLng(latA, lngA));
+							m.setLatLngB(new LatLng(latB, lngB));
+							m.setNumeroDeOrden(postSnapshot.getKey().toString());
+							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
+							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
+							if (m.getDestino().toString().toLowerCase().contains(text.toLowerCase()))
+
+							{
+								ordersList.add(m);
+							}
+							if (m.getDestino().toString().toLowerCase().contains(text.toLowerCase()))
+								if(m.getEstadoDeOrden().toString().matches("Completada")){
+
+									{
+										CostoPorOrden precioModel = new CostoPorOrden();
+										costosDeOrden = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
+										precioModel.setPrecioDeOrden(costosDeOrden);
+										costoPorOrdenList.add(precioModel);
+									}
+								}
 
 						}
 

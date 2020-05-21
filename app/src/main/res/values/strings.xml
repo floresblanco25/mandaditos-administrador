@@ -2,23 +2,5 @@
 <resources>
 
     <string name="app_name">Administrador</string>
-	
-	<string name="listo_para_hacer_un_envío">¿Listo para hacer un envío?</string>
-    <string name="punto_a">Punto A</string>
-    <string name="dirección_de_recogida">Dirección de recogida</string>
-    <string name="dirección_de_entrega">Dirección de entrega</string>
-
-    <string name="welcome_how_can_i_help_you">Bienvenido Mario, ¿Cómo puedo ayudarte?</string>
-
-    <string name="name">Nombre</string>
-    <string name="email">Correo</string>
-    <string name="password">Contraseña</string>
-    <string name="create_account">Crear cuenta</string>
-    <string name="already_a_member_login">¿Ya tienes una cuenta? Iniciar sesión</string>
-
-    <string name="login">Acceder</string>
-    <string name="no_account_yet_create_one">¿Sin cuenta? Crear una ahora</string>
-
-	
 
 </resources>

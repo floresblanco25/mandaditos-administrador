@@ -69,18 +69,21 @@
 
 		<activity
 			android:name=".Home"
+			android:screenOrientation="portrait"
 			android:label="@string/app_name">
 
 		</activity>
 
 		<activity
 			android:name=".HomeClient"
+			android:screenOrientation="portrait"
 			android:label="@string/app_name">
 
 		</activity>
 
 		<activity
 			android:name=".mapPicker"
+			android:screenOrientation="portrait"
 			android:label="@string/app_name">
 
 		</activity>
