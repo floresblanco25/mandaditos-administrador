@@ -28,12 +28,6 @@
     <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-    <permission
-        android:name="com.mandaditos.administrador.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="com.mandaditos.administrador.permission.C2D_MESSAGE" />
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -55,8 +49,7 @@
         </activity>
         <activity
             android:name="com.mandaditos.administrador.Home"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.mandaditos.administrador.HomeClient"
@@ -138,8 +131,6 @@
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="com.mandaditos.administrador" />
             </intent-filter>
         </receiver>
 
