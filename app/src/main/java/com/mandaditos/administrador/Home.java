@@ -3,10 +3,9 @@ package com.mandaditos.administrador;
 import android.*;
 import android.app.*;
 import android.content.*;
-import android.media.*;
-import android.net.*;
 import android.os.*;
 import android.support.annotation.*;
+import android.support.v4.app.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.*;
 import android.text.*;
@@ -23,6 +22,7 @@ import java.util.*;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.TaskStackBuilder;
 import com.mandaditos.administrador.R;
 public class Home extends AppCompatActivity
 {
@@ -42,7 +42,8 @@ public class Home extends AppCompatActivity
 	private Button entregadas,sinentregar,nuevas,drivers; 
 	private EditText buscarEmpresaEd,buscarPersona,buscarDestino;
 	private String uId;
-
+	String datosFirebase = "";
+	String datosFirebaseCopia = "";
 
 
 
@@ -69,7 +70,7 @@ public class Home extends AppCompatActivity
 		buscarPersona = findViewById(R.id.BuscarPersonamainEditText1);
 		buscarDestino = findViewById(R.id.lugarmainEditText1);
 
-		
+		startService(new Intent(this, com.mandaditos.administrador.mUtilities.ChildEventListener.class));
 		
 		
 		
@@ -99,9 +100,8 @@ public class Home extends AppCompatActivity
 		
 		
 		
-		
 		mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
-		mDataBaseOrders.orderByKey().limitToFirst(2).addValueEventListener(new ValueEventListener(){
+		mDataBaseOrders.addValueEventListener(new ValueEventListener(){
 
 
 
@@ -120,17 +120,6 @@ public class Home extends AppCompatActivity
 							{
 								if (m.getDriverAsignado().toString().toLowerCase().matches("Sin asignar".toLowerCase()))
 								{
-									try {
-										Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-										Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-										if(r.isPlaying()){
-											r.stop();
-										}
-										else{
-										r.play();}
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
 								}
 
 							}
@@ -488,6 +477,7 @@ public class Home extends AppCompatActivity
 //sin comoletar boton
 	public void mostrarSinCompletar(View v)
 	{
+		
 		//dialog 
 		pDialog = new ProgressDialog(Home.this);
 		pDialog.setMessage("Cargando datos de los servidores..");
@@ -1352,7 +1342,6 @@ public class Home extends AppCompatActivity
     }
 
 
-
-
+	
 
 }
