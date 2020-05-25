@@ -77,6 +77,30 @@ public class Home extends AppCompatActivity
 		
 		
 		
+
+
+
+
+
+DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+		connectedRef.addValueEventListener(new ValueEventListener() {
+				@Override
+				public void onDataChange(DataSnapshot snapshot) {
+					boolean connected = snapshot.getValue(Boolean.class);
+					if (connected) {
+						netTv.setVisibility(View.GONE);
+					} else {
+						netTv.setVisibility(View.VISIBLE);
+					}
+				}
+
+				@Override
+				public void onCancelled(DatabaseError error) {
+				}
+			});
+
+			
+			
 		
 		
 		
