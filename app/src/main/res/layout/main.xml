@@ -6,6 +6,17 @@
 	android:gravity="center"
 	android:orientation="vertical">
 
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Desconectado de la red"
+		android:gravity="center"
+		android:background="#D0007A"
+		android:textColor="#FFFFFF"
+		android:textSize="18sp"
+		android:padding="8dp"
+		android:id="@+id/network"/>
+
 	<LinearLayout
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
@@ -125,7 +136,8 @@
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:gravity="left|center_vertical">
+		android:gravity="left|center_vertical"
+		android:elevation="6dp">
 
 		<TextView
 			android:layout_width="wrap_content"
@@ -182,6 +194,18 @@
 			android:textAppearance="?android:attr/textAppearanceLarge"
 			android:id="@+id/pagoDrivermainTextView1"
 			android:textColor="#32A05C"/>
+
+		<View
+			android:background="?android:attr/dividerHorizontal"
+			android:layout_width="1dp"
+			android:layout_height="match_parent"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Más"
+			android:onClick="showMore"/>
 
 	</LinearLayout>
 

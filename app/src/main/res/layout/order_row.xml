@@ -25,7 +25,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="0"
-				style="@style/info"
 				android:layout_margin="8dp"
 				android:textSize="14sp"
 				android:typeface="monospace"
@@ -41,7 +40,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="Consultando..."
-				style="@style/info"
 				android:layout_margin="8dp"
 				android:id="@+id/dashboardOrderStatus"
 				android:textColor="#FA3D32"
@@ -111,13 +109,11 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="Cliente"
-				style="@style/info"
 				android:layout_margin="8dp"/>
 
 			<EditText
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				style="@style/info"
 				android:layout_margin="0dp"
 				android:id="@+id/dashboardAddressA"
 				android:textColor="#A02595"
@@ -135,14 +131,12 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="Tel.:"
-				style="@style/info"
 				android:layout_margin="8dp"/>
 
 			<EditText
 				android:textIsSelectable="true"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				style="@style/info"
 				android:layout_margin="0dp"
 				android:id="@+id/CelulardashboardAddressA"
 				android:textColor="#3F6A78"
@@ -180,13 +174,11 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="Instrucciones:"
-				style="@style/info"
 				android:layout_margin="8dp"/>
 
 			<EditText
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				style="@style/info"
 				android:layout_margin="0dp"
 				android:id="@+id/instruccionesEd"
 				android:maxEms="10"
@@ -207,13 +199,11 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="Destino"
-				style="@style/info"
 				android:layout_margin="8dp"/>
 
 			<EditText
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				style="@style/info"
 				android:layout_margin="0dp"
 				android:id="@+id/dashboardAddressB"
 				android:textColor="#00676E"
@@ -232,7 +222,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="Costo del producto $"
-				style="@style/info"
 				android:layout_margin="8dp"/>
 
 			<EditText
@@ -240,7 +229,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text=""
-				style="@style/info"
 				android:id="@+id/costodelproducto"
 				android:textColor="#202020"
 				android:hint="Obligatorio"
@@ -250,7 +238,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="Envío $"
-				style="@style/info"
 				android:layout_margin="8dp"/>
 
 			<EditText
@@ -258,7 +245,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text=""
-				style="@style/info"
 				android:id="@+id/costodelenvio"
 				android:textColor="#3E3E3E"
 				android:hint="Obligatorio"
@@ -300,14 +286,12 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="Driver Asignado"
-				style="@style/info"
 				android:layout_margin="8dp"/>
 
 			<EditText
 				android:layout_width="100dp"
 				android:layout_height="wrap_content"
 				android:text="Sin asignar"
-				style="@style/info"
 				android:layout_margin="0dp"
 				android:id="@+id/DriverAsignadodashboard"
 				android:maxEms="10"

@@ -5,7 +5,6 @@ import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.support.annotation.*;
-import android.support.v4.app.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.*;
 import android.text.*;
@@ -22,7 +21,7 @@ import java.util.*;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.TaskStackBuilder;
+import android.support.v7.widget.PopupMenu;
 import com.mandaditos.administrador.R;
 public class Home extends AppCompatActivity
 {
@@ -31,7 +30,7 @@ public class Home extends AppCompatActivity
 	private DatabaseReference mDataBaseOrders;
 	private DatabaseReference mDataBase;
 	private RequestPermissionHandler mRequestPermissionHandler;
-	private TextView contarOrdenes,totalAliquidar,pagoDriverTv;
+	private TextView contarOrdenes,totalAliquidar,pagoDriverTv,netTv;
 	private mAdapter adapter;
 	private RecyclerView mRecyclerView;
 	FirebaseAuth mFirebaseAuth;
@@ -69,7 +68,17 @@ public class Home extends AppCompatActivity
 		buscarEmpresaEd = findViewById(R.id.searchEdmainEditText1);
 		buscarPersona = findViewById(R.id.BuscarPersonamainEditText1);
 		buscarDestino = findViewById(R.id.lugarmainEditText1);
+		netTv = findViewById(R.id.network);
 
+		
+		
+		
+		
+		
+		
+		
+		
+//servicio notificaciones
 		startService(new Intent(this, com.mandaditos.administrador.mUtilities.ChildEventListener.class));
 		
 		
@@ -80,8 +89,7 @@ public class Home extends AppCompatActivity
 
 
 
-
-
+//red
 DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
 		connectedRef.addValueEventListener(new ValueEventListener() {
 				@Override
@@ -466,6 +474,81 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+//Show more
+	public void showMore(View v){
+		PopupMenu popup = new PopupMenu(this, v);
+        popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+				public boolean onMenuItemClick(MenuItem item) {
+					switch(item.getItemId()){
+						case R.id.borrcompl:
+								final AlertDialog dialog = new AlertDialog.Builder(Home.this).create();
+								dialog.setTitle("Borrar todas las ordenes completadas!");
+								dialog.setMessage("Borraras todas las completadas, ingresa contraseña");
+							final EditText input = new EditText(Home.this);  
+							LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.MATCH_PARENT,
+								LinearLayout.LayoutParams.MATCH_PARENT);
+							input.setLayoutParams(lp);
+							dialog.setView(input);
+								dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener(){
+
+										@Override
+										public void onClick(DialogInterface p1, int p2)
+										{
+											dialog.dismiss();
+										}
+									});
+								dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Eliminar", new DialogInterface.OnClickListener(){
+
+										@Override
+										public void onClick(DialogInterface p1, int p2)
+										{
+											if(input.getText().toString().matches("15151515")){
+											DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+											Query applesQuery = ref.child("Ordenes").orderByChild("estadoDeOrden").equalTo("Completada");
+
+											applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+													@Override
+													public void onDataChange(DataSnapshot dataSnapshot)
+													{
+														for (DataSnapshot appleSnapshot: dataSnapshot.getChildren())
+														{
+															appleSnapshot.getRef().removeValue();
+
+														}
+													}
+
+													@Override
+													public void onCancelled(DatabaseError databaseError)
+													{
+														Toast.makeText(Home.this, databaseError.toException().toString(), Toast.LENGTH_SHORT).show();
+													}
+												});
+											}else{
+												Toast.makeText(Home.this,"Password incorrecto",500).show();
+											}
+										}
+									});
+								dialog.show();
+
+							
+					}
+					return true;
+				}
+			});
+
+        popup.show();
+	}
 
 
 
