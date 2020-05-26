@@ -529,12 +529,10 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 				@Override
 				public void onClick(View p1)
 				{
-					Intent i = new Intent(mContext, mapPicker.class);
-					Bundle b = new Bundle();
-					b.putParcelable("latLng", mDataList.get(position).getLatLngB());
-					b.putString("partidaODestino", "destino");
-					i.putExtras(b);
-					mContext.startActivity(i);
+					Uri gmmIntentUri = Uri.parse("geo:0,0?q="+Uri.parse(mDataList.get(position).getDestino()));
+					Intent intent = new Intent(android.content.Intent.ACTION_VIEW, 
+											   gmmIntentUri);
+					holder.context.startActivity(intent);
 
 				}
 			});
@@ -666,7 +664,7 @@ public class mAdapter extends RecyclerView.Adapter<mViewHolder>
 								public void onClick(DialogInterface p1, int p2)
 								{
 									DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-									Query applesQuery = ref.child("Ordenes/" + mDataList.get(position).getNumeroDeOrden());
+									Query applesQuery = ref.child("Ordenes").orderByKey().equalTo(mDataList.get(position).getNumeroDeOrden());
 
 									applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
 											@Override

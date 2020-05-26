@@ -743,7 +743,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 						adapter = new mAdapter(Home.this, ordersList);
 						mRecyclerView.setHasFixedSize(true);
 						LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
-						layoutManager.setReverseLayout(true);
+						layoutManager.setReverseLayout(false);
 						layoutManager.setStackFromEnd(true);
 						mRecyclerView.setLayoutManager(layoutManager);
 						mRecyclerView.setAdapter(adapter);
