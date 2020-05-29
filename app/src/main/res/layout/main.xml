@@ -149,17 +149,32 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="0"
-			android:textAppearance="?android:attr/textAppearanceLarge"
-			android:layout_margin="8dp"
 			android:textColor="#98160E"
 			android:id="@+id/totalAliquidar"
 			android:textStyle="bold"
-			android:layout_marginLeft="0dp"/>
+			android:layout_marginLeft="0dp"
+			android:textSize="21sp"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Liquidado: $"
+			android:textSize="10sp"
+			android:layout_marginLeft="3dp"/>
+
+		<EditText
+			android:layout_width="wrap_content"
+			android:inputType="numberDecimal|numberSigned"
+			android:layout_height="wrap_content"
+			android:ems="2"
+			android:textColor="#43B492"
+			android:id="@+id/liquidadoEd"/>
 
 		<View
 			android:background="?android:attr/dividerHorizontal"
 			android:layout_width="1dp"
-			android:layout_height="match_parent"/>
+			android:layout_height="match_parent"
+			android:layout_marginLeft="3dp"/>
 
 		<TextView
 			android:layout_width="wrap_content"
@@ -171,7 +186,6 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="0"
-			android:layout_margin="8dp"
 			android:id="@+id/countmainTextView1"
 			android:textAppearance="?android:attr/textAppearanceLarge"
 			android:textColor="#274885"/>
@@ -179,13 +193,13 @@
 		<View
 			android:background="?android:attr/dividerHorizontal"
 			android:layout_width="1dp"
-			android:layout_height="match_parent"/>
+			android:layout_height="match_parent"
+			android:layout_marginLeft="3dp"/>
 
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Pago del driver :$"
-			android:layout_margin="8dp"/>
+			android:text="Pago driver :$"/>
 
 		<TextView
 			android:layout_width="wrap_content"
@@ -198,14 +212,16 @@
 		<View
 			android:background="?android:attr/dividerHorizontal"
 			android:layout_width="1dp"
-			android:layout_height="match_parent"/>
+			android:layout_height="match_parent"
+			android:layout_marginLeft="3dp"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
 			android:text="Más"
-			android:onClick="showMore"/>
+			android:onClick="showMore"
+			android:textSize="12sp"/>
 
 	</LinearLayout>
 

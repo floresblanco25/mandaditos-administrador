@@ -110,28 +110,24 @@ public class HomeClient extends AppCompatActivity
 										double lngB = postSnapshot.child("latLngB/longitude").getValue();
 
 										mandaditosModel m = new mandaditosModel();
-										m.setUserId(postSnapshot.child("userId").getValue().toString());
+										m.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
 										m.setUsuario(postSnapshot.child("usuario").getValue().toString());
-										m.setPartida(postSnapshot.child("partida").getValue().toString());
-										m.setDestino(postSnapshot.child("destino").getValue().toString());
-										m.setDistancia(postSnapshot.child("distancia").getValue().toString());
-										m.setFecha(postSnapshot.child("fecha").getValue().toString());
-										m.setETA(postSnapshot.child("eta").getValue().toString());
-										m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
+										m.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
+										m.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
 
 										m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
 										m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-										m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
-										m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
-										m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+										m.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
+										m.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
+										m.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
 										m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
 										m.setLatLngA(new LatLng(latA, lngA));
 										m.setLatLngB(new LatLng(latB, lngB));
 										m.setNumeroDeOrden(postSnapshot.getKey().toString());
 										m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-										m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+										m.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
 										m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
-										if(postSnapshot.child("empresa").getValue().toString().toLowerCase().matches(nombreDeCliente.toString().toLowerCase())){
+										if(postSnapshot.child("empresaDePartida").getValue().toString().toLowerCase().matches(nombreDeCliente.toString().toLowerCase())){
 											ordersList.add(m);
 											CostoPorOrden precioModel = new CostoPorOrden();
 											costosDeOrden = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
@@ -322,8 +318,7 @@ public class HomeClient extends AppCompatActivity
 		String UserId = mFirebaseUser.getUid().toString();
 		FirebaseDatabase.getInstance().getReference("Ordenes")
 			.push()
-			.setValue(new mandaditosModel("0", Empresa, Direccion, "", UserId, "", "", "", "", "", 
-										  "", "", "0", "Sin completar", new LatLng(13.67694, -89.27972), new LatLng(13.67694, -89.27972), "Sin asignar", "", "0"));
+			.setValue(new mandaditosModel("0", Empresa, Direccion, "", UserId, "", "", "", "0", "Sin completar", new LatLng(13.67694, -89.27972), new LatLng(13.67694, -89.27972), "Sin asignar", "", "0","0"));
 		finishAffinity();
 		startActivity(new Intent(HomeClient.this, HomeClient.class));
 	}
@@ -554,30 +549,25 @@ public class HomeClient extends AppCompatActivity
 							double lngB = postSnapshot.child("latLngB/longitude").getValue();
 
 							mandaditosModel m = new mandaditosModel();
-							m.setUserId(postSnapshot.child("userId").getValue().toString());
+							m.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
 							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
-							m.setPartida(postSnapshot.child("partida").getValue().toString());
-							m.setDestino(postSnapshot.child("destino").getValue().toString());
-							m.setDistancia(postSnapshot.child("distancia").getValue().toString());
-							m.setFecha(postSnapshot.child("fecha").getValue().toString());
-							m.setETA(postSnapshot.child("eta").getValue().toString());
-							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
-
+							m.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
+							m.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
 							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
 							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
-							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
-							m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+							m.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
+							m.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
+							m.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
 							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
 							m.setLatLngA(new LatLng(latA, lngA));
 							m.setLatLngB(new LatLng(latB, lngB));
 							m.setNumeroDeOrden(postSnapshot.getKey().toString());
 							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
 							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
-							if (m.getPartida().toString().toLowerCase().contains(text.toLowerCase()))
+							if (m.getClienteDeDestino().toString().toLowerCase().contains(text.toLowerCase()))
 							{
-								if(postSnapshot.child("empresa").getValue().toString().toLowerCase().matches(nombreDeCliente.toString().toLowerCase())){
+								if(postSnapshot.child("empresaDePartida").getValue().toString().toLowerCase().matches(nombreDeCliente.toString().toLowerCase())){
 								ordersList.add(m);
 								CostoPorOrden precioModel = new CostoPorOrden();
 								costosDeOrden = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());

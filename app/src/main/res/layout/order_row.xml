@@ -221,7 +221,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Costo del producto $"
+				android:text="Costo producto $"
 				android:layout_margin="8dp"/>
 
 			<EditText
@@ -231,8 +231,8 @@
 				android:text=""
 				android:id="@+id/costodelproducto"
 				android:textColor="#202020"
-				android:hint="Obligatorio"
-				android:textStyle="bold"/>
+				android:textStyle="bold"
+				android:ems="3"/>
 
 			<TextView
 				android:layout_width="wrap_content"
@@ -247,8 +247,8 @@
 				android:text=""
 				android:id="@+id/costodelenvio"
 				android:textColor="#3E3E3E"
-				android:hint="Obligatorio"
-				android:textStyle="bold"/>
+				android:textStyle="bold"
+				android:ems="3"/>
 
 		</LinearLayout>
 

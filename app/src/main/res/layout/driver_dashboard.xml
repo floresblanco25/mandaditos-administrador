@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="8dp"
+			android:id="@+id/driverNameDashboardTv"
+			android:typeface="monospace"
+			android:textSize="21sp"
+			android:textColor="#509C61"
+			android:textStyle="bold"
+			android:text="Driver"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Herramientas"
+			android:typeface="monospace"
+			android:onClick="mostrarHerramientas"/>
+
+	</LinearLayout>
+
+	<android.support.v7.widget.RecyclerView
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/recycler_orders"
+		android:layout_width="match_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:layout_marginTop="16dp">
+
+	</android.support.v7.widget.RecyclerView>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:elevation="5dp">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Total:"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:layout_margin="8dp"
+			android:typeface="monospace"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="0"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:layout_margin="8dp"
+			android:textStyle="bold"
+			android:typeface="monospace"
+			android:textColor="#740600"
+			android:id="@+id/countmainTextView1"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+

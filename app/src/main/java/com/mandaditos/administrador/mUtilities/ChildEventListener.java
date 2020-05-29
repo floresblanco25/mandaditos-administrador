@@ -40,16 +40,16 @@ public class ChildEventListener extends Service
 				public void onChildAdded(DataSnapshot dataSnapshot, String keyName) {
 
 						Intent i = new Intent(ChildEventListener.this,Home.class);
-					String empresa = dataSnapshot.child("empresa").getValue().toString();
+					String empresa = dataSnapshot.child("empresaDePartida").getValue().toString();
 					showNotification(ChildEventListener.this, "Nueva orden "+keyName, empresa, i);
 				}
 
 				@Override
 				public void onChildChanged(DataSnapshot dataSnapshot, String keyName) {
 					Intent i = new Intent(ChildEventListener.this,Home.class);
-					String empresa = dataSnapshot.child("empresa").getValue().toString();
-					String cliente = dataSnapshot.child("partida").getValue().toString();
-					String instrucciones = dataSnapshot.child("instruccionesDeLlegada").getValue().toString();
+					String empresa = dataSnapshot.child("empresaDePartida").getValue().toString();
+					String cliente = dataSnapshot.child("clienteDeDestino").getValue().toString();
+					String instrucciones = dataSnapshot.child("instrucciones").getValue().toString();
 					showNotification(ChildEventListener.this, "Orden editada "+keyName, empresa + " " + cliente+" "+instrucciones, i);
 					
 				}

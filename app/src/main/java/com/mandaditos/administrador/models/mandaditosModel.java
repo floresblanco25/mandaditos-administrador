@@ -5,154 +5,116 @@ import com.google.android.gms.maps.model.*;
 public class mandaditosModel
 {
 	private String Usuario;
-	private String Partida;
-    private String Destino;
-	private String Distancia;
-    private String Fecha;
-	private String ETA;
-    private String RecogerDineroEn;
+	private String ClienteDeDestino;
+    private String DireccionDeDestino;
 	private String CostoDelProducto;
-	private String costoDelEnvio;
+	private String CostoDelEnvio;
 	private String EstadoDeOrden;
 	private LatLng LatLngA;
 	private LatLng LatLngB;
 	private String NumeroDeOrden;
-	private String UserId;
+	private String EmpresaUserId;
 	private String DriverUid;
 	private String DriverAsignado;
-	private String Telefono;
-	private String Empresa;
-	private String DireccionEmpresa;
-	private String InstruccionesDeLlegada;
+	private String TelefonoDeClienteDeDestino;
+	private String EmpresaDePartida;
+	private String DireccionEmpresaDePartida;
+	private String Instrucciones;
 	private String CostoOrden;
+	private String LiquidadoPorDriver;
 	
 	public mandaditosModel(){}
 
-    public mandaditosModel(String CostoDelEnvio, String Empresa, String DireccionDeEmpresa, String InstruccionesDeLlegada, String userId,
-						   String Usuario,String Partida, String Destino, String Distancia, String Fecha, 
-						   String ETA, String RecogerDineroEn, String CostoDelProducto, String EstadoDeOrden,LatLng LatLngA,
-						   LatLng LatLngB, String driverAsignado, String Telefono, String CostoOrden
+    public mandaditosModel(String CostoDelEnvio, String EmpresaDePartida, String DireccionEmpresaDePartida, String Instrucciones, String EmpresaUserId,
+						   String Usuario,String ClienteDeDestino, String DireccionDeDestino, String CostoDelProducto, String EstadoDeOrden,LatLng LatLngA,
+						   LatLng LatLngB, String driverAsignado, String TelefonoDeClienteDeDestino, String CostoOrden, String LiquidadoPorDriver
 						   ) {
-        this.Partida = Partida;
-        this.Destino = Destino;
-		this.Distancia = Distancia;
-        this.Fecha = Fecha;
-		this.ETA = ETA;
-        this.RecogerDineroEn = RecogerDineroEn;
+        this.ClienteDeDestino = ClienteDeDestino;
+        this.DireccionDeDestino = DireccionDeDestino;
 		this.CostoDelProducto = CostoDelProducto;
 		this.EstadoDeOrden=EstadoDeOrden;
 		this.LatLngA=LatLngA;
 		this.Usuario=Usuario;
 		this.LatLngB=LatLngB;
-		this.UserId=userId;
+		this.EmpresaUserId=EmpresaUserId;
 		this.DriverAsignado = driverAsignado;
-		this.Telefono=Telefono;
-		this.Empresa=Empresa;
-		this.DireccionEmpresa=DireccionDeEmpresa;
-		this.InstruccionesDeLlegada=InstruccionesDeLlegada;
-		this.costoDelEnvio=CostoDelEnvio;
+		this.TelefonoDeClienteDeDestino=TelefonoDeClienteDeDestino;
+		this.EmpresaDePartida=EmpresaDePartida;
+		this.DireccionEmpresaDePartida=DireccionEmpresaDePartida;
+		this.Instrucciones=Instrucciones;
+		this.CostoDelEnvio=CostoDelEnvio;
 		this.CostoOrden=CostoOrden;
+		this.LiquidadoPorDriver=LiquidadoPorDriver;
 	}
 
-	public void setCostoOrden(String costoOrden)
+	public void setUsuario(String usuario)
 	{
-		CostoOrden = costoOrden;
+		Usuario = usuario;
 	}
 
-	public String getCostoOrden()
+	public String getUsuario()
 	{
-		return CostoOrden;
+		return Usuario;
+	}
+
+	public void setClienteDeDestino(String clienteDeDestino)
+	{
+		ClienteDeDestino = clienteDeDestino;
+	}
+
+	public String getClienteDeDestino()
+	{
+		return ClienteDeDestino;
+	}
+
+	public void setDireccionDeDestino(String direccionDeDestino)
+	{
+		DireccionDeDestino = direccionDeDestino;
+	}
+
+	public String getDireccionDeDestino()
+	{
+		return DireccionDeDestino;
+	}
+
+	public void setCostoDelProducto(String costoDelProducto)
+	{
+		CostoDelProducto = costoDelProducto;
+	}
+
+	public String getCostoDelProducto()
+	{
+		return CostoDelProducto;
 	}
 
 	public void setCostoDelEnvio(String costoDelEnvio)
 	{
-		this.costoDelEnvio = costoDelEnvio;
+		CostoDelEnvio = costoDelEnvio;
 	}
 
 	public String getCostoDelEnvio()
 	{
-		return costoDelEnvio;
+		return CostoDelEnvio;
 	}
 
-	public void setEmpresa(String empresa)
+	public void setEstadoDeOrden(String estadoDeOrden)
 	{
-		Empresa = empresa;
+		EstadoDeOrden = estadoDeOrden;
 	}
 
-	public String getEmpresa()
+	public String getEstadoDeOrden()
 	{
-		return Empresa;
+		return EstadoDeOrden;
 	}
 
-	public void setDireccionEmpresa(String direccionEmpresa)
+	public void setLatLngA(LatLng latLngA)
 	{
-		DireccionEmpresa = direccionEmpresa;
+		LatLngA = latLngA;
 	}
 
-	public String getDireccionEmpresa()
+	public LatLng getLatLngA()
 	{
-		return DireccionEmpresa;
-	}
-
-	public void setInstruccionesDeLlegada(String instruccionesDeLlegada)
-	{
-		InstruccionesDeLlegada = instruccionesDeLlegada;
-	}
-
-	public String getInstruccionesDeLlegada()
-	{
-		return InstruccionesDeLlegada;
-	}
-
-	public void setTelefono(String telefono)
-	{
-		Telefono = telefono;
-	}
-
-	public String getTelefono()
-	{
-		return Telefono;
-	}
-
-	public void setDriverAsignado(String mNombreDriver)
-	{
-		this.DriverAsignado = mNombreDriver;
-	}
-
-	public String getDriverAsignado()
-	{
-		return DriverAsignado;
-	}
-
-	public void setDriverUid(String DriverUid)
-	{
-		this.DriverUid = DriverUid;
-	}
-
-	public String getDriverUid()
-	{
-		return DriverUid;
-	}
-
-
-	public void setUserId(String UserId)
-	{
-		this.UserId = UserId;
-	}
-
-	public String getUserId()
-	{
-		return UserId;
-	}
-
-	public void setNumeroDeOrden(String numeroDeOrden)
-	{
-		NumeroDeOrden = numeroDeOrden;
-	}
-
-	public String getNumeroDeOrden()
-	{
-		return NumeroDeOrden;
+		return LatLngA;
 	}
 
 	public void setLatLngB(LatLng latLngB)
@@ -165,86 +127,105 @@ public class mandaditosModel
 		return LatLngB;
 	}
 
-
-	public String getUsuario()
+	public void setNumeroDeOrden(String numeroDeOrden)
 	{
-		return Usuario;
+		NumeroDeOrden = numeroDeOrden;
 	}
 
-    public String getPartida() {
-        return Partida;
-    }
-
-    public String getDestino() {
-        return Destino;
-    }
-	public String getDistancia() {
-        return Distancia;
-    }
-
-    public String getFecha() {
-        return Fecha;
-    }
-	public String getEta() {
-        return ETA;
-    }
-
-    public String getRecogerDineroEn() {
-        return RecogerDineroEn;
-    }
-	public String getCostoDelProducto() {
-        return CostoDelProducto;
-    }
-	public String getEstadoDeOrden(){
-		return EstadoDeOrden;
-	}
-	public LatLng getLatLngA(){
-		return LatLngA;
-	}
-
-
-
-
-
-	public void setPartida(String t){
-		Partida=t;
-	}
-
-	public void setDestino(String t){
-		Destino=t;
-	}
-
-	public void setDistancia(String t){
-		Distancia=t;
-	}
-	public void setFecha(String t){
-		Fecha=t;
-	}
-	public void setETA(String t){
-		ETA=t;
-	}
-	public void setRecogerDineroEn(String t){
-		RecogerDineroEn=t;
-	}
-	public void setCostoDelProducto(String t){
-		CostoDelProducto=t;
-	}
-
-	public void setEstadoDeOrden(String t){
-		EstadoDeOrden=t;
-	}
-	public void setLatLngA(LatLng t){
-		LatLngA=t;
-	}
-
-	public void setUsuario(String t)
+	public String getNumeroDeOrden()
 	{
-		this.Usuario = t;
+		return NumeroDeOrden;
 	}
 
+	public void setEmpresaUserId(String empresaUserId)
+	{
+		EmpresaUserId = empresaUserId;
+	}
 
+	public String getEmpresaUserId()
+	{
+		return EmpresaUserId;
+	}
 
+	public void setDriverUid(String driverUid)
+	{
+		DriverUid = driverUid;
+	}
 
+	public String getDriverUid()
+	{
+		return DriverUid;
+	}
+
+	public void setDriverAsignado(String driverAsignado)
+	{
+		DriverAsignado = driverAsignado;
+	}
+
+	public String getDriverAsignado()
+	{
+		return DriverAsignado;
+	}
+
+	public void setTelefonoDeClienteDeDestino(String telefonoDeClienteDeDestino)
+	{
+		TelefonoDeClienteDeDestino = telefonoDeClienteDeDestino;
+	}
+
+	public String getTelefonoDeClienteDeDestino()
+	{
+		return TelefonoDeClienteDeDestino;
+	}
+
+	public void setEmpresaDePartida(String empresaDePartida)
+	{
+		EmpresaDePartida = empresaDePartida;
+	}
+
+	public String getEmpresaDePartida()
+	{
+		return EmpresaDePartida;
+	}
+
+	public void setDireccionEmpresaDePartida(String direccionEmpresaDePartida)
+	{
+		DireccionEmpresaDePartida = direccionEmpresaDePartida;
+	}
+
+	public String getDireccionEmpresaDePartida()
+	{
+		return DireccionEmpresaDePartida;
+	}
+
+	public void setInstrucciones(String instrucciones)
+	{
+		Instrucciones = instrucciones;
+	}
+
+	public String getInstrucciones()
+	{
+		return Instrucciones;
+	}
+
+	public void setCostoOrden(String costoOrden)
+	{
+		CostoOrden = costoOrden;
+	}
+
+	public String getCostoOrden()
+	{
+		return CostoOrden;
+	}
+
+	public void setLiquidadoPorDriver(String liquidadoPorDriver)
+	{
+		LiquidadoPorDriver = liquidadoPorDriver;
+	}
+
+	public String getLiquidadoPorDriver()
+	{
+		return LiquidadoPorDriver;
+	}
 
 
 

@@ -35,11 +35,9 @@ public class Home extends AppCompatActivity
 	private RecyclerView mRecyclerView;
 	FirebaseAuth mFirebaseAuth;
 	private ArrayList<String> DriversListUid,DriversListNames;
-	private ArrayList<String> namesList;
 	private String Empresa;
-	private String Direccion = "";
 	private Button entregadas,sinentregar,nuevas,drivers; 
-	private EditText buscarEmpresaEd,buscarPersona,buscarDestino;
+	private EditText buscarEmpresaEd,buscarPersona,buscarDestino,liquidadoEd;
 	private String uId;
 	String datosFirebase = "";
 	String datosFirebaseCopia = "";
@@ -69,10 +67,13 @@ public class Home extends AppCompatActivity
 		buscarPersona = findViewById(R.id.BuscarPersonamainEditText1);
 		buscarDestino = findViewById(R.id.lugarmainEditText1);
 		netTv = findViewById(R.id.network);
+		liquidadoEd = findViewById(R.id.liquidadoEd);
 
 		
 		
-		
+		try{
+		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); 
+		}catch(Exception e){}
 		
 		
 		
@@ -132,44 +133,44 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 		
 		
 		
-		mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
-		mDataBaseOrders.addValueEventListener(new ValueEventListener(){
-
-
-
-				@Override
-				public void onDataChange(DataSnapshot p1)
-				{
-					pDialog.dismiss();
-					if (p1.exists())
-					{
-						for (DataSnapshot postSnapshot : p1.getChildren())
-						{
-							mandaditosModel m = new mandaditosModel();
-							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
-							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-							if (m.getEstadoDeOrden().toString().toLowerCase().matches("Sin completar".toLowerCase()))
-							{
-								if (m.getDriverAsignado().toString().toLowerCase().matches("Sin asignar".toLowerCase()))
-								{
-								}
-
-							}
-						}
-
-
-					}
-
-					else
-					{}
-				}
-				@Override
-				public void onCancelled(DatabaseError p1)
-				{
-				}
-			});
-		
-		
+//		mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
+//		mDataBaseOrders.addValueEventListener(new ValueEventListener(){
+//
+//
+//
+//				@Override
+//				public void onDataChange(DataSnapshot p1)
+//				{
+//					pDialog.dismiss();
+//					if (p1.exists())
+//					{
+//						for (DataSnapshot postSnapshot : p1.getChildren())
+//						{
+//							mandaditosModel m = new mandaditosModel();
+//							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
+//							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
+//							if (m.getEstadoDeOrden().toString().toLowerCase().matches("Sin completar".toLowerCase()))
+//							{
+//								if (m.getDriverAsignado().toString().toLowerCase().matches("Sin asignar".toLowerCase()))
+//								{
+//								}
+//
+//							}
+//						}
+//
+//
+//					}
+//
+//					else
+//					{}
+//				}
+//				@Override
+//				public void onCancelled(DatabaseError p1)
+//				{
+//				}
+//			});
+//		
+//		
 		
 		
 		
@@ -212,31 +213,6 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 				}
 			});
 
-		DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("Usuarios/" + userId + "/Perfil").child("address");
-		ref2.addListenerForSingleValueEvent(new ValueEventListener() {
-				@Override
-				public void onDataChange(DataSnapshot dataSnapshot) {
-					String t = dataSnapshot.getValue(String.class);
-					setNombreUsuario(t);
-
-				}
-				private void setNombreUsuario(String t)
-				{
-
-					String usuario = t;
-
-					Direccion=usuario;
-
-
-
-				}
-
-				@Override
-				public void onCancelled(DatabaseError databaseError) {
-
-				}
-			});
-		
 
 			
 			
@@ -344,26 +320,22 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 							double lngB = postSnapshot.child("latLngB/longitude").getValue();
 
 							mandaditosModel m = new mandaditosModel();
-							m.setUserId(postSnapshot.child("userId").getValue().toString());
+							m.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
 							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
-							m.setPartida(postSnapshot.child("partida").getValue().toString());
-							m.setDestino(postSnapshot.child("destino").getValue().toString());
-							m.setDistancia(postSnapshot.child("distancia").getValue().toString());
-							m.setFecha(postSnapshot.child("fecha").getValue().toString());
-							m.setETA(postSnapshot.child("eta").getValue().toString());
-							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
+							m.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
+							m.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
 
 							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
 							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
-							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
-							m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+							m.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
+							m.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
+							m.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
 							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
 							m.setLatLngA(new LatLng(latA, lngA));
 							m.setLatLngB(new LatLng(latB, lngB));
 							m.setNumeroDeOrden(postSnapshot.getKey().toString());
 							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
 							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
 							if (m.getEstadoDeOrden().toString().toLowerCase().matches("Sin completar".toLowerCase()))
 							{
@@ -387,7 +359,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 						layoutManager.setStackFromEnd(true);
 						mRecyclerView.setLayoutManager(layoutManager);
 						mRecyclerView.setAdapter(adapter);
-						totalAliquidar.setText(String.valueOf(grandTotal(costoPorOrdenList)));
+						totalAliquidar.setText(String.valueOf(sumarItems(costoPorOrdenList)));
 						int count = 0;
 						if (adapter != null)
 						{
@@ -565,8 +537,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 		String UserId = mFirebaseUser.getUid().toString();
 		FirebaseDatabase.getInstance().getReference("Ordenes")
 			.push()
-			.setValue(new mandaditosModel("0", "", "", "", UserId, "", "", "", "", "", 
-										  "", "", "0", "Sin completar", new LatLng(13.67694, -89.27972), new LatLng(13.67694, -89.27972), "Sin asignar", "", "0"));
+			.setValue(new mandaditosModel("0", "", "", "", UserId, "", "", "", "0", "Sin completar", new LatLng(13.67694, -89.27972), new LatLng(13.67694, -89.27972), "Sin asignar", "", "0","0"));
 		finishAffinity();
 		startActivity(new Intent(Home.this, Home.class));
 	}
@@ -612,26 +583,22 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 							double lngB = postSnapshot.child("latLngB/longitude").getValue();
 
 							mandaditosModel m = new mandaditosModel();
-							m.setUserId(postSnapshot.child("userId").getValue().toString());
+							m.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
 							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
-							m.setPartida(postSnapshot.child("partida").getValue().toString());
-							m.setDestino(postSnapshot.child("destino").getValue().toString());
-							m.setDistancia(postSnapshot.child("distancia").getValue().toString());
-							m.setFecha(postSnapshot.child("fecha").getValue().toString());
-							m.setETA(postSnapshot.child("eta").getValue().toString());
-							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
+							m.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
+							m.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
 							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
 							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
-							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
-							m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+							m.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
+							m.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
+							m.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
 							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
 							m.setLatLngA(new LatLng(latA, lngA));
 							m.setLatLngB(new LatLng(latB, lngB));
 							m.setNumeroDeOrden(postSnapshot.getKey().toString());
 							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
 							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
 							if (m.getEstadoDeOrden().toString().toLowerCase().matches("Sin completar".toLowerCase()))
 							{
 								if (!(m.getDriverAsignado().toString().toLowerCase().matches("Sin asignar".toLowerCase())))
@@ -653,7 +620,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 						layoutManager.setStackFromEnd(true);
 						mRecyclerView.setLayoutManager(layoutManager);
 						mRecyclerView.setAdapter(adapter);
-						totalAliquidar.setText(String.valueOf(grandTotal(items)));
+						totalAliquidar.setText(String.valueOf(sumarItems(items)));
 						int count = 0;
 						if (adapter != null)
 						{
@@ -709,25 +676,21 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 							double lngB = postSnapshot.child("latLngB/longitude").getValue();
 
 							mandaditosModel m = new mandaditosModel();
-							m.setUserId(postSnapshot.child("userId").getValue().toString());
+							m.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
 							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
-							m.setPartida(postSnapshot.child("partida").getValue().toString());
-							m.setDestino(postSnapshot.child("destino").getValue().toString());
-							m.setDistancia(postSnapshot.child("distancia").getValue().toString());
-							m.setFecha(postSnapshot.child("fecha").getValue().toString());
-							m.setETA(postSnapshot.child("eta").getValue().toString());
-							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
+							m.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
+							m.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
 							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
 							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
-							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
-							m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+							m.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
+							m.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
+							m.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
 							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
 							m.setLatLngA(new LatLng(latA, lngA));
 							m.setLatLngB(new LatLng(latB, lngB));
 							m.setNumeroDeOrden(postSnapshot.getKey().toString());
 							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
 							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
 							if (m.getEstadoDeOrden().toString().toLowerCase().matches("Completada".toLowerCase()))
 							{
@@ -747,7 +710,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 						layoutManager.setStackFromEnd(true);
 						mRecyclerView.setLayoutManager(layoutManager);
 						mRecyclerView.setAdapter(adapter);
-						totalAliquidar.setText(String.valueOf(grandTotal(items)));
+						totalAliquidar.setText(String.valueOf(sumarItems(items)));
 						int count = 0;
 						if (adapter != null)
 						{
@@ -808,25 +771,21 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 							double lngB = postSnapshot.child("latLngB/longitude").getValue();
 
 							mandaditosModel m = new mandaditosModel();
-							m.setUserId(postSnapshot.child("userId").getValue().toString());
+							m.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
 							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
-							m.setPartida(postSnapshot.child("partida").getValue().toString());
-							m.setDestino(postSnapshot.child("destino").getValue().toString());
-							m.setDistancia(postSnapshot.child("distancia").getValue().toString());
-							m.setFecha(postSnapshot.child("fecha").getValue().toString());
-							m.setETA(postSnapshot.child("eta").getValue().toString());
-							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
+							m.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
+							m.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
 							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
 							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
-							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
-							m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+							m.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
+							m.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
+							m.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
 							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
 							m.setLatLngA(new LatLng(latA, lngA));
 							m.setLatLngB(new LatLng(latB, lngB));
 							m.setNumeroDeOrden(postSnapshot.getKey().toString());
 							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
 							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
 							if (m.getEstadoDeOrden().toString().toLowerCase().matches("Sin completar".toLowerCase()))
 							{
@@ -850,7 +809,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 						layoutManager.setStackFromEnd(true);
 						mRecyclerView.setLayoutManager(layoutManager);
 						mRecyclerView.setAdapter(adapter);
-						totalAliquidar.setText(String.valueOf(grandTotal(items)));
+						totalAliquidar.setText(String.valueOf(sumarItems(items)));
 						int count = 0;
 						if (adapter != null)
 						{
@@ -888,7 +847,6 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 	{
 		String[] drivers = GetStringArray(DriversListUid);
 		String[] names = GetStringArray(DriversListNames);
-//		solo necesuto arreglar la lista de nlmbres 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setAdapter(new mSpinnerAdapter(Home.this, names, drivers), null);
         builder.setTitle("Lista de Drivers");
@@ -898,15 +856,17 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 				public void onClick(DialogInterface p1, int p2)
 				{
 					final String selectedUid = DriversListUid.get(p2);
-					//aqui obtenemos el nombre del usuario
-					DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Drivers/" + selectedUid + "/Perfil").child("nombre");
-					ref.addListenerForSingleValueEvent(new ValueEventListener() {
-							@Override
-							public void onDataChange(DataSnapshot dataSnapshot)
-							{
-								String nombre = dataSnapshot.getValue(String.class);
+					final String selectedName = DriversListNames.get(p2);
+					Intent i = new Intent(Home.this,DriverDashboard.class);
+					Bundle b = new Bundle();
+					b.putString("driverName",selectedName);
+					b.putString("uid",selectedUid);
+					i.putExtras(b);
+					startActivity(i);
+					
+					
+					
 								mDataBaseOrders.addListenerForSingleValueEvent(new ValueEventListener(){
-
 
 										@Override
 										public void onDataChange(DataSnapshot p1)
@@ -915,8 +875,9 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 											{
 
 												List<mandaditosModel> ordersList = new ArrayList<mandaditosModel>();
-												List<CostoPorOrden> costos = new ArrayList<CostoPorOrden>();
-												List<CostoPorOrden> costosEnvio = new ArrayList<CostoPorOrden>();
+												List<CostoPorOrden> costosPorOrdenList = new ArrayList<CostoPorOrden>();
+												List<CostoPorOrden> costosEnvioList = new ArrayList<CostoPorOrden>();
+												
 												for (DataSnapshot postSnapshot : p1.getChildren())
 												{
 
@@ -927,26 +888,22 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 
 													mandaditosModel model = new mandaditosModel();
 													model.setNumeroDeOrden(postSnapshot.getKey().toString());
-													model.setUserId(postSnapshot.child("userId").getValue().toString());
+													model.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
 													model.setUsuario(postSnapshot.child("usuario").getValue().toString());
-													model.setPartida(postSnapshot.child("partida").getValue().toString());
-													model.setDestino(postSnapshot.child("destino").getValue().toString());
-													model.setDistancia(postSnapshot.child("distancia").getValue().toString());
-													model.setFecha(postSnapshot.child("fecha").getValue().toString());
-													model.setETA(postSnapshot.child("eta").getValue().toString());
-													model.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
+													model.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
+													model.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
 													model.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
 													model.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-													model.setEmpresa(postSnapshot.child("empresa").getValue().toString());
-													model.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
-													model.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+													model.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
+													model.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
+													model.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
 													model.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
 													model.setLatLngA(new LatLng(latA, lngA));
 													model.setLatLngB(new LatLng(latB, lngB));
 													model.setNumeroDeOrden(postSnapshot.getKey().toString());
 													model.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
 													model.setDriverUid(postSnapshot.child("driverAsignado").getValue().toString());
-													model.setTelefono(postSnapshot.child("telefono").getValue().toString());
+													model.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
 													model.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
 													if (model.getDriverAsignado().toString().matches(selectedUid))
 													{
@@ -954,10 +911,10 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 													}
 													if (model.getDriverUid().toString().matches(selectedUid))
 													{
-														CostoPorOrden precioModel = new CostoPorOrden();
+														CostoPorOrden precioPorOrdenModel = new CostoPorOrden();
 														float numbers = Float.valueOf(postSnapshot.child("costoOrden").getValue().toString());
-														precioModel.setPrecioDeOrden(numbers);
-														costos.add(precioModel);
+														precioPorOrdenModel.setPrecioDeOrden(numbers);
+														costosPorOrdenList.add(precioPorOrdenModel);
 														
 														//costo envio suma
 														CostoPorOrden precioModelEnvio = new CostoPorOrden();
@@ -965,7 +922,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 														if(Float.parseFloat(postSnapshot.child("costoDelEnvio").getValue().toString())>0.0f)
 															{
 															precioModelEnvio.setPrecioDeOrden(numbersEnvio-1);
-															costosEnvio.add(precioModelEnvio);
+															costosEnvioList.add(precioModelEnvio);
 														}
 														
 													}
@@ -979,8 +936,9 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 												layoutManager.setStackFromEnd(true);
 												mRecyclerView.setLayoutManager(layoutManager);
 												mRecyclerView.setAdapter(adapter);
-												totalAliquidar.setText(String.valueOf(grandTotal(costos)));
-												pagoDriverTv.setText(String.valueOf(grandTotal(costosEnvio)));
+												float liquidado = 0;
+												totalAliquidar.setText(String.valueOf(sumarItems(costosPorOrdenList) - liquidado));
+												pagoDriverTv.setText(String.valueOf(sumarItems(costosEnvioList)));
 												int count = 0;
 												if (adapter != null)
 												{
@@ -999,14 +957,6 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 
 							}
 
-							@Override
-							public void onCancelled(DatabaseError databaseError)
-							{
-
-							}
-						});
-					// TODO: Implement this method
-				}
 			});
 
 
@@ -1040,7 +990,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 
 
 //total calc
-	private float grandTotal(List<CostoPorOrden> items)
+	private float sumarItems(List<CostoPorOrden> items)
 	{
 		float totalPrice = 0;
 		for (int i = 0 ; i < items.size(); i++)
@@ -1209,33 +1159,29 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 							double lngB = postSnapshot.child("latLngB/longitude").getValue();
 
 							mandaditosModel m = new mandaditosModel();
-							m.setUserId(postSnapshot.child("userId").getValue().toString());
+							m.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
 							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
-							m.setPartida(postSnapshot.child("partida").getValue().toString());
-							m.setDestino(postSnapshot.child("destino").getValue().toString());
-							m.setDistancia(postSnapshot.child("distancia").getValue().toString());
-							m.setFecha(postSnapshot.child("fecha").getValue().toString());
-							m.setETA(postSnapshot.child("eta").getValue().toString());
-							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
+							m.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
+							m.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
 
 							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
 							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
-							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
-							m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+							m.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
+							m.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
+							m.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
 							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
 							m.setLatLngA(new LatLng(latA, lngA));
 							m.setLatLngB(new LatLng(latB, lngB));
 							m.setNumeroDeOrden(postSnapshot.getKey().toString());
 							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
 							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
-								if (m.getEmpresa().toString().toLowerCase().contains(text.toLowerCase()))
+							if (m.getEmpresaDePartida().toString().toLowerCase().contains(text.toLowerCase()))
 										
 								{
 									ordersList.add(m);
 								}
-							if (m.getEmpresa().toString().toLowerCase().contains(text.toLowerCase()))
+							if (m.getEmpresaDePartida().toString().toLowerCase().contains(text.toLowerCase()))
 								if(m.getEstadoDeOrden().toString().matches("Completada")){
 
 									{
@@ -1256,7 +1202,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 						layoutManager.setStackFromEnd(true);
 						mRecyclerView.setLayoutManager(layoutManager);
 						mRecyclerView.setAdapter(adapter);
-						totalAliquidar.setText(String.valueOf(grandTotal(costoPorOrdenList)));
+						totalAliquidar.setText(String.valueOf(sumarItems(costoPorOrdenList)));
 						int count = 0;
 						if (adapter != null)
 						{
@@ -1298,28 +1244,24 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 							double lngB = postSnapshot.child("latLngB/longitude").getValue();
 
 							mandaditosModel m = new mandaditosModel();
-							m.setUserId(postSnapshot.child("userId").getValue().toString());
+							m.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
 							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
-							m.setPartida(postSnapshot.child("partida").getValue().toString());
-							m.setDestino(postSnapshot.child("destino").getValue().toString());
-							m.setDistancia(postSnapshot.child("distancia").getValue().toString());
-							m.setFecha(postSnapshot.child("fecha").getValue().toString());
-							m.setETA(postSnapshot.child("eta").getValue().toString());
-							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
+							m.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
+							m.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
 
 							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
 							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
-							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
-							m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+							m.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
+							m.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
+							m.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
 							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
 							m.setLatLngA(new LatLng(latA, lngA));
 							m.setLatLngB(new LatLng(latB, lngB));
 							m.setNumeroDeOrden(postSnapshot.getKey().toString());
 							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
 							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
-							if (m.getPartida().toString().toLowerCase().contains(text.toLowerCase()))
+							if (m.getClienteDeDestino().toString().toLowerCase().contains(text.toLowerCase()))
 							{
 								ordersList.add(m);
 								CostoPorOrden precioModel = new CostoPorOrden();
@@ -1338,7 +1280,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 						layoutManager.setStackFromEnd(true);
 						mRecyclerView.setLayoutManager(layoutManager);
 						mRecyclerView.setAdapter(adapter);
-						totalAliquidar.setText(String.valueOf(grandTotal(costoPorOrdenList)));
+						totalAliquidar.setText(String.valueOf(sumarItems(costoPorOrdenList)));
 						int count = 0;
 						if (adapter != null)
 						{
@@ -1381,33 +1323,29 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 							double lngB = postSnapshot.child("latLngB/longitude").getValue();
 
 							mandaditosModel m = new mandaditosModel();
-							m.setUserId(postSnapshot.child("userId").getValue().toString());
+							m.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
 							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
-							m.setPartida(postSnapshot.child("partida").getValue().toString());
-							m.setDestino(postSnapshot.child("destino").getValue().toString());
-							m.setDistancia(postSnapshot.child("distancia").getValue().toString());
-							m.setFecha(postSnapshot.child("fecha").getValue().toString());
-							m.setETA(postSnapshot.child("eta").getValue().toString());
-							m.setRecogerDineroEn(postSnapshot.child("recogerDineroEn").getValue().toString());
+							m.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
+							m.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
 
 							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
 							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-							m.setEmpresa(postSnapshot.child("empresa").getValue().toString());
-							m.setDireccionEmpresa(postSnapshot.child("direccionEmpresa").getValue().toString());
-							m.setInstruccionesDeLlegada(postSnapshot.child("instruccionesDeLlegada").getValue().toString());
+							m.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
+							m.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
+							m.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
 							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
 							m.setLatLngA(new LatLng(latA, lngA));
 							m.setLatLngB(new LatLng(latB, lngB));
 							m.setNumeroDeOrden(postSnapshot.getKey().toString());
 							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-							m.setTelefono(postSnapshot.child("telefono").getValue().toString());
+							m.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
 							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
-							if (m.getDestino().toString().toLowerCase().contains(text.toLowerCase()))
+							if (m.getDireccionDeDestino().toString().toLowerCase().contains(text.toLowerCase()))
 
 							{
 								ordersList.add(m);
 							}
-							if (m.getDestino().toString().toLowerCase().contains(text.toLowerCase()))
+							if (m.getDireccionDeDestino().toString().toLowerCase().contains(text.toLowerCase()))
 								if(m.getEstadoDeOrden().toString().matches("Completada")){
 
 									{
@@ -1428,7 +1366,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 						layoutManager.setStackFromEnd(true);
 						mRecyclerView.setLayoutManager(layoutManager);
 						mRecyclerView.setAdapter(adapter);
-						totalAliquidar.setText(String.valueOf(grandTotal(costoPorOrdenList)));
+						totalAliquidar.setText(String.valueOf(sumarItems(costoPorOrdenList)));
 						int count = 0;
 						if (adapter != null)
 						{
