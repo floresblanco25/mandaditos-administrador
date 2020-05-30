@@ -23,6 +23,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import com.mandaditos.administrador.R;
+import java.io.*;
 public class Home extends AppCompatActivity
 {
 
@@ -68,6 +69,12 @@ public class Home extends AppCompatActivity
 		buscarDestino = findViewById(R.id.lugarmainEditText1);
 		netTv = findViewById(R.id.network);
 		liquidadoEd = findViewById(R.id.liquidadoEd);
+		
+		
+		
+		
+		
+		
 
 		
 		

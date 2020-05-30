@@ -1,15 +1,23 @@
 package com.mandaditos.administrador.mUtilities;
 
+import android.app.*;
 import com.google.android.gms.maps.model.*;
 import com.google.firebase.database.*;
 import com.mandaditos.administrador.*;
 import com.mandaditos.administrador.models.*;
 import java.util.*;
+import android.content.*;
 
 public  class FireDataDb
 {
+
+	public FireDataDb(){}
 	
-	public static List<mandaditosModel>  getFireData(String path,final String uid){
+	public List<mandaditosModel>  getFireData(Context context,String path,final String uid){
+		final ProgressDialog pDialog = new ProgressDialog(context);
+		pDialog.setMessage("Cargando datos de los servidores..");
+		pDialog.setCancelable(false);
+		pDialog.show();
 		
 		final List<mandaditosModel> ordersList = new ArrayList<mandaditosModel>();
 		DatabaseReference mRef = FirebaseDatabase.getInstance().getReference(path);
@@ -20,6 +28,7 @@ public  class FireDataDb
 				@Override
 				public void onDataChange(DataSnapshot p1)
 				{
+					pDialog.dismiss();
 					if (p1.exists())
 					{
 
@@ -56,6 +65,7 @@ public  class FireDataDb
 								ordersList.add(model);
 							}
 						}
+						
 
 
 						
@@ -70,4 +80,5 @@ public  class FireDataDb
 			});
 		return ordersList;
 	}
+	
 }

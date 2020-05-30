@@ -3,7 +3,8 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:orientation="vertical">
+	android:orientation="vertical"
+	android:gravity="center_horizontal">
 
 	<LinearLayout
 		android:orientation="horizontal"
@@ -38,9 +39,15 @@
 		android:layout_width="match_parent"
 		android:layout_height="fill_parent"
 		android:layout_weight="1"
-		android:layout_marginTop="16dp">
+		android:layout_marginTop="8dp">
 
 	</android.support.v7.widget.RecyclerView>
+
+	<ListView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/dashboardList"
+		android:layout_weight="1"/>
 
 	<LinearLayout
 		android:orientation="horizontal"
@@ -51,7 +58,7 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Total:"
+			android:text="Total $"
 			android:textAppearance="?android:attr/textAppearanceLarge"
 			android:layout_margin="8dp"
 			android:typeface="monospace"/>
@@ -61,11 +68,10 @@
 			android:layout_height="wrap_content"
 			android:text="0"
 			android:textAppearance="?android:attr/textAppearanceLarge"
-			android:layout_margin="8dp"
-			android:textStyle="bold"
 			android:typeface="monospace"
-			android:textColor="#740600"
-			android:id="@+id/countmainTextView1"/>
+			android:layout_marginTop="8dp"
+			android:id="@+id/totalDineroTv"
+			android:textColor="#1B4820"/>
 
 	</LinearLayout>
 
