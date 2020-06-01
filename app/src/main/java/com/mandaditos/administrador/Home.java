@@ -138,49 +138,6 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 		
 		
 		
-		
-		
-//		mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
-//		mDataBaseOrders.addValueEventListener(new ValueEventListener(){
-//
-//
-//
-//				@Override
-//				public void onDataChange(DataSnapshot p1)
-//				{
-//					pDialog.dismiss();
-//					if (p1.exists())
-//					{
-//						for (DataSnapshot postSnapshot : p1.getChildren())
-//						{
-//							mandaditosModel m = new mandaditosModel();
-//							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
-//							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-//							if (m.getEstadoDeOrden().toString().toLowerCase().matches("Sin completar".toLowerCase()))
-//							{
-//								if (m.getDriverAsignado().toString().toLowerCase().matches("Sin asignar".toLowerCase()))
-//								{
-//								}
-//
-//							}
-//						}
-//
-//
-//					}
-//
-//					else
-//					{}
-//				}
-//				@Override
-//				public void onCancelled(DatabaseError p1)
-//				{
-//				}
-//			});
-//		
-//		
-		
-		
-		
 
 //aqui obtenemos el uid
 		mFirebaseAuth = FirebaseAuth.getInstance();

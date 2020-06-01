@@ -27,9 +27,40 @@
 			android:layout_width="wrap_content"
 			style="?android:attr/buttonBarButtonStyle"
 			android:layout_height="wrap_content"
-			android:text="Herramientas"
+			android:text="Opciones"
 			android:typeface="monospace"
 			android:onClick="mostrarHerramientas"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Cobrar"
+			android:onClick="cobrar"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:gravity="center"
+			android:typeface="monospace"
+			android:id="@+id/driverTitleDashboard"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="0"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:id="@+id/countDriverTv"
+			android:layout_margin="8dp"/>
 
 	</LinearLayout>
 
@@ -44,34 +75,69 @@
 	</android.support.v7.widget.RecyclerView>
 
 	<ListView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:id="@+id/dashboardList"
-		android:layout_weight="1"/>
-
-	<LinearLayout
-		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:elevation="5dp">
+		android:id="@+id/dashboardList"
+		android:layout_weight="1"
+		android:dividerHeight="0dp"/>
 
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Total $"
-			android:textAppearance="?android:attr/textAppearanceLarge"
-			android:layout_margin="8dp"
-			android:typeface="monospace"/>
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/driverdashboardLinearLayout1">
 
-		<TextView
-			android:layout_width="wrap_content"
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:text="0"
-			android:textAppearance="?android:attr/textAppearanceLarge"
-			android:typeface="monospace"
-			android:layout_marginTop="8dp"
-			android:id="@+id/totalDineroTv"
-			android:textColor="#1B4820"/>
+			android:elevation="5dp"
+			android:gravity="center">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Pagado $"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:layout_margin="8dp"
+				android:typeface="monospace"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="0"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:typeface="monospace"
+				android:id="@+id/pagadoTv"
+				android:textColor="#1B4820"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:elevation="5dp"
+			android:gravity="center">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Total $"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:layout_margin="8dp"
+				android:typeface="monospace"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="0"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:typeface="monospace"
+				android:id="@+id/totalDineroTv"
+				android:textColor="#1B4820"/>
+
+		</LinearLayout>
 
 	</LinearLayout>
 
