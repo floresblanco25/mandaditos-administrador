@@ -411,9 +411,9 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 										{
 											if(input.getText().toString().matches("15151515")){
 											DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-											Query applesQuery = ref.child("Ordenes").orderByChild("estadoDeOrden").equalTo("Completada");
+											Query ordersQuery = ref.child("Ordenes").orderByChild("estadoDeOrden").equalTo("Completada");
 
-											applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+											ordersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
 													@Override
 													public void onDataChange(DataSnapshot dataSnapshot)
 													{
@@ -875,7 +875,6 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 //FILTER
 	//Filter
 	private void filterEmpresa(final String text) {
-		//dialog 
 		final List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
 		final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
 		DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
@@ -928,76 +927,46 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 	
 	
 	private void filterPersonas(final String text) {
-		mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
-		mDataBaseOrders.addListenerForSingleValueEvent(new ValueEventListener(){
-
-				private Float costosDeOrden;
-
+		final List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
+		final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
+		DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
+		mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
 				@Override
-				public void onDataChange(DataSnapshot p1)
+				public void onDataChange(DataSnapshot rerSnapshot)
 				{
-					pDialog.dismiss();
-					if (p1.exists())
-					{
-						List<CostoPorOrden> costoPorOrdenList = new ArrayList<CostoPorOrden>();
-						List<mandaditosModel> ordersList = new ArrayList<mandaditosModel>();
-						for (DataSnapshot postSnapshot : p1.getChildren())
-						{
-							double latA = postSnapshot.child("latLngA/latitude").getValue();
-							double lngA = postSnapshot.child("latLngA/longitude").getValue();
-							double latB = postSnapshot.child("latLngB/latitude").getValue();
-							double lngB = postSnapshot.child("latLngB/longitude").getValue();
-
-							mandaditosModel m = new mandaditosModel();
-							m.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
-							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
-							m.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
-							m.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
-
-							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
-							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-							m.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
-							m.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
-							m.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
-							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
-							m.setLatLngA(new LatLng(latA, lngA));
-							m.setLatLngB(new LatLng(latB, lngB));
-							m.setNumeroDeOrden(postSnapshot.getKey().toString());
-							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-							m.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
-							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
-							if (m.getClienteDeDestino().toString().toLowerCase().contains(text.toLowerCase()))
-							{
-								ordersList.add(m);
+					ordersList = fireData.getFireDataList(rerSnapshot);
+					for (mandaditosModel order : ordersList) {
+						if (order.getClienteDeDestino().toLowerCase().contains(text.toLowerCase())) {
+							filteredOrdersList.add(order);
+						}
+						if (order.getEmpresaDePartida().toLowerCase().contains(text.toLowerCase())) {
+							if(order.getEstadoDeOrden().toString().matches("Completada")){
 								CostoPorOrden precioModel = new CostoPorOrden();
-								costosDeOrden = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
-								precioModel.setPrecioDeOrden(costosDeOrden);
-								costoPorOrdenList.add(precioModel);
+								float numbers = Float.valueOf(order.getCostoDelProducto().toString());
+								precioModel.setPrecioDeOrden(numbers);
+								items.add(precioModel);
 							}
-
 						}
 
-
-						adapter = new mAdapter(Home.this, ordersList);
-						mRecyclerView.setHasFixedSize(true);
-						LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
-						layoutManager.setReverseLayout(true);
-						layoutManager.setStackFromEnd(true);
-						mRecyclerView.setLayoutManager(layoutManager);
-						mRecyclerView.setAdapter(adapter);
-						totalAliquidar.setText(String.valueOf(sumarItems(costoPorOrdenList)));
-						int count = 0;
-						if (adapter != null)
-						{
-							count = adapter.getItemCount();
-						}
-						contarOrdenes.setText(String.valueOf(count));
 					}
-
-					else
-					{}
+					mAdapter adapter = new mAdapter(Home.this, filteredOrdersList);
+					mRecyclerView.setVisibility(View.VISIBLE);
+					mRecyclerView.setHasFixedSize(true);
+					LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
+					layoutManager.setReverseLayout(true);
+					layoutManager.setStackFromEnd(true);
+					mRecyclerView.setLayoutManager(layoutManager);
+					mRecyclerView.setAdapter(adapter);
+					int count = 0;
+					if (adapter != null)
+					{
+						count = adapter.getItemCount();
+					}
+					contarOrdenes.setText(count+"");
+					totalAliquidar.setText(String.valueOf(sumarItems(items)));
 				}
+
 				@Override
 				public void onCancelled(DatabaseError p1)
 				{
@@ -1007,83 +976,46 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
     }
 	
 	private void filterLugar(final String text) {
-		mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
-		mDataBaseOrders.addListenerForSingleValueEvent(new ValueEventListener(){
-
-				private Float costosDeOrden;
-
+		final List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
+		final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
+		DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
+		mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
 				@Override
-				public void onDataChange(DataSnapshot p1)
+				public void onDataChange(DataSnapshot rerSnapshot)
 				{
-					pDialog.dismiss();
-					if (p1.exists())
-					{
-						List<CostoPorOrden> costoPorOrdenList = new ArrayList<CostoPorOrden>();
-						List<mandaditosModel> ordersList = new ArrayList<mandaditosModel>();
-						for (DataSnapshot postSnapshot : p1.getChildren())
-						{
-							double latA = postSnapshot.child("latLngA/latitude").getValue();
-							double lngA = postSnapshot.child("latLngA/longitude").getValue();
-							double latB = postSnapshot.child("latLngB/latitude").getValue();
-							double lngB = postSnapshot.child("latLngB/longitude").getValue();
-
-							mandaditosModel m = new mandaditosModel();
-							m.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
-							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
-							m.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
-							m.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
-
-							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
-							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-							m.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
-							m.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
-							m.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
-							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
-							m.setLatLngA(new LatLng(latA, lngA));
-							m.setLatLngB(new LatLng(latB, lngB));
-							m.setNumeroDeOrden(postSnapshot.getKey().toString());
-							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-							m.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
-							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
-							if (m.getDireccionDeDestino().toString().toLowerCase().contains(text.toLowerCase()))
-
-							{
-								ordersList.add(m);
+					ordersList = fireData.getFireDataList(rerSnapshot);
+					for (mandaditosModel order : ordersList) {
+						if (order.getDireccionDeDestino().toLowerCase().contains(text.toLowerCase())) {
+							filteredOrdersList.add(order);
+						}
+						if (order.getEmpresaDePartida().toLowerCase().contains(text.toLowerCase())) {
+							if(order.getEstadoDeOrden().toString().matches("Completada")){
+								CostoPorOrden precioModel = new CostoPorOrden();
+								float numbers = Float.valueOf(order.getCostoDelProducto().toString());
+								precioModel.setPrecioDeOrden(numbers);
+								items.add(precioModel);
 							}
-							if (m.getDireccionDeDestino().toString().toLowerCase().contains(text.toLowerCase()))
-								if(m.getEstadoDeOrden().toString().matches("Completada")){
-
-									{
-										CostoPorOrden precioModel = new CostoPorOrden();
-										costosDeOrden = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
-										precioModel.setPrecioDeOrden(costosDeOrden);
-										costoPorOrdenList.add(precioModel);
-									}
-								}
-
 						}
 
-
-						adapter = new mAdapter(Home.this, ordersList);
-						mRecyclerView.setHasFixedSize(true);
-						LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
-						layoutManager.setReverseLayout(true);
-						layoutManager.setStackFromEnd(true);
-						mRecyclerView.setLayoutManager(layoutManager);
-						mRecyclerView.setAdapter(adapter);
-						totalAliquidar.setText(String.valueOf(sumarItems(costoPorOrdenList)));
-						int count = 0;
-						if (adapter != null)
-						{
-							count = adapter.getItemCount();
-						}
-						contarOrdenes.setText(String.valueOf(count));
 					}
-
-					else
-					{}
+					mAdapter adapter = new mAdapter(Home.this, filteredOrdersList);
+					mRecyclerView.setVisibility(View.VISIBLE);
+					mRecyclerView.setHasFixedSize(true);
+					LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
+					layoutManager.setReverseLayout(true);
+					layoutManager.setStackFromEnd(true);
+					mRecyclerView.setLayoutManager(layoutManager);
+					mRecyclerView.setAdapter(adapter);
+					int count = 0;
+					if (adapter != null)
+					{
+						count = adapter.getItemCount();
+					}
+					contarOrdenes.setText(count+"");
+					totalAliquidar.setText(String.valueOf(sumarItems(items)));
 				}
+
 				@Override
 				public void onCancelled(DatabaseError p1)
 				{

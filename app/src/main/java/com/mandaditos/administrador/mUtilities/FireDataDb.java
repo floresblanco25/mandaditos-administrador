@@ -64,7 +64,6 @@ public  class FireDataDb
 		try{
 		value = postSnapshot.child(child).getValue().toString();
 		}catch(Exception e){
-			Toast.makeText(context,e.toString(),1000).show();
 		}
 		return value;
 	}

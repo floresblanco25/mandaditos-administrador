@@ -5,10 +5,13 @@ import android.content.*;
 import android.os.*;
 import android.support.annotation.*;
 import android.support.v4.app.*;
+import android.widget.*;
 import com.google.firebase.auth.*;
 import com.google.firebase.database.*;
 import com.mandaditos.administrador.*;
 import com.mandaditos.administrador.mUtilities.*;
+import com.mandaditos.administrador.models.*;
+import java.util.*;
 
 import android.support.v4.app.TaskStackBuilder;
 import com.mandaditos.administrador.R;
@@ -19,6 +22,7 @@ public class ChildEventListener extends Service
 
 	FirebaseAuth auth;
 	NotificationCompat.Builder builder;
+	FireDataDb fireData = new FireDataDb();
 
 	@Nullable
 	@Override
@@ -36,20 +40,22 @@ public class ChildEventListener extends Service
 	{
 		DatabaseReference mdb= FirebaseDatabase.getInstance().getReference("Ordenes");
 		mdb.addChildEventListener(new com.google.firebase.database.ChildEventListener() {
+
+				private List<mandaditosModel> ordersList;
 				@Override
 				public void onChildAdded(DataSnapshot dataSnapshot, String keyName) {
 
 						Intent i = new Intent(ChildEventListener.this,Home.class);
-					String empresa = dataSnapshot.child("empresaDePartida").getValue().toString();
+					String empresa = tryGetData(dataSnapshot,"empresaDePartida");
 					showNotification(ChildEventListener.this, "Nueva orden "+keyName, empresa, i);
 				}
 
 				@Override
 				public void onChildChanged(DataSnapshot dataSnapshot, String keyName) {
 					Intent i = new Intent(ChildEventListener.this,Home.class);
-					String empresa = dataSnapshot.child("empresaDePartida").getValue().toString();
-					String cliente = dataSnapshot.child("clienteDeDestino").getValue().toString();
-					String instrucciones = dataSnapshot.child("instrucciones").getValue().toString();
+					String empresa = tryGetData(dataSnapshot,"empresaDePartida");
+					String cliente = tryGetData(dataSnapshot,"clienteDeDestino");
+					String instrucciones = tryGetData(dataSnapshot,"instrucciones");
 					showNotification(ChildEventListener.this, "Orden editada "+keyName, empresa + " " + cliente+" "+instrucciones, i);
 					
 				}
@@ -97,5 +103,14 @@ public class ChildEventListener extends Service
 		mBuilder.setContentIntent(resultPendingIntent);
 
 		notificationManager.notify(notificationId, mBuilder.build());
+	}
+	private String tryGetData(DataSnapshot postSnapshot,String child)
+	{
+		String value = "No existe o corrupto "+child;
+		try{
+			value = postSnapshot.child(child).getValue().toString();
+		}catch(Exception e){
+		}
+		return value;
 	}
 	}
