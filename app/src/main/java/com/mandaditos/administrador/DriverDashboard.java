@@ -1,17 +1,17 @@
 package com.mandaditos.administrador;
-import android.app.*;
 import android.content.*;
+import android.graphics.*;
 import android.os.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.*;
 import android.view.*;
 import android.widget.*;
+import android.widget.AdapterView.*;
+import com.google.firebase.database.*;
 import com.mandaditos.administrador.mUtilities.*;
 import com.mandaditos.administrador.models.*;
 import java.util.*;
-
-import android.support.v7.app.AlertDialog;
-import com.google.firebase.database.*;
+import com.mandaditos.administrador.adapters.*;
 
 public class DriverDashboard extends AppCompatActivity
 {
@@ -19,10 +19,12 @@ public class DriverDashboard extends AppCompatActivity
 	private String driverTxt;
 	private String uid;
 	private RecyclerView mRecyclerView;
-	private TextView total,countDriverTv,driverTitle,pagadoTv;
-	private ListView dashboardList;
+	private TextView total,allCountTv,driverTitle,pagadoTv,completadoDeMuchas;
+	private ListView listView;
 	private List<mandaditosModel> ordersList;
 	LinearLayout drLayout;
+
+	private FireDataDb fireData;
 
 
 	
@@ -35,12 +37,13 @@ public class DriverDashboard extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.driver_dashboard);
 		mRecyclerView = findViewById(R.id.recycler_orders);
-		dashboardList = findViewById(R.id.dashboardList);
+		listView = findViewById(R.id.dashboardList);
 		total = findViewById(R.id.totalDineroTv);
-		countDriverTv = findViewById(R.id.countDriverTv);
+		allCountTv = findViewById(R.id.countDriverTv);
 		driverTitle = findViewById(R.id.driverTitleDashboard);
 		drLayout = findViewById(R.id.driverdashboardLinearLayout1);
 		pagadoTv = findViewById(R.id.pagadoTv);
+		completadoDeMuchas = findViewById(R.id.completedCount);
 
 
 
@@ -56,9 +59,8 @@ public class DriverDashboard extends AppCompatActivity
 		uid = b.getString("uid");
 		TextView driverTv = findViewById(R.id.driverNameDashboardTv);
 		driverTv.setText(driverTxt);
-		FireDataDb fireData = new FireDataDb();
-		ordersList = fireData.getFireData(DriverDashboard.this,"Ordenes", uid);
-		herramientas();
+		fireData = new FireDataDb();
+		showOrders();
 		
 		
 		
@@ -107,7 +109,7 @@ public class DriverDashboard extends AppCompatActivity
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setAdapter(new mSpinnerAdapter(DriverDashboard.this, titles, titles), null);
         builder.setTitle(driverTxt);
-		builder.setCancelable(false);
+		builder.setCancelable(true);
 		builder.setItems(titles, new DialogInterface.OnClickListener() {
 
 				@Override
@@ -145,79 +147,54 @@ public class DriverDashboard extends AppCompatActivity
 	
 //Show orders
 	private void showOrders(){
-		driverTitle.setText("ORDENES A CARGO: ");
-		mRecyclerView.setVisibility(View.VISIBLE);
-		dashboardList.setVisibility(View.GONE);
-		mAdapter adapter = new mAdapter(DriverDashboard.this, ordersList);
-		mRecyclerView.setHasFixedSize(true);
-		LinearLayoutManager layoutManager = new LinearLayoutManager(DriverDashboard.this);
-		layoutManager.setReverseLayout(true);
-		layoutManager.setStackFromEnd(true);
-		mRecyclerView.setLayoutManager(layoutManager);
-		mRecyclerView.setAdapter(adapter);
-		int count = 0;
-		if (adapter != null)
-		{
-			count = adapter.getItemCount();
-		}
-		countDriverTv.setText(count+"");
-		drLayout.setVisibility(View.GONE);
-	}
-	
-	
-	
-	
-	
-	
-	
-//cobrar boton
-	public void cobrar(View v){
-		final AlertDialog dialog = new AlertDialog.Builder(DriverDashboard.this).create();
-		dialog.setTitle("Cobrar ordenes");
-		dialog.setMessage("Cobrar "+total.getText().toString());
-		final EditText input = new EditText(DriverDashboard.this);  
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-			LinearLayout.LayoutParams.MATCH_PARENT,
-			LinearLayout.LayoutParams.MATCH_PARENT);
-		input.setLayoutParams(lp);
-		dialog.setView(input);
-		dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener(){
+		final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
+		DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
+		mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
 				@Override
-				public void onClick(DialogInterface p1, int p2)
+				public void onDataChange(DataSnapshot rerSnapshot)
 				{
-					dialog.dismiss();
+					ordersList = fireData.getFireDataList(rerSnapshot);
+					for (mandaditosModel driver : ordersList) {
+						if (driver.getDriverAsignado().equalsIgnoreCase(uid)) {
+							filteredOrdersList.add(driver);
+						} 
+
+					}
+					mAdapter adapter = new mAdapter(DriverDashboard.this, filteredOrdersList);
+					driverTitle.setText("ORDENES A CARGO: ");
+					mRecyclerView.setVisibility(View.VISIBLE);
+					listView.setVisibility(View.GONE);
+					mRecyclerView.setHasFixedSize(true);
+					LinearLayoutManager layoutManager = new LinearLayoutManager(DriverDashboard.this);
+					layoutManager.setReverseLayout(true);
+					layoutManager.setStackFromEnd(true);
+					mRecyclerView.setLayoutManager(layoutManager);
+					mRecyclerView.setAdapter(adapter);
+					int count = 0;
+					if (adapter != null)
+					{
+						count = adapter.getItemCount();
+					}
+					allCountTv.setText(count+"");
+					drLayout.setVisibility(View.GONE);
 				}
-			});
-		dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Cobrar", new DialogInterface.OnClickListener(){
 
 				@Override
-				public void onClick(DialogInterface p1, int p2)
+				public void onCancelled(DatabaseError p1)
 				{
-						DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-						Query applesQuery = ref.child("Ordenes").orderByChild("estadoDeOrden").equalTo("Completada");
-
-						applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-								@Override
-								public void onDataChange(DataSnapshot dataSnapshot)
-								{
-									for (DataSnapshot appleSnapshot: dataSnapshot.getChildren())
-									{
-
-									}
-								}
-
-								@Override
-								public void onCancelled(DatabaseError databaseError)
-								{
-									Toast.makeText(DriverDashboard.this, databaseError.toException().toString(), Toast.LENGTH_SHORT).show();
-								}
-							});
 				}
 			});
-		dialog.show();
+
 		
-	}
+					
+				}
+
+	
+	
+	
+	
+	
 	
 	
 	
@@ -228,46 +205,110 @@ public class DriverDashboard extends AppCompatActivity
 	
 //Liquidacion
 	private void showLiquidacion(){
-		driverTitle.setText("LIQUIDACIÓN");
-		List<CostoPorOrden> costosPorOrdenList = new ArrayList<CostoPorOrden>();
-		List<CostoPorOrden> costosEnvioList = new ArrayList<CostoPorOrden>();
-		ArrayList<String> values = new ArrayList<String>();
-		mAdapter adapter2 = new mAdapter(DriverDashboard.this, ordersList);
-		int count = 0;
-		if (adapter2 != null)
-		{
-			count = adapter2.getItemCount();
-		}
-		countDriverTv.setText(count+"");
-		mRecyclerView.setAdapter(null);
-		mRecyclerView.setVisibility(View.GONE);
-		dashboardList.setVisibility(View.VISIBLE);
-		for (int i=0; i<ordersList.size(); i++) {
-			if(ordersList.get(i).getEstadoDeOrden().matches("Completada")){
-				
-			values.add(ordersList.get(i).getClienteDeDestino()+"\n"+"$"+ordersList.get(i).getCostoOrden());
-			CostoPorOrden precioPorOrdenModel = new CostoPorOrden();
-			float numbers = Float.valueOf(ordersList.get(i).getCostoOrden());
-			precioPorOrdenModel.setPrecioDeOrden(numbers);
-			costosPorOrdenList.add(precioPorOrdenModel);
+		driverTitle.setText("LIQUIDACIÓN: ");
+		
+		//LISTS
+		final List<CostoPorOrden> costosPorOrdenCompletedList = new ArrayList<CostoPorOrden>();
+		final List<CostoPorOrden> costosEnvioList = new ArrayList<CostoPorOrden>();
+		final ArrayList<mandaditosModel> filteredOrdersListFinal = new ArrayList<mandaditosModel>();
+		
+		
+		//Refs
+		DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
+		mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
-			CostoPorOrden precioModelEnvio = new CostoPorOrden();
-			float numbersEnvio = Float.valueOf(ordersList.get(i).getCostoDelEnvio());
-			if(Float.parseFloat(ordersList.get(i).getCostoDelEnvio())>0.0f)
-			{
-				precioModelEnvio.setPrecioDeOrden(numbersEnvio-1);
-				costosEnvioList.add(precioModelEnvio);
-			}
-			}
-		}
-		float liquidado = 0;
-		total.setText(String.valueOf(sumarItems(costosPorOrdenList) - liquidado));
+				@Override
+				public void onDataChange(DataSnapshot refSnapshot)
+				{
+					
+					//Mostrar ordenes en vista simple
+					ordersList = fireData.getFireDataList(refSnapshot);
+					for (mandaditosModel order : ordersList) {
+						//filter by driver uid
+						if (order.getDriverAsignado().equalsIgnoreCase(uid)) {
+							filteredOrdersListFinal.add(order);
+						} 
+
+					}
+
+					
+					//updateviews
+					mRecyclerView.setAdapter(null);
+					mRecyclerView.setVisibility(View.GONE);
+					listView.setVisibility(View.VISIBLE);
+					
+					
+					//setadapter
+					simpleListAdapter adptr = new simpleListAdapter(DriverDashboard.this,filteredOrdersListFinal);
+					listView.setAdapter(adptr);
+					
+					//count from adapter
+					int countAll = 0;
+					if (adptr != null){
+						countAll = adptr.getCount();
+						
+					}
+					allCountTv.setText(countAll+"");
+					
+					
+					
+					
+					//Suma de los costos
+					for (int i=0; i<filteredOrdersListFinal.size(); i++) {
+						if (filteredOrdersListFinal.get(i).getEstadoDeOrden().matches("Completada"))
+						{
+							//costo de orden list
+							CostoPorOrden precioPorOrdenCompletedModel = new CostoPorOrden();
+							float numbersCostoOrden = Float.valueOf(filteredOrdersListFinal.get(i).getCostoOrden());
+							precioPorOrdenCompletedModel.setPrecioDeOrden(numbersCostoOrden);
+							costosPorOrdenCompletedList.add(precioPorOrdenCompletedModel);
 
 
-		ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(DriverDashboard.this,
-																	R.layout.sumar_simple_row, android.R.id.text1, values);
-		dashboardList.setAdapter(listAdapter); 
-		drLayout.setVisibility(View.VISIBLE);
+							//costo de envio list - 1$
+							CostoPorOrden precioModelEnvio = new CostoPorOrden();
+							float numbersEnvio = Float.valueOf(filteredOrdersListFinal.get(i).getCostoDelEnvio());
+							if(Float.parseFloat(filteredOrdersListFinal.get(i).getCostoDelEnvio())>0.0f)
+							{
+								precioModelEnvio.setPrecioDeOrden(numbersEnvio-1);
+								costosEnvioList.add(precioModelEnvio);
+							}
+						}else{
+						}
+						int countJustCompleted = 0;
+						countJustCompleted = costosPorOrdenCompletedList.size();
+						completadoDeMuchas.setText(countJustCompleted+"");
+					}
+
+					//TOTAL de costo por ordenes
+					total.setText(String.valueOf(sumarItems(costosPorOrdenCompletedList)));
+					pagadoTv.setText(String.valueOf(sumarItems(costosPorOrdenCompletedList)));
+					
+					
+							//click handle
+					listView.setOnItemLongClickListener(new OnItemLongClickListener(){
+
+							@Override
+							public boolean onItemLongClick(AdapterView<?> p1, View p2, int p3, long p4)
+							{
+								Toast.makeText(DriverDashboard.this," "+p3,500).show();
+								return false;
+							}
+						});
+						
+						
+					drLayout.setVisibility(View.VISIBLE);
+					
+					
+					}
+
+				@Override
+				public void onCancelled(DatabaseError p1)
+				{
+				}
+			});
+			
+			
+		
 
 
 	}
@@ -282,47 +323,112 @@ public class DriverDashboard extends AppCompatActivity
 //Pago
 	private void pagoDeDriver(){
 		driverTitle.setText("PAGO DE DRIVER");
-		List<CostoPorOrden> costosPorOrdenList = new ArrayList<CostoPorOrden>();
-		List<CostoPorOrden> costosEnvioList = new ArrayList<CostoPorOrden>();
-		ArrayList<String> values = new ArrayList<String>();
-		mAdapter adapter2 = new mAdapter(DriverDashboard.this, ordersList);
-		int count = 0;
-		if (adapter2 != null)
-		{
-			count = adapter2.getItemCount();
-		}
-		countDriverTv.setText(count+"");
-		mRecyclerView.setAdapter(null);
-		mRecyclerView.setVisibility(View.GONE);
-		dashboardList.setVisibility(View.VISIBLE);
-		for (int i=0; i<ordersList.size(); i++) {
-			if(ordersList.get(i).getEstadoDeOrden().matches("Completada")){
-				
-			float numbersEnvio = Float.valueOf(ordersList.get(i).getCostoDelEnvio());
-			values.add(ordersList.get(i).getClienteDeDestino()+"\n$"+(numbersEnvio-1));
-			CostoPorOrden precioPorOrdenModel = new CostoPorOrden();
-			float numbers = Float.valueOf(ordersList.get(i).getCostoOrden());
-			precioPorOrdenModel.setPrecioDeOrden(numbers);
-			costosPorOrdenList.add(precioPorOrdenModel);
-
-			CostoPorOrden precioModelEnvio = new CostoPorOrden();
-			if(Float.parseFloat(ordersList.get(i).getCostoDelEnvio())>0.0f)
-			{
-				precioModelEnvio.setPrecioDeOrden(numbersEnvio-1);
-				costosEnvioList.add(precioModelEnvio);
-			}
-		}
-		}
-		total.setText(String.valueOf(sumarItems(costosEnvioList)));
+			//LISTS
+			final List<CostoPorOrden> costosPorOrdenCompletedList = new ArrayList<CostoPorOrden>();
+			final List<CostoPorOrden> costosEnvioCompletedList = new ArrayList<CostoPorOrden>();
+			final ArrayList<mandaditosModel> filteredOrdersListFinal = new ArrayList<mandaditosModel>();
 
 
-		ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(DriverDashboard.this,
-																	R.layout.sumar_simple_row, android.R.id.text1, values);
-		dashboardList.setAdapter(listAdapter); 
-		drLayout.setVisibility(View.VISIBLE);
-		
-		
-	}
+			//Refs
+			DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
+			mRef.addListenerForSingleValueEvent(new ValueEventListener(){
+
+					@Override
+					public void onDataChange(DataSnapshot refSnapshot)
+					{
+
+						//Mostrar ordenes en vista simple
+						ordersList = fireData.getFireDataList(refSnapshot);
+						for (mandaditosModel order : ordersList) {
+							//filter by driver uid
+							if (order.getDriverAsignado().equalsIgnoreCase(uid)) {
+								filteredOrdersListFinal.add(order);
+							} 
+
+						}
+
+
+						//updateviews
+						mRecyclerView.setAdapter(null);
+						mRecyclerView.setVisibility(View.GONE);
+						listView.setVisibility(View.VISIBLE);
+
+
+						//setadapter
+						simpleListAdapter adptr = new simpleListAdapter(DriverDashboard.this,filteredOrdersListFinal);
+						listView.setAdapter(adptr);
+
+						//count from adapter
+						int countAll = 0;
+						if (adptr != null){
+							countAll = adptr.getCount();
+
+						}
+						allCountTv.setText(countAll+"");
+
+
+
+
+						//Suma de los costos
+						for (int i=0; i<filteredOrdersListFinal.size(); i++) {
+							if (filteredOrdersListFinal.get(i).getEstadoDeOrden().matches("Completada"))
+							{
+								//costo de orden list
+								CostoPorOrden precioPorOrdenCompletedModel = new CostoPorOrden();
+								float numbersCostoOrden = Float.valueOf(filteredOrdersListFinal.get(i).getCostoOrden());
+								precioPorOrdenCompletedModel.setPrecioDeOrden(numbersCostoOrden);
+								costosPorOrdenCompletedList.add(precioPorOrdenCompletedModel);
+
+
+								//costo de envio list - 1$
+								CostoPorOrden precioModelEnvio = new CostoPorOrden();
+								float numbersEnvio = Float.valueOf(filteredOrdersListFinal.get(i).getCostoDelEnvio());
+								if(Float.parseFloat(filteredOrdersListFinal.get(i).getCostoDelEnvio())>0.0f)
+								{
+									precioModelEnvio.setPrecioDeOrden(numbersEnvio-1);
+									costosEnvioCompletedList.add(precioModelEnvio);
+								}
+							}else{
+							}
+							int countJustCompleted = 0;
+							countJustCompleted = costosPorOrdenCompletedList.size();
+							completadoDeMuchas.setText(countJustCompleted+"");
+						}
+
+						//TOTAL de costo por ordenes
+						total.setText(String.valueOf(sumarItems(costosEnvioCompletedList)));
+						pagadoTv.setText(String.valueOf(sumarItems(costosPorOrdenCompletedList)));
+
+
+
+						//click handle
+						listView.setOnItemLongClickListener(new OnItemLongClickListener(){
+
+								@Override
+								public boolean onItemLongClick(AdapterView<?> p1, View p2, int p3, long p4)
+								{
+									Toast.makeText(DriverDashboard.this," "+p3,500).show();
+									return false;
+								}
+							});
+
+
+						drLayout.setVisibility(View.VISIBLE);
+
+
+					}
+
+					@Override
+					public void onCancelled(DatabaseError p1)
+					{
+					}
+				});
+
+
+
+
+
+		}
 	
 	
 	

@@ -31,13 +31,6 @@
 			android:typeface="monospace"
 			android:onClick="mostrarHerramientas"/>
 
-		<Button
-			android:layout_width="wrap_content"
-			style="?android:attr/buttonBarButtonStyle"
-			android:layout_height="wrap_content"
-			android:text="Cobrar"
-			android:onClick="cobrar"/>
-
 	</LinearLayout>
 
 	<LinearLayout
@@ -59,8 +52,21 @@
 			android:layout_height="wrap_content"
 			android:text="0"
 			android:textAppearance="?android:attr/textAppearanceLarge"
-			android:id="@+id/countDriverTv"
-			android:layout_margin="8dp"/>
+			android:layout_marginLeft="8dp"
+			android:id="@+id/completedCount"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="/"
+			android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="0"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:id="@+id/countDriverTv"/>
 
 	</LinearLayout>
 
