@@ -10,6 +10,7 @@ import android.view.*;
 import android.view.View.*;
 import android.view.ViewGroup.*;
 import android.view.animation.*;
+import android.view.inputmethod.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
 import com.google.android.gms.maps.model.*;
@@ -902,6 +903,8 @@ class mViewHolder extends RecyclerView.ViewHolder
 		mFirebaseAuth = FirebaseAuth.getInstance();
 		FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
 		uId = mFirebaseUser.getUid().toString();
+		CostoDelProductoEd.setImeOptions(EditorInfo.IME_ACTION_DONE);
+		CostoDelEnvioEd.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
 		
 

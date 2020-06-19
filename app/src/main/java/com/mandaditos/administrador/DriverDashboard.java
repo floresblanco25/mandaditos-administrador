@@ -147,7 +147,11 @@ public class DriverDashboard extends AppCompatActivity
 	
 //Show orders
 	private void showOrders(){
-		final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
+		final List<mandaditosModel> filteredOrdersListFinal = new ArrayList<mandaditosModel>();
+		final List<CostoPorOrden> costosPorOrdenCompletedList = new ArrayList<CostoPorOrden>();
+		final List<CostoPorOrden> costosEnvioList = new ArrayList<CostoPorOrden>();
+
+		
 		DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
 		mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -157,11 +161,11 @@ public class DriverDashboard extends AppCompatActivity
 					ordersList = fireData.getFireDataList(rerSnapshot);
 					for (mandaditosModel driver : ordersList) {
 						if (driver.getDriverAsignado().equalsIgnoreCase(uid)) {
-							filteredOrdersList.add(driver);
+							filteredOrdersListFinal.add(driver);
 						} 
 
 					}
-					mAdapter adapter = new mAdapter(DriverDashboard.this, filteredOrdersList);
+					mAdapter adapter = new mAdapter(DriverDashboard.this, filteredOrdersListFinal);
 					driverTitle.setText("ORDENES A CARGO: ");
 					mRecyclerView.setVisibility(View.VISIBLE);
 					listView.setVisibility(View.GONE);
@@ -178,7 +182,32 @@ public class DriverDashboard extends AppCompatActivity
 					}
 					allCountTv.setText(count+"");
 					drLayout.setVisibility(View.GONE);
+					for (int i=0; i<filteredOrdersListFinal.size(); i++) {
+						if (filteredOrdersListFinal.get(i).getEstadoDeOrden().matches("Completada"))
+						{
+							//costo de orden list
+							CostoPorOrden precioPorOrdenCompletedModel = new CostoPorOrden();
+							float numbersCostoOrden = Float.valueOf(filteredOrdersListFinal.get(i).getCostoOrden());
+							precioPorOrdenCompletedModel.setPrecioDeOrden(numbersCostoOrden);
+							costosPorOrdenCompletedList.add(precioPorOrdenCompletedModel);
+
+
+							//costo de envio list - 1$
+							CostoPorOrden precioModelEnvio = new CostoPorOrden();
+							float numbersEnvio = Float.valueOf(filteredOrdersListFinal.get(i).getCostoDelEnvio());
+							if(Float.parseFloat(filteredOrdersListFinal.get(i).getCostoDelEnvio())>0.0f)
+							{
+								precioModelEnvio.setPrecioDeOrden(numbersEnvio-1);
+								costosEnvioList.add(precioModelEnvio);
+							}
+						}else{
+						}
+						int countJustCompleted = 0;
+						countJustCompleted = costosPorOrdenCompletedList.size();
+						completadoDeMuchas.setText(countJustCompleted+"");
+					}
 				}
+				
 
 				@Override
 				public void onCancelled(DatabaseError p1)
@@ -239,7 +268,7 @@ public class DriverDashboard extends AppCompatActivity
 					
 					
 					//setadapter
-					simpleListAdapter adptr = new simpleListAdapter(DriverDashboard.this,filteredOrdersListFinal);
+					simpleListAdapter adptr = new simpleListAdapter(DriverDashboard.this,filteredOrdersListFinal,false);
 					listView.setAdapter(adptr);
 					
 					//count from adapter
@@ -355,7 +384,7 @@ public class DriverDashboard extends AppCompatActivity
 
 
 						//setadapter
-						simpleListAdapter adptr = new simpleListAdapter(DriverDashboard.this,filteredOrdersListFinal);
+						simpleListAdapter adptr = new simpleListAdapter(DriverDashboard.this,filteredOrdersListFinal,true);
 						listView.setAdapter(adptr);
 
 						//count from adapter
@@ -375,7 +404,7 @@ public class DriverDashboard extends AppCompatActivity
 							{
 								//costo de orden list
 								CostoPorOrden precioPorOrdenCompletedModel = new CostoPorOrden();
-								float numbersCostoOrden = Float.valueOf(filteredOrdersListFinal.get(i).getCostoOrden());
+								float numbersCostoOrden = Float.valueOf(filteredOrdersListFinal.get(i).getCostoDelEnvio());
 								precioPorOrdenCompletedModel.setPrecioDeOrden(numbersCostoOrden);
 								costosPorOrdenCompletedList.add(precioPorOrdenCompletedModel);
 

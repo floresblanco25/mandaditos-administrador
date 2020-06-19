@@ -150,84 +150,6 @@ public class HomeClient extends AppCompatActivity
 					
 						
 						
-
-//					mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
-//					mDataBaseOrders.addListenerForSingleValueEvent(new ValueEventListener(){
-//
-//							private Float costosDeOrden;
-//
-//
-//							@Override
-//							public void onDataChange(DataSnapshot p1)
-//							{
-//								pDialog.dismiss();
-//								if (p1.exists())
-//								{
-//									List<CostoPorOrden> costoPorOrdenList = new ArrayList<CostoPorOrden>();
-//									List<mandaditosModel> ordersList = new ArrayList<mandaditosModel>();
-//									for (DataSnapshot postSnapshot : p1.getChildren())
-//									{
-//										double latA = postSnapshot.child("latLngA/latitude").getValue();
-//										double lngA = postSnapshot.child("latLngA/longitude").getValue();
-//										double latB = postSnapshot.child("latLngB/latitude").getValue();
-//										double lngB = postSnapshot.child("latLngB/longitude").getValue();
-//
-//										mandaditosModel m = new mandaditosModel();
-//										m.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
-//										m.setUsuario(postSnapshot.child("usuario").getValue().toString());
-//										m.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
-//										m.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
-//
-//										m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
-//										m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-//										m.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
-//										m.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
-//										m.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
-//										m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
-//										m.setLatLngA(new LatLng(latA, lngA));
-//										m.setLatLngB(new LatLng(latB, lngB));
-//										m.setNumeroDeOrden(postSnapshot.getKey().toString());
-//										m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-//										m.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
-//										m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
-//										if(postSnapshot.child("empresaDePartida").getValue().toString().toLowerCase().matches(nombreDeCliente.toString().toLowerCase())){
-//											ordersList.add(m);
-//											CostoPorOrden precioModel = new CostoPorOrden();
-//											costosDeOrden = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
-//											precioModel.setPrecioDeOrden(costosDeOrden);
-//											costoPorOrdenList.add(precioModel);
-//										}
-//
-//									}
-//
-//
-//									adapter = new mAdapter(HomeClient.this, ordersList);
-//									mRecyclerView.setHasFixedSize(true);
-//									LinearLayoutManager layoutManager = new LinearLayoutManager(HomeClient.this);
-//									layoutManager.setReverseLayout(true);
-//									layoutManager.setStackFromEnd(true);
-//									mRecyclerView.setLayoutManager(layoutManager);
-//									mRecyclerView.setAdapter(adapter);
-//									totalAliquidar.setText(String.valueOf(grandTotal(costoPorOrdenList)));
-//									int count = 0;
-//									if (adapter != null)
-//									{
-//										count = adapter.getItemCount();
-//									}
-//									contarOrdenes.setText(String.valueOf(count));
-//								}
-//
-//								else
-//								{}
-//							}
-//							@Override
-//							public void onCancelled(DatabaseError p1)
-//							{
-//							}
-//						});
-
-
-					
 						
 					Empresa=nombreDeCliente;
 				}
@@ -581,7 +503,6 @@ public class HomeClient extends AppCompatActivity
 				@Override
 				public void onDataChange(DataSnapshot dataSnapshot) {
 					final String nombreDeCliente = dataSnapshot.getValue(String.class);
-			
 		mDataBaseOrders = FirebaseDatabase.getInstance().getReference("Ordenes");
 		mDataBaseOrders.addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -592,54 +513,57 @@ public class HomeClient extends AppCompatActivity
 					pDialog.dismiss();
 					if (p1.exists())
 					{
-						List<CostoPorOrden> costoPorOrdenList = new ArrayList<CostoPorOrden>();
-						List<mandaditosModel> ordersList = new ArrayList<mandaditosModel>();
-						for (DataSnapshot postSnapshot : p1.getChildren())
-						{
-							double latA = postSnapshot.child("latLngA/latitude").getValue();
-							double lngA = postSnapshot.child("latLngA/longitude").getValue();
-							double latB = postSnapshot.child("latLngB/latitude").getValue();
-							double lngB = postSnapshot.child("latLngB/longitude").getValue();
+						
+						
+						
+					final List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
+					final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
+					DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
+					mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
-							mandaditosModel m = new mandaditosModel();
-							m.setEmpresaUserId(postSnapshot.child("empresaUserId").getValue().toString());
-							m.setUsuario(postSnapshot.child("usuario").getValue().toString());
-							m.setClienteDeDestino(postSnapshot.child("clienteDeDestino").getValue().toString());
-							m.setDireccionDeDestino(postSnapshot.child("direccionDeDestino").getValue().toString());
-							m.setCostoDelProducto(postSnapshot.child("costoDelProducto").getValue().toString());
-							m.setCostoDelEnvio(postSnapshot.child("costoDelEnvio").getValue().toString());
-							m.setEmpresaDePartida(postSnapshot.child("empresaDePartida").getValue().toString());
-							m.setDireccionEmpresaDePartida(postSnapshot.child("direccionEmpresaDePartida").getValue().toString());
-							m.setInstrucciones(postSnapshot.child("instrucciones").getValue().toString());
-							m.setEstadoDeOrden(postSnapshot.child("estadoDeOrden").getValue().toString());
-							m.setLatLngA(new LatLng(latA, lngA));
-							m.setLatLngB(new LatLng(latB, lngB));
-							m.setNumeroDeOrden(postSnapshot.getKey().toString());
-							m.setDriverAsignado(postSnapshot.child("driverAsignado").getValue().toString());
-							m.setTelefonoDeClienteDeDestino(postSnapshot.child("telefonoDeClienteDeDestino").getValue().toString());
-							m.setCostoOrden(postSnapshot.child("costoOrden").getValue().toString());
-							if (m.getClienteDeDestino().toString().toLowerCase().contains(text.toLowerCase()))
+							@Override
+							public void onDataChange(DataSnapshot rerSnapshot)
 							{
-								if(postSnapshot.child("empresaDePartida").getValue().toString().toLowerCase().matches(nombreDeCliente.toString().toLowerCase())){
-								ordersList.add(m);
-								CostoPorOrden precioModel = new CostoPorOrden();
-								costosDeOrden = Float.valueOf(postSnapshot.child("costoDelProducto").getValue().toString());
-								precioModel.setPrecioDeOrden(costosDeOrden);
-								costoPorOrdenList.add(precioModel);
+								ordersList = fireData.getFireDataList(rerSnapshot);
+								for (mandaditosModel order : ordersList) {
+									if (order.getEmpresaDePartida().toLowerCase().matches(nombreDeCliente.toString().toLowerCase())) {
+										if(order.getClienteDeDestino().toString().toLowerCase().contains(text.toString().toLowerCase())){
+											filteredOrdersList.add(order);
+											CostoPorOrden precioModel = new CostoPorOrden();
+											costosDeOrden = Float.valueOf(order.getCostoDelProducto().toString());
+											precioModel.setPrecioDeOrden(costosDeOrden);
+											items.add(precioModel);
+										}
+										
+									}
+
 								}
+								adapter = new mAdapter(HomeClient.this, filteredOrdersList);
+								mRecyclerView.setHasFixedSize(true);
+								LinearLayoutManager layoutManager = new LinearLayoutManager(HomeClient.this);
+								layoutManager.setReverseLayout(true);
+								layoutManager.setStackFromEnd(true);
+								mRecyclerView.setLayoutManager(layoutManager);
+								mRecyclerView.setAdapter(adapter);
+								totalAliquidar.setText(String.valueOf(grandTotal(items)));
+								int count = 0;
+								if (adapter != null)
+								{
+									count = adapter.getItemCount();
+								}
+								contarOrdenes.setText(String.valueOf(count));
 							}
 
-						}
+							@Override
+							public void onCancelled(DatabaseError p1)
+							{
+							}
+						});
 
-
-						adapter = new mAdapter(HomeClient.this, ordersList);
-						mRecyclerView.setHasFixedSize(true);
-						LinearLayoutManager layoutManager = new LinearLayoutManager(HomeClient.this);
-						layoutManager.setReverseLayout(true);
-						layoutManager.setStackFromEnd(true);
-						mRecyclerView.setLayoutManager(layoutManager);
-						mRecyclerView.setAdapter(adapter);
-						totalAliquidar.setText(String.valueOf(grandTotal(costoPorOrdenList)));
+				
+				
+				
+				
 						int count = 0;
 						if (adapter != null)
 						{

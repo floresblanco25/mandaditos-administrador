@@ -14,11 +14,13 @@ public class simpleListAdapter extends BaseAdapter
 	private Activity context_1;
 
 	private ArrayList<mandaditosModel> ordersList;
+	private boolean espago;
 
 	public simpleListAdapter(Activity context,
-							 ArrayList<mandaditosModel> ordersList) {
+							 ArrayList<mandaditosModel> ordersList,boolean espago) {
 		context_1 = context;
 		this.ordersList = ordersList;
+		this.espago=espago;
 	}
 
 	@Override
@@ -63,9 +65,20 @@ public class simpleListAdapter extends BaseAdapter
 
 		if(ordersList.get(position).getEstadoDeOrden().equalsIgnoreCase("Completada")){
 			viewHolder.txt.setBackgroundColor(Color.GREEN);
-			viewHolder.txt.setText("✓ "+ordersList.get(position).getClienteDeDestino()+" "+ordersList.get(position).getCostoOrden());
+			viewHolder.txt.setText("✓ "+ordersList.get(position).getClienteDeDestino()+" $"+ordersList.get(position).getCostoOrden());
+			
+			
+			if(espago==true){
+				viewHolder.txt.setBackgroundColor(Color.GREEN);
+				viewHolder.txt.setText("✓ "+ordersList.get(position).getClienteDeDestino()+" $"+(Float.valueOf(ordersList.get(position).getCostoDelEnvio())-1));
+			}
 		}else{
-		viewHolder.txt.setText(ordersList.get(position).getClienteDeDestino()+" "+ordersList.get(position).getCostoOrden());
+			viewHolder.txt.setBackgroundColor(Color.WHITE);
+		viewHolder.txt.setText("× "+ordersList.get(position).getClienteDeDestino()+" $"+ordersList.get(position).getCostoOrden());
+			if(espago==true){
+				viewHolder.txt.setBackgroundColor(Color.WHITE);
+				viewHolder.txt.setText("× "+ordersList.get(position).getClienteDeDestino()+" $"+(Float.valueOf(ordersList.get(position).getCostoDelEnvio())-1));
+			}
 		}
 		return convertView;
 	}

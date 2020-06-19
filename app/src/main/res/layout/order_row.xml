@@ -142,9 +142,8 @@
 				android:textColor="#3F6A78"
 				android:textStyle="bold"
 				android:textSize="16sp"
-				android:maxEms="10"
-				android:ems="5"
-				android:inputType="phone"/>
+				android:inputType="phone"
+				android:minEms="3"/>
 
 			<Button
 				android:layout_width="wrap_content"
@@ -222,7 +221,8 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="Costo producto $"
-				android:layout_margin="8dp"/>
+				android:layout_margin="8dp"
+				android:textSize="12sp"/>
 
 			<EditText
 				android:inputType="numberDecimal|numberSigned"
@@ -232,13 +232,15 @@
 				android:id="@+id/costodelproducto"
 				android:textColor="#202020"
 				android:textStyle="bold"
-				android:ems="3"/>
+				android:focusable="true"
+				android:minEms="2"/>
 
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="Envío $"
-				android:layout_margin="8dp"/>
+				android:layout_margin="8dp"
+				android:textSize="12sp"/>
 
 			<EditText
 				android:inputType="numberDecimal|numberSigned"
@@ -248,7 +250,8 @@
 				android:id="@+id/costodelenvio"
 				android:textColor="#3E3E3E"
 				android:textStyle="bold"
-				android:ems="3"/>
+				android:focusable="true"
+				android:minEms="2"/>
 
 		</LinearLayout>
 
