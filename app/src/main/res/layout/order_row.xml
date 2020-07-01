@@ -76,14 +76,58 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Empresa:"
+				android:text="Tienda:"
 				android:layout_margin="8dp"/>
 
 			<EditText
-				android:layout_width="match_parent"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:id="@+id/empresaEd"
-				android:textSize="14sp"/>
+				android:textSize="14sp"
+				android:maxEms="7"
+				android:ems="6"/>
+
+			<EditText
+				android:layout_width="wrap_content"
+				android:inputType="phone"
+				android:layout_height="wrap_content"
+				android:maxEms="5"
+				android:id="@+id/orderrowTiendaPhoneEd"/>
+
+			<Button
+				android:layout_width="wrap_content"
+				style="?android:attr/buttonBarButtonStyle"
+				android:layout_height="wrap_content"
+				android:text="Whatsapp"
+				android:textSize="10sp"
+				android:id="@+id/orderrowWhatsappTienda"/>
+
+			<Button
+				android:layout_width="wrap_content"
+				style="?android:attr/buttonBarButtonStyle"
+				android:layout_height="wrap_content"
+				android:text="Llamar"
+				android:textSize="10sp"
+				android:id="@+id/orderrowCallTienda"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Paquete recogido"
+				android:layout_margin="8dp"/>
+
+			<CheckBox
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/orderrowCheckBoxRecolecta"/>
 
 		</LinearLayout>
 
@@ -385,7 +429,8 @@
 					android:layout_height="wrap_content"
 					android:text="Mapa de partida"
 					android:layout_marginRight="8dp"
-					android:id="@+id/orderrowButtonPartida"/>
+					android:id="@+id/orderrowButtonPartida"
+					android:visibility="gone"/>
 
 				<Button
 					android:layout_width="wrap_content"

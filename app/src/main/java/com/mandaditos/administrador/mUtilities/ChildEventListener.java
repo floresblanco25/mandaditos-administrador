@@ -41,7 +41,7 @@ public class ChildEventListener extends Service
 		DatabaseReference mdb= FirebaseDatabase.getInstance().getReference("Ordenes");
 		mdb.addChildEventListener(new com.google.firebase.database.ChildEventListener() {
 
-				private List<mandaditosModel> ordersList;
+				private List<OrderModel> ordersList;
 				@Override
 				public void onChildAdded(DataSnapshot dataSnapshot, String keyName) {
 

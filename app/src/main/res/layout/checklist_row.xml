@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+
+	<TextView
+		android:id="@+id/checklistRowText1"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:textSize="16sp"
+		android:paddingLeft="6dip"
+		android:paddingRight="6dip"
+		android:gravity="left|center_vertical"
+		android:typeface="normal"
+		android:paddingBottom="6dp"
+		android:layout_gravity="left|center_vertical"
+		android:padding="8dp"
+		android:textColor="#292929"/>
+
+	<CheckBox
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="right|center_vertical"
+		android:padding="12dp"
+		android:id="@+id/checklistrowCheckBox1"/>
+
+</FrameLayout>
+

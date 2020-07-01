@@ -77,7 +77,7 @@ public class mapPicker extends AppCompatActivity implements OnMapReadyCallback
 				@Override
 				public void onClick(View p1)
 				{
-					mAdapter.setLatLng(partidaODestino,newLatLng);
+					ordersAdapter.setLatLng(partidaODestino,newLatLng);
 					Toast.makeText(p1.getContext(),"Guardado",Toast.LENGTH_SHORT).show();
 					finish();
 				}

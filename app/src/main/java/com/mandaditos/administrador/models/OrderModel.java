@@ -2,49 +2,96 @@ package com.mandaditos.administrador.models;
 
 import com.google.android.gms.maps.model.*;
 
-public class mandaditosModel
+public class OrderModel
 {
+	//tienda
+	private String EmpresaUserId;
+	private String EmpresaDePartida;
+	private String DireccionEmpresaDePartida;
+	private String TelefonoTienda;
+	
+	//usuario
 	private String Usuario;
 	private String ClienteDeDestino;
     private String DireccionDeDestino;
+	private String TelefonoDeClienteDeDestino;
+	
+	//driver
+	private String DriverUid;
+	private String DriverAsignado;
+	private String LiquidadoPorDriver;
+	private String TelefonoDriver;
+	
+	//orden
 	private String CostoDelProducto;
 	private String CostoDelEnvio;
 	private String EstadoDeOrden;
+	private String NumeroDeOrden;
+	private String CostoOrden;
+	private Boolean RecibidoEnBase;
+	private String Instrucciones;
+	
+	//mapas
 	private LatLng LatLngA;
 	private LatLng LatLngB;
-	private String NumeroDeOrden;
-	private String EmpresaUserId;
-	private String DriverUid;
-	private String DriverAsignado;
-	private String TelefonoDeClienteDeDestino;
-	private String EmpresaDePartida;
-	private String DireccionEmpresaDePartida;
-	private String Instrucciones;
-	private String CostoOrden;
-	private String LiquidadoPorDriver;
-	
-	public mandaditosModel(){}
 
-    public mandaditosModel(String CostoDelEnvio, String EmpresaDePartida, String DireccionEmpresaDePartida, String Instrucciones, String EmpresaUserId,
-						   String Usuario,String ClienteDeDestino, String DireccionDeDestino, String CostoDelProducto, String EstadoDeOrden,LatLng LatLngA,
-						   LatLng LatLngB, String driverAsignado, String TelefonoDeClienteDeDestino, String CostoOrden, String LiquidadoPorDriver
-						   ) {
-        this.ClienteDeDestino = ClienteDeDestino;
-        this.DireccionDeDestino = DireccionDeDestino;
-		this.CostoDelProducto = CostoDelProducto;
-		this.EstadoDeOrden=EstadoDeOrden;
-		this.LatLngA=LatLngA;
-		this.Usuario=Usuario;
-		this.LatLngB=LatLngB;
-		this.EmpresaUserId=EmpresaUserId;
+	public OrderModel(String empresaUserId, String empresaDePartida, String direccionEmpresaDePartida, String telefonoTienda, String usuario, String clienteDeDestino, String direccionDeDestino, String telefonoDeClienteDeDestino, String driverUid, String driverAsignado, String liquidadoPorDriver, String telefonoDriver, String costoDelProducto, String costoDelEnvio, String estadoDeOrden, String numeroDeOrden, String costoOrden, Boolean recibidoEnBase, String instrucciones, LatLng latLngA, LatLng latLngB)
+	{
+		this.EmpresaUserId = empresaUserId;
+		this.EmpresaDePartida = empresaDePartida;
+		this.DireccionEmpresaDePartida = direccionEmpresaDePartida;
+		this.TelefonoTienda = telefonoTienda;
+		this.Usuario = usuario;
+		this.ClienteDeDestino = clienteDeDestino;
+		this.DireccionDeDestino = direccionDeDestino;
+		this.TelefonoDeClienteDeDestino = telefonoDeClienteDeDestino;
+		this.DriverUid = driverUid;
 		this.DriverAsignado = driverAsignado;
-		this.TelefonoDeClienteDeDestino=TelefonoDeClienteDeDestino;
-		this.EmpresaDePartida=EmpresaDePartida;
-		this.DireccionEmpresaDePartida=DireccionEmpresaDePartida;
-		this.Instrucciones=Instrucciones;
-		this.CostoDelEnvio=CostoDelEnvio;
-		this.CostoOrden=CostoOrden;
-		this.LiquidadoPorDriver=LiquidadoPorDriver;
+		this.LiquidadoPorDriver = liquidadoPorDriver;
+		this.TelefonoDriver = telefonoDriver;
+		this.CostoDelProducto = costoDelProducto;
+		this.CostoDelEnvio = costoDelEnvio;
+		this.EstadoDeOrden = estadoDeOrden;
+		this.NumeroDeOrden = numeroDeOrden;
+		this.CostoOrden = costoOrden;
+		this.RecibidoEnBase = recibidoEnBase;
+		this.Instrucciones = instrucciones;
+		this.LatLngA = latLngA;
+		this.LatLngB = latLngB;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public OrderModel(){}
+
+
+	public void setTelefonoTienda(String telefonoTienda)
+	{
+		TelefonoTienda = telefonoTienda;
+	}
+
+	public String getTelefonoTienda()
+	{
+		return TelefonoTienda;
+	}
+
+	public void setRecibidoEnBase(Boolean recibidoEnBase)
+	{
+		RecibidoEnBase = recibidoEnBase;
+	}
+
+	public Boolean getRecibidoEnBase()
+	{
+		return RecibidoEnBase;
 	}
 
 	public void setUsuario(String usuario)

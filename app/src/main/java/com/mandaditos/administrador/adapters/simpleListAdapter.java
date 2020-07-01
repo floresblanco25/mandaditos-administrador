@@ -13,11 +13,11 @@ public class simpleListAdapter extends BaseAdapter
 
 	private Activity context_1;
 
-	private ArrayList<mandaditosModel> ordersList;
+	private ArrayList<OrderModel> ordersList;
 	private boolean espago;
 
 	public simpleListAdapter(Activity context,
-							 ArrayList<mandaditosModel> ordersList,boolean espago) {
+							 ArrayList<OrderModel> ordersList,boolean espago) {
 		context_1 = context;
 		this.ordersList = ordersList;
 		this.espago=espago;
@@ -48,6 +48,7 @@ public class simpleListAdapter extends BaseAdapter
 			viewHolder = new ViewHolder();
 			viewHolder.txt = convertView
 				.findViewById(R.id.text1);
+				viewHolder.txt2 = convertView.findViewById(R.id.text2);
 			/**
 			 * At very first time when the List View row Item control's
 			 * instance is created it will be store in the convertView as a
@@ -64,27 +65,31 @@ public class simpleListAdapter extends BaseAdapter
 		}
 
 		if(ordersList.get(position).getEstadoDeOrden().equalsIgnoreCase("Completada")){
-			viewHolder.txt.setBackgroundColor(Color.GREEN);
-			viewHolder.txt.setText("✓ "+ordersList.get(position).getClienteDeDestino()+" $"+ordersList.get(position).getCostoOrden());
-			
-			
-			if(espago==true){
-				viewHolder.txt.setBackgroundColor(Color.GREEN);
-				viewHolder.txt.setText("✓ "+ordersList.get(position).getClienteDeDestino()+" $"+(Float.valueOf(ordersList.get(position).getCostoDelEnvio())-1));
-			}
-		}else{
 			viewHolder.txt.setBackgroundColor(Color.WHITE);
-		viewHolder.txt.setText("× "+ordersList.get(position).getClienteDeDestino()+" $"+ordersList.get(position).getCostoOrden());
+			viewHolder.txt.setText("✓ "+ordersList.get(position).getClienteDeDestino());
+			viewHolder.txt2.setText("$"+ordersList.get(position).getCostoOrden());
+			
+			
 			if(espago==true){
 				viewHolder.txt.setBackgroundColor(Color.WHITE);
-				viewHolder.txt.setText("× "+ordersList.get(position).getClienteDeDestino()+" $"+(Float.valueOf(ordersList.get(position).getCostoDelEnvio())-1));
+				viewHolder.txt.setText("✓ "+ordersList.get(position).getClienteDeDestino());
+				viewHolder.txt2.setText("$"+(Float.valueOf(ordersList.get(position).getCostoDelEnvio())-1));
+			}
+		}else{
+			viewHolder.txt.setBackgroundColor(Color.RED);
+		viewHolder.txt.setText("× "+ordersList.get(position).getClienteDeDestino());
+			viewHolder.txt2.setText("$"+ordersList.get(position).getCostoOrden());
+			if(espago==true){
+				viewHolder.txt.setBackgroundColor(Color.RED);
+				viewHolder.txt.setText("× "+ordersList.get(position).getClienteDeDestino());
+				viewHolder.txt2.setText("$"+(Float.valueOf(ordersList.get(position).getCostoDelEnvio())-1));
 			}
 		}
 		return convertView;
 	}
 
 	public class ViewHolder {
-		public TextView txt;
+		public TextView txt,txt2;
 
 	}
 }

@@ -28,11 +28,9 @@ public class Home extends AppCompatActivity
 {
 
 	private ProgressDialog pDialog;
-	private DatabaseReference mDataBaseOrders;
 	private DatabaseReference mDataBase;
 	private RequestPermissionHandler mRequestPermissionHandler;
 	private TextView contarOrdenes,totalAliquidar,pagoDriverTv,netTv;
-	private mAdapter adapter;
 	private RecyclerView mRecyclerView;
 	FirebaseAuth mFirebaseAuth;
 	private ArrayList<String> DriversListUid,DriversListNames;
@@ -43,7 +41,7 @@ public class Home extends AppCompatActivity
 	String datosFirebase = "";
 	String datosFirebaseCopia = "";
 
-	private List<mandaditosModel> ordersList;
+	private List<OrderModel> ordersList;
 
 	private FireDataDb fireData;
 
@@ -161,7 +159,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 //aqui obtenemos el nombre del usuario
 		mFirebaseAuth = FirebaseAuth.getInstance();
 		String userId = mFirebaseUser.getUid().toString();
-		DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Usuarios/" + userId + "/Perfil").child("nombre");
+		DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Tiendas/" + userId + "/Perfil").child("nombre");
 		ref.addListenerForSingleValueEvent(new ValueEventListener() {
 				@Override
 				public void onDataChange(DataSnapshot dataSnapshot) {
@@ -283,7 +281,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 				{
 					pDialog.dismiss();
 					ordersList = fireData.getFireDataList(rerSnapshot);
-					mAdapter adapter = new mAdapter(Home.this, ordersList);
+					ordersAdapter adapter = new ordersAdapter(Home.this, ordersList);
 					mRecyclerView.setVisibility(View.VISIBLE);
 					mRecyclerView.setHasFixedSize(true);
 					LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
@@ -386,6 +384,10 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 				public boolean onMenuItemClick(MenuItem item) {
 					switch(item.getItemId()){
+						case R.id.checkList:{
+							showCheckList();
+							}
+							break;
 						case R.id.borrcompl:
 								final AlertDialog dialog = new AlertDialog.Builder(Home.this).create();
 								dialog.setTitle("Borrar todas las ordenes completadas!");
@@ -461,9 +463,23 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 		String UserId = mFirebaseUser.getUid().toString();
 		FirebaseDatabase.getInstance().getReference("Ordenes")
 			.push()
-			.setValue(new mandaditosModel("0", "", "", "", UserId, "", "", "", "0", "Sin completar", new LatLng(13.67694, -89.27972), new LatLng(13.67694, -89.27972), "Sin asignar", "", "0","0"));
+			.setValue(new OrderModel(UserId,"", "","", "", "","","", "", "Sin asignar", "","","0","0","Sin completar","","0",false,"", new LatLng(13.67694, -89.27972), new LatLng(13.67694, -89.27972)));
 		finishAffinity();
 		startActivity(new Intent(Home.this, Home.class));
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//CHECKLIST
+	public void showCheckList(){
+		Intent i = new Intent(Home.this, CheckList.class);
+		startActivity(i);
 	}
 
 
@@ -484,7 +500,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 		pDialog.setCancelable(false);
 		pDialog.show();
 			final List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
-			final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
+			final List<OrderModel> filteredOrdersList = new ArrayList<OrderModel>();
 			DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
 			mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -493,7 +509,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 					{
 						pDialog.dismiss();
 						ordersList = fireData.getFireDataList(rerSnapshot);
-						for (mandaditosModel order : ordersList) {
+						for (OrderModel order : ordersList) {
 							if (order.getEstadoDeOrden().equalsIgnoreCase("Sin Completar")) {
 								if(!order.getDriverAsignado().equalsIgnoreCase("Sin Asignar")){
 								filteredOrdersList.add(order);
@@ -505,7 +521,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 							} 
 
 						}
-						mAdapter adapter = new mAdapter(Home.this, filteredOrdersList);
+						ordersAdapter adapter = new ordersAdapter(Home.this, filteredOrdersList);
 						mRecyclerView.setVisibility(View.VISIBLE);
 						mRecyclerView.setHasFixedSize(true);
 						LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
@@ -547,7 +563,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 		pDialog.setCancelable(false);
 		pDialog.show();
 		final List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
-		final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
+		final List<OrderModel> filteredOrdersList = new ArrayList<OrderModel>();
 		DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
 		mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -556,7 +572,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 				{
 					pDialog.dismiss();
 					ordersList = fireData.getFireDataList(rerSnapshot);
-					for (mandaditosModel order : ordersList) {
+					for (OrderModel order : ordersList) {
 						if (order.getEstadoDeOrden().equalsIgnoreCase("Completada")) {
 								filteredOrdersList.add(order);
 								CostoPorOrden precioModel = new CostoPorOrden();
@@ -566,7 +582,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 						} 
 
 					}
-					mAdapter adapter = new mAdapter(Home.this, filteredOrdersList);
+					ordersAdapter adapter = new ordersAdapter(Home.this, filteredOrdersList);
 					mRecyclerView.setVisibility(View.VISIBLE);
 					mRecyclerView.setHasFixedSize(true);
 					LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
@@ -613,7 +629,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 		pDialog.setCancelable(false);
 		pDialog.show();
 		final List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
-		final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
+		final List<OrderModel> filteredOrdersList = new ArrayList<OrderModel>();
 		DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
 		mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -622,7 +638,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 				{
 					pDialog.dismiss();
 					ordersList = fireData.getFireDataList(rerSnapshot);
-					for (mandaditosModel order : ordersList) {
+					for (OrderModel order : ordersList) {
 						if (order.getDriverAsignado().equalsIgnoreCase("Sin Asignar")) {
 							if(order.getEstadoDeOrden().equalsIgnoreCase("Sin Completar")){
 							filteredOrdersList.add(order);
@@ -634,7 +650,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 						}
 
 					}
-					mAdapter adapter = new mAdapter(Home.this, filteredOrdersList);
+					ordersAdapter adapter = new ordersAdapter(Home.this, filteredOrdersList);
 					mRecyclerView.setVisibility(View.VISIBLE);
 					mRecyclerView.setHasFixedSize(true);
 					LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
@@ -876,7 +892,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 	//Filter
 	private void filterEmpresa(final String text) {
 		final List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
-		final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
+		final List<OrderModel> filteredOrdersList = new ArrayList<OrderModel>();
 		DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
 		mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -884,7 +900,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 				public void onDataChange(DataSnapshot rerSnapshot)
 				{
 					ordersList = fireData.getFireDataList(rerSnapshot);
-					for (mandaditosModel order : ordersList) {
+					for (OrderModel order : ordersList) {
 						if (order.getEmpresaDePartida().toLowerCase().contains(text.toLowerCase())) {
 								filteredOrdersList.add(order);
 						}
@@ -898,7 +914,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 						}
 
 					}
-					mAdapter adapter = new mAdapter(Home.this, filteredOrdersList);
+					ordersAdapter adapter = new ordersAdapter(Home.this, filteredOrdersList);
 					mRecyclerView.setVisibility(View.VISIBLE);
 					mRecyclerView.setHasFixedSize(true);
 					LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
@@ -928,7 +944,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 	
 	private void filterPersonas(final String text) {
 		final List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
-		final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
+		final List<OrderModel> filteredOrdersList = new ArrayList<OrderModel>();
 		DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
 		mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -936,7 +952,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 				public void onDataChange(DataSnapshot rerSnapshot)
 				{
 					ordersList = fireData.getFireDataList(rerSnapshot);
-					for (mandaditosModel order : ordersList) {
+					for (OrderModel order : ordersList) {
 						if (order.getClienteDeDestino().toLowerCase().contains(text.toLowerCase())) {
 							filteredOrdersList.add(order);
 						}
@@ -950,7 +966,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 						}
 
 					}
-					mAdapter adapter = new mAdapter(Home.this, filteredOrdersList);
+					ordersAdapter adapter = new ordersAdapter(Home.this, filteredOrdersList);
 					mRecyclerView.setVisibility(View.VISIBLE);
 					mRecyclerView.setHasFixedSize(true);
 					LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);
@@ -977,7 +993,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 	
 	private void filterLugar(final String text) {
 		final List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
-		final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
+		final List<OrderModel> filteredOrdersList = new ArrayList<OrderModel>();
 		DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
 		mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -985,7 +1001,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 				public void onDataChange(DataSnapshot rerSnapshot)
 				{
 					ordersList = fireData.getFireDataList(rerSnapshot);
-					for (mandaditosModel order : ordersList) {
+					for (OrderModel order : ordersList) {
 						if (order.getDireccionDeDestino().toLowerCase().contains(text.toLowerCase())) {
 							filteredOrdersList.add(order);
 						}
@@ -999,7 +1015,7 @@ DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".i
 						}
 
 					}
-					mAdapter adapter = new mAdapter(Home.this, filteredOrdersList);
+					ordersAdapter adapter = new ordersAdapter(Home.this, filteredOrdersList);
 					mRecyclerView.setVisibility(View.VISIBLE);
 					mRecyclerView.setHasFixedSize(true);
 					LinearLayoutManager layoutManager = new LinearLayoutManager(Home.this);

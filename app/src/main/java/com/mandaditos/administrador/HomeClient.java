@@ -28,17 +28,18 @@ public class HomeClient extends AppCompatActivity
 	private DatabaseReference mDataBaseOrders;
 	private RequestPermissionHandler mRequestPermissionHandler;
 	private TextView contarOrdenes,totalAliquidar;
-	private mAdapter adapter;
+	private ordersAdapter adapter;
 	private RecyclerView mRecyclerView;
 	FirebaseAuth mFirebaseAuth;
 	private String Empresa;
+	private String Telefono;
 	private String Direccion = "";
 	private Button nuevas; 
 	private EditText buscarNombre;
 	private String uId;
 
 	private FireDataDb fireData;
-	private List<mandaditosModel> ordersList;
+	private List<OrderModel> ordersList;
 
 
 
@@ -88,11 +89,12 @@ public class HomeClient extends AppCompatActivity
 //aqui obtenemos el nombre del usuario
 		mFirebaseAuth = FirebaseAuth.getInstance();
 		String userId = mFirebaseUser.getUid().toString();
-		DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Usuarios/" + userId + "/Perfil").child("nombre");
+		DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Tiendas/" + userId + "/Perfil");
 		ref.addListenerForSingleValueEvent(new ValueEventListener() {
 				@Override
 				public void onDataChange(DataSnapshot dataSnapshot) {
-					final String nombreDeCliente = dataSnapshot.getValue(String.class);
+					
+					final Tienda TiendaInfo = dataSnapshot.getValue(Tienda.class);
 					
 					//get all orders
 					//dialog 
@@ -101,7 +103,7 @@ public class HomeClient extends AppCompatActivity
 					pDialog.setCancelable(false);
 					pDialog.show();
 					final List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
-					final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
+					final List<OrderModel> filteredOrdersList = new ArrayList<OrderModel>();
 					DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
 					mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -110,8 +112,8 @@ public class HomeClient extends AppCompatActivity
 							{
 								pDialog.dismiss();
 								ordersList = fireData.getFireDataList(rerSnapshot);
-								for (mandaditosModel order : ordersList) {
-									if (order.getEmpresaDePartida().equalsIgnoreCase(nombreDeCliente)) {
+								for (OrderModel order : ordersList) {
+									if (order.getEmpresaDePartida().equalsIgnoreCase(TiendaInfo.getNombre())) {
 										filteredOrdersList.add(order);
 										if(order.getEstadoDeOrden().equalsIgnoreCase("Completada")){
 										CostoPorOrden precioModel = new CostoPorOrden();
@@ -122,7 +124,7 @@ public class HomeClient extends AppCompatActivity
 									} 
 
 								}
-								mAdapter adapter = new mAdapter(HomeClient.this, filteredOrdersList);
+								ordersAdapter adapter = new ordersAdapter(HomeClient.this, filteredOrdersList);
 								mRecyclerView.setVisibility(View.VISIBLE);
 								mRecyclerView.setHasFixedSize(true);
 								LinearLayoutManager layoutManager = new LinearLayoutManager(HomeClient.this);
@@ -151,7 +153,9 @@ public class HomeClient extends AppCompatActivity
 						
 						
 						
-					Empresa=nombreDeCliente;
+					Empresa=TiendaInfo.getNombre();
+					Telefono = TiendaInfo.getTelefono();
+					Direccion = TiendaInfo.getAddress();
 				}
 
 				@Override
@@ -160,19 +164,20 @@ public class HomeClient extends AppCompatActivity
 				}
 			});
 
-		DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("Usuarios/" + userId + "/Perfil").child("address");
-		ref2.addListenerForSingleValueEvent(new ValueEventListener() {
-				@Override
-				public void onDataChange(DataSnapshot dataSnapshot) {
-					Direccion = dataSnapshot.getValue(String.class);
-
-				}
-
-				@Override
-				public void onCancelled(DatabaseError databaseError) {
-
-				}
-			});
+			//Diteccion
+//		DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("Tiendas/" + userId + "/Perfil").child("address");
+//		ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+//				@Override
+//				public void onDataChange(DataSnapshot dataSnapshot) {
+//					Direccion = dataSnapshot.getValue(String.class);
+//
+//				}
+//
+//				@Override
+//				public void onCancelled(DatabaseError databaseError) {
+//
+//				}
+//			});
 			
 
 
@@ -292,8 +297,9 @@ public class HomeClient extends AppCompatActivity
 		FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
 		String UserId = mFirebaseUser.getUid().toString();
 		FirebaseDatabase.getInstance().getReference("Ordenes")
-			.push()
-			.setValue(new mandaditosModel("0", Empresa, Direccion, "", UserId, "", "", "", "0", "Sin completar", new LatLng(13.67694, -89.27972), new LatLng(13.67694, -89.27972), "Sin asignar", "", "0","0"));
+			.push().setValue(new OrderModel(UserId,Empresa, Direccion,Telefono, "", "","","", "", "Sin asignar", "","","0","0","Sin completar","","0",false,"", new LatLng(13.67694, -89.27972), new LatLng(13.67694, -89.27972)));
+			//.setValue(new OrderModel("0", Empresa, Direccion, "", UserId, "", "", "", "0", "Sin completar", new LatLng(13.67694, -89.27972), new LatLng(13.67694, -89.27972), "Sin asignar", "", "0","0",false));
+			
 		finishAffinity();
 		startActivity(new Intent(HomeClient.this, HomeClient.class));
 	}
@@ -498,7 +504,7 @@ public class HomeClient extends AppCompatActivity
 //aqui obtenemos el nombre del usuario
 		mFirebaseAuth = FirebaseAuth.getInstance();
 		String userId = mFirebaseUser.getUid().toString();
-		DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Usuarios/" + userId + "/Perfil").child("nombre");
+		DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Tiendas/" + userId + "/Perfil").child("nombre");
 		ref.addListenerForSingleValueEvent(new ValueEventListener() {
 				@Override
 				public void onDataChange(DataSnapshot dataSnapshot) {
@@ -517,7 +523,7 @@ public class HomeClient extends AppCompatActivity
 						
 						
 					final List<CostoPorOrden> items = new ArrayList<CostoPorOrden>();
-					final List<mandaditosModel> filteredOrdersList = new ArrayList<mandaditosModel>();
+					final List<OrderModel> filteredOrdersList = new ArrayList<OrderModel>();
 					DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Ordenes");
 					mRef.addListenerForSingleValueEvent(new ValueEventListener(){
 
@@ -525,7 +531,7 @@ public class HomeClient extends AppCompatActivity
 							public void onDataChange(DataSnapshot rerSnapshot)
 							{
 								ordersList = fireData.getFireDataList(rerSnapshot);
-								for (mandaditosModel order : ordersList) {
+								for (OrderModel order : ordersList) {
 									if (order.getEmpresaDePartida().toLowerCase().matches(nombreDeCliente.toString().toLowerCase())) {
 										if(order.getClienteDeDestino().toString().toLowerCase().contains(text.toString().toLowerCase())){
 											filteredOrdersList.add(order);
@@ -538,7 +544,7 @@ public class HomeClient extends AppCompatActivity
 									}
 
 								}
-								adapter = new mAdapter(HomeClient.this, filteredOrdersList);
+								adapter = new ordersAdapter(HomeClient.this, filteredOrdersList);
 								mRecyclerView.setHasFixedSize(true);
 								LinearLayoutManager layoutManager = new LinearLayoutManager(HomeClient.this);
 								layoutManager.setReverseLayout(true);

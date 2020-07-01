@@ -16,6 +16,7 @@ public class CreateAccount extends Activity
 	EditText nameEd;
 	EditText emailEd;
 	EditText passwordEd;
+	EditText phoneEd;
 	Button signupButt;
 	FirebaseAuth mFirebaseAuth;
 	DatabaseReference mDataBase;
@@ -36,6 +37,7 @@ public class CreateAccount extends Activity
 		direccionEd = findViewById(R.id.DireccioncreateaccountEditText1);
 		passwordEd = findViewById(R.id.input_password);
 		signupButt = findViewById(R.id.btn_signup);
+		phoneEd = findViewById(R.id.input_phone);
 
         signupButt.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -71,11 +73,12 @@ public class CreateAccount extends Activity
 
 										FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
 										String userId = mFirebaseUser.getUid().toString();
-										mUser user = new mUser();
+										Tienda user = new Tienda();
 										user.setNombre(nameEd.getText().toString());
-										user.setmUserId(mFirebaseUser.getUid().toString());
+										user.setUserId(mFirebaseUser.getUid().toString());
 										user.setAddress(direccionEd.getText().toString());
-										mDataBase.child("Usuarios/" + userId + "/Perfil").setValue(user);
+										user.setTelefono(phoneEd.getText().toString());
+										mDataBase.child("Tiendas/" + userId + "/Perfil").setValue(user);
 									}
 								}
 							});

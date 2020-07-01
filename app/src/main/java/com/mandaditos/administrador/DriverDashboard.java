@@ -21,7 +21,7 @@ public class DriverDashboard extends AppCompatActivity
 	private RecyclerView mRecyclerView;
 	private TextView total,allCountTv,driverTitle,pagadoTv,completadoDeMuchas;
 	private ListView listView;
-	private List<mandaditosModel> ordersList;
+	private List<OrderModel> ordersList;
 	LinearLayout drLayout;
 
 	private FireDataDb fireData;
@@ -147,7 +147,7 @@ public class DriverDashboard extends AppCompatActivity
 	
 //Show orders
 	private void showOrders(){
-		final List<mandaditosModel> filteredOrdersListFinal = new ArrayList<mandaditosModel>();
+		final List<OrderModel> filteredOrdersListFinal = new ArrayList<OrderModel>();
 		final List<CostoPorOrden> costosPorOrdenCompletedList = new ArrayList<CostoPorOrden>();
 		final List<CostoPorOrden> costosEnvioList = new ArrayList<CostoPorOrden>();
 
@@ -159,13 +159,13 @@ public class DriverDashboard extends AppCompatActivity
 				public void onDataChange(DataSnapshot rerSnapshot)
 				{
 					ordersList = fireData.getFireDataList(rerSnapshot);
-					for (mandaditosModel driver : ordersList) {
+					for (OrderModel driver : ordersList) {
 						if (driver.getDriverAsignado().equalsIgnoreCase(uid)) {
 							filteredOrdersListFinal.add(driver);
 						} 
 
 					}
-					mAdapter adapter = new mAdapter(DriverDashboard.this, filteredOrdersListFinal);
+					ordersAdapter adapter = new ordersAdapter(DriverDashboard.this, filteredOrdersListFinal);
 					driverTitle.setText("ORDENES A CARGO: ");
 					mRecyclerView.setVisibility(View.VISIBLE);
 					listView.setVisibility(View.GONE);
@@ -239,7 +239,7 @@ public class DriverDashboard extends AppCompatActivity
 		//LISTS
 		final List<CostoPorOrden> costosPorOrdenCompletedList = new ArrayList<CostoPorOrden>();
 		final List<CostoPorOrden> costosEnvioList = new ArrayList<CostoPorOrden>();
-		final ArrayList<mandaditosModel> filteredOrdersListFinal = new ArrayList<mandaditosModel>();
+		final ArrayList<OrderModel> filteredOrdersListFinal = new ArrayList<OrderModel>();
 		
 		
 		//Refs
@@ -252,7 +252,7 @@ public class DriverDashboard extends AppCompatActivity
 					
 					//Mostrar ordenes en vista simple
 					ordersList = fireData.getFireDataList(refSnapshot);
-					for (mandaditosModel order : ordersList) {
+					for (OrderModel order : ordersList) {
 						//filter by driver uid
 						if (order.getDriverAsignado().equalsIgnoreCase(uid)) {
 							filteredOrdersListFinal.add(order);
@@ -355,7 +355,7 @@ public class DriverDashboard extends AppCompatActivity
 			//LISTS
 			final List<CostoPorOrden> costosPorOrdenCompletedList = new ArrayList<CostoPorOrden>();
 			final List<CostoPorOrden> costosEnvioCompletedList = new ArrayList<CostoPorOrden>();
-			final ArrayList<mandaditosModel> filteredOrdersListFinal = new ArrayList<mandaditosModel>();
+			final ArrayList<OrderModel> filteredOrdersListFinal = new ArrayList<OrderModel>();
 
 
 			//Refs
@@ -368,7 +368,7 @@ public class DriverDashboard extends AppCompatActivity
 
 						//Mostrar ordenes en vista simple
 						ordersList = fireData.getFireDataList(refSnapshot);
-						for (mandaditosModel order : ordersList) {
+						for (OrderModel order : ordersList) {
 							//filter by driver uid
 							if (order.getDriverAsignado().equalsIgnoreCase(uid)) {
 								filteredOrdersListFinal.add(order);

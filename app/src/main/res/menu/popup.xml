@@ -3,5 +3,9 @@
     <item
         android:id="@+id/borrcompl"
         android:title="Borrar completadas"/>
+	
+	<item
+        android:id="@+id/checkList"
+        android:title="Lista de chequeo"/>
     
 </menu>
