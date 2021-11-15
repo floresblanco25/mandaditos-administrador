@@ -1,20 +1,10 @@
 {
-  "version": 3,
-  "artifactType": {
-    "type": "APK",
-    "kind": "Directory"
-  },
-  "applicationId": "com.mandaditos.administrador",
-  "variantName": "debug",
-  "elements": [
-    {
-      "type": "SINGLE",
-      "filters": [],
-      "attributes": [],
-      "versionCode": 29,
-      "versionName": "5.0",
-      "outputFile": "Administrador-debug.apk"
-    }
-  ],
-  "elementType": "File"
+  "latestVersion": "1.2.2",
+  "latestVersionCode": 10,
+  "url": "https://github.com/javiersantos/AppUpdater/releases",
+  "releaseNotes": [
+    "- First evolution",
+    "- Second evolution",
+    "- Bug fixes"
+  ]
 }
